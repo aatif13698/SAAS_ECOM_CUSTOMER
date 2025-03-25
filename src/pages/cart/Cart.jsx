@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaTrash, FaShoppingCart } from "react-icons/fa";
 import useWidth from "../../Hooks/useWidth";
 import "../../App.css"
 import images from "../../constant/images";
+import customerService from "../../services/customerService";
 
 const Cart = () => {
         const { width, breakpoints } = useWidth();
@@ -30,6 +31,28 @@ const Cart = () => {
   };
 
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+
+
+  useEffect(() => {
+
+    getCarts()
+
+  },[])
+
+  async function getCarts(params) {
+
+    try {
+
+      const response = await customerService.getCarts(null);
+
+      console.log("cart response",response);
+      
+      
+    } catch (error) {
+      console.log("error while fetching the carts", error);
+    }
+    
+  }
 
   return (
     <div className="w-full md:px-8 sm:px-0">
