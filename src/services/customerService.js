@@ -233,6 +233,37 @@ const getCarts = async (sessionId) => {
     }
 };
 
+
+
+const removeFromCart = async (data) => {
+    const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
+    
+    try {
+        const response = await axios.delete(
+            `${import.meta.env.VITE_API_URL}/api/customer/cart/remove`,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+                data: { ...data, clientId: import.meta.env.VITE_DATABASE_ID } // Move data inside `data` field
+            }
+        );
+        return response;
+    } catch (error) {
+        if (error.response) {
+            // The request was made, but the server responded with a status code
+            return Promise.reject(error.response.data.message);
+        } else if (error.request) {
+            // The request was made but no response was received
+            return Promise.reject("Network error. Please try again.");
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            return Promise.reject("An error occurred. Please try again later.");
+        }
+    }
+};
+
+
 export default { 
     getCategortAndSubcategory,
     updateProfile,
@@ -242,5 +273,6 @@ export default {
     deleteAddress,
     getAddresses,
     addToCart,
-    getCarts
+    getCarts,
+    removeFromCart
 }

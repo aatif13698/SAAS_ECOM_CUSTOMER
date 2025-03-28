@@ -166,7 +166,9 @@ const ProductDetail = () => {
 
               {width > breakpoints.md ? (
                 <div className="flex justify-around  gap-4 mx-2">
-                  <button className="px-6 py-2 h-[4rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65">
+                  <button 
+                  className="px-6 py-2 h-[4rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65"
+                  >
                     <span>Buy Now</span>
                   </button>
                   <button
