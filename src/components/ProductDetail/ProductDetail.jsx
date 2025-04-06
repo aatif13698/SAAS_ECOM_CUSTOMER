@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import "./ProductDetail.css";
 import Footer from "../footer/Footer";
 import useWidth from "../../Hooks/useWidth";
@@ -12,6 +12,8 @@ import productService from "../../services/productService";
 import { useParams } from "react-router-dom";
 import customerService from "../../services/customerService";
 import toast from "react-hot-toast";
+import { Dialog, Transition } from "@headlessui/react";
+
 
 // Secret key for decryption (same as used for encryption)
 const SECRET_KEY = import.meta.env.VITE_ENCRYPTION_KEY || "my-secret-key";
@@ -27,12 +29,38 @@ const decryptId = (encryptedId) => {
   }
 };
 
-const ProductDetail = () => {
+const ProductDetail = ({ noFade }) => {
+
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
+  const handleCloseLoadingModal = () => {
+    setShowLoadingModal(false);
+  };
+
+
+
   const { productId: encryptedId } = useParams();
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false); // State to track loading
   const [error, setError] = useState(null);
+
+  console.log("productData", productData);
+
+
+  // handle customiseable option
+  const [customizationValues, setCustomizationValues] = useState({});
+
+  console.log("customizationValues", customizationValues);
+
+
+  // Handle input changes dynamically
+  const handleInputChange = (fieldName, value) => {
+    setCustomizationValues((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+  };
+
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -69,8 +97,7 @@ const ProductDetail = () => {
     if (productData) {
       setProductSpecificData(productData?.product);
       setSelectedImage(
-        `${import.meta.env.VITE_API_URL}/productBluePrint/${
-          productData?.product?.images[0]
+        `${import.meta.env.VITE_API_URL}/productBluePrint/${productData?.product?.images[0]
         }`
       );
       const priceOPtions = productData?.priceOptions;
@@ -83,22 +110,67 @@ const ProductDetail = () => {
   }, [productData]);
 
   async function handleAddToCart() {
+    const isCustomizable = productData?.product?.isCustomizable;
+    console.log("isCustomizable", isCustomizable);
+
+    if (isCustomizable == true) {
+
+      setShowLoadingModal(true)
+
+    } else {
+      finalAddToCart()
+    }
+  }
+
+  // new
+  async function finalAddToCart() {
+
     setIsLoading(true);
     try {
-      const dataObject = {
-        productStockId: productData?._id,
-        quantity: 1,
-        priceOption: selectedPriceOption,
-        sessionId: null,
-      };
-      const response = await customerService.addToCart(dataObject);
+      const formData = new FormData();
+      Object.entries(customizationValues).forEach(([key, value]) => {
+        if (value instanceof File) {
+          formData.append(key, value);
+        } else {
+          formData.append(key, value);
+        }
+      });
+
+      formData.append("productStockId", productData?._id);
+      formData.append("quantity", 1);
+      formData.append("priceOption", JSON.stringify(selectedPriceOption) );
+      formData.append("sessionId", null);
+      formData.append("clientId", import.meta.env.VITE_DATABASE_ID)
+     
+      const response = await customerService.newaddToCart(formData);
+      setShowLoadingModal(false);
       toast.success(response?.data?.message);
       setIsLoading(false);
+      
     } catch (error) {
       setIsLoading(false);
       console.log("error while adding to cart", error);
     }
   }
+
+  // old
+  // async function finalAddToCart(params) {
+  //   setIsLoading(true);
+  //   try {
+  //     const dataObject = {
+  //       productStockId: productData?._id,
+  //       quantity: 1,
+  //       priceOption: selectedPriceOption,
+  //       sessionId: null,
+  //     };
+  //     const response = await customerService.addToCart(dataObject);
+  //     toast.success(response?.data?.message);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     setIsLoading(false);
+  //     console.log("error while adding to cart", error);
+  //   }
+  // }
 
   if (loading) {
     return (
@@ -126,6 +198,72 @@ const ProductDetail = () => {
     );
   }
 
+
+  const renderFieldPreview = (field) => {
+    const baseStyles = "w-[100%] p-2 border border-gray-300 rounded-md";
+    const fieldName = field.labelName;
+    switch (field.selectedField) {
+      case 'text':
+      case 'number':
+      case 'email':
+      case 'hyperlink':
+        return (
+          <input
+            type={field?.selectedField}
+            placeholder={field?.labelName}
+            className={baseStyles}
+            value={customizationValues[fieldName] || ""}
+            onChange={(e) => handleInputChange(fieldName, e.target.value)}
+          />
+        );
+      case 'textarea':
+        return (
+          <textarea
+            placeholder={field?.labelName}
+            value={customizationValues[fieldName] || ""}
+            onChange={(e) => handleInputChange(fieldName, e.target.value)}
+            className={`${baseStyles} min-h-[100px]`}
+          />
+        );
+      case 'select':
+      case 'multiselect':
+        return (
+          <select
+            className={baseStyles}
+            value={customizationValues[fieldName] || ""}
+            onChange={(e) => handleInputChange(fieldName, e.target.value)}
+          >
+            <option value="">{field?.labelName || 'Select an option'}</option>
+            {field?.selectOptions?.map((opt, idx) => (
+              <option key={idx} value={opt.valueName}>{opt.valueName}</option>
+            ))}
+          </select>
+        );
+      case 'checkbox':
+        return (
+          <input
+            type="checkbox"
+            checked={customizationValues[fieldName] || false}
+            onChange={(e) => handleInputChange(fieldName, e.target.checked)}
+            className="h-5 w-5 text-blue-600"
+          />
+        );
+      case 'file':
+        return (
+          <input
+            type="file"
+            onChange={(e) => handleInputChange(fieldName, e.target.files[0])} // Store file object
+            // accept={field?.validation?.fileTypes?.join(',')}
+            className={baseStyles}
+          />
+        );
+      default:
+        return <div
+        // className={baseStyles}
+        >{field?.selectedField} (Preview not available)</div>;
+    }
+  };
+
   return (
     <div className=" w-[100%] flex md:px-8 sm:px-0  ">
       <div className={`${width > breakpoints.xl ? "w-[100%]" : "w-[100%]"}`}>
@@ -143,20 +281,17 @@ const ProductDetail = () => {
                 {productSpecificData?.images.map((img, index) => (
                   <img
                     key={index}
-                    src={`${
-                      import.meta.env.VITE_API_URL
-                    }/productBluePrint/${img}`}
+                    src={`${import.meta.env.VITE_API_URL
+                      }/productBluePrint/${img}`}
                     alt="Thumbnail"
-                    className={`w-16 h-16 object-cover border-2 rounded-lg p-2 cursor-pointer transition-all ${
-                      selectedImage ===
+                    className={`w-16 h-16 object-cover border-2 rounded-lg p-2 cursor-pointer transition-all ${selectedImage ===
                       `${import.meta.env.VITE_API_URL}/productBluePrint/${img}`
-                        ? "border-red-500 border-3 p-0 "
-                        : "border-gray-300"
-                    }`}
+                      ? "border-red-500 border-3 p-0 "
+                      : "border-gray-300"
+                      }`}
                     onClick={() =>
                       setSelectedImage(
-                        `${
-                          import.meta.env.VITE_API_URL
+                        `${import.meta.env.VITE_API_URL
                         }/productBluePrint/${img}`
                       )
                     }
@@ -166,18 +301,17 @@ const ProductDetail = () => {
 
               {width > breakpoints.md ? (
                 <div className="flex justify-around  gap-4 mx-2">
-                  <button 
-                  className="px-6 py-2 h-[4rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65"
+                  <button
+                    className="px-6 py-2 h-[4rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65"
                   >
                     <span>Buy Now</span>
                   </button>
                   <button
                     onClick={handleAddToCart}
-                    className={`px-6 py-2 h-[4rem] w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg ${
-                      isLoading
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-addToCartBUtton/65"
-                    }`}
+                    className={`px-6 py-2 h-[4rem] w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg ${isLoading
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-addToCartBUtton/65"
+                      }`}
                     disabled={isLoading} // Disable button when loading
                   >
                     {isLoading ? (
@@ -215,17 +349,14 @@ const ProductDetail = () => {
             </div>
 
             <div
-              className={`space-y-4 md:h-[70vh] ${
-                width > breakpoints.md
-                  ? "h-[90vh] overflow-auto scrollbar-hide"
-                  : ""
-              }   px-3 md:px-0`}
+              className={`space-y-4 md:h-[70vh] ${width > breakpoints.md
+                ? "h-[90vh] overflow-auto scrollbar-hide"
+                : ""
+                }   px-3 md:px-0`}
             >
               <h1 className="text-2xl font-semibold">
                 {productSpecificData?.name}
               </h1>
-              {/* <p className="text-lg text-gray-700">{description}</p> */}
-              {/* <p className="text-xl font-bold text-red-600">₹{price}</p> */}
               {/* price options */}
               {productData?.priceOptions && (
                 <div className=" p-2 rounded-md">
@@ -445,14 +576,97 @@ const ProductDetail = () => {
 
         <div className="flex flex-col bg-red-300 items-center justify-center">
           <div
-            className={`${
-              width < breakpoints.sm ? "w-[100%]" : "w-[100%]"
-            }  flex flex-col justify-center gap-3 items-center`}
+            className={`${width < breakpoints.sm ? "w-[100%]" : "w-[100%]"
+              }  flex flex-col justify-center gap-3 items-center`}
           >
             <Footer />
           </div>
         </div>
       </div>
+
+
+
+      <Transition appear show={showLoadingModal} as={Fragment}>
+        <Dialog as="div" className="relative z-[99999]" onClose={handleCloseLoadingModal}>
+          <Transition.Child
+            as={Fragment}
+            enter={noFade ? "" : "duration-300 ease-out"}
+            enterFrom={noFade ? "" : "opacity-0"}
+            enterTo={noFade ? "" : "opacity-100"}
+            leave={noFade ? "" : "duration-200 ease-in"}
+            leaveFrom={noFade ? "" : "opacity-100"}
+            leaveTo={noFade ? "" : "opacity-0"}
+          >
+            <div className="fixed inset-0 bg-slate-900/50 backdrop-filter backdrop-blur-sm" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto flex justify-center items-center">
+            <Transition.Child
+              as={Fragment}
+              enter={noFade ? "" : "duration-300 ease-out"}
+              enterFrom={noFade ? "" : "opacity-0 scale-95"}
+              enterTo={noFade ? "" : "opacity-100 scale-100"}
+              leave={noFade ? "" : "duration-200 ease-in"}
+              leaveFrom={noFade ? "" : "opacity-100 scale-100"}
+              leaveTo={noFade ? "" : "opacity-0 scale-95"}
+            >
+              <Dialog.Panel className="md:w-[70%] w-[100%]  bg-white dark:bg-darkSecondary rounded-md shadow-xl p-6 ">
+
+                {/* Message */}
+                <h2 className="text-lg font-semibold mt-2 text-center">This product is customiseable</h2>
+                <p className="text-gray-600 text-sm mt-1 text-center mb-4">Please fill the form</p>
+
+                {/* Buttons */}
+                {/* <div className="mt-4 flex justify-center gap-4">
+                  <button onClick={() => {
+                    setShowLoadingModal(false)
+                    // navigate("/login")
+                  }} className=" py-2  w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65">
+                    <span>Log In</span>
+                  </button>
+                  <button onClick={() => {
+                    setShowLoadingModal(false)
+                    // navigate("/signup")
+                  }} className="px-6 py-2   w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg hover:bg-addToCartBUtton/65">
+                    <span>Sign Up</span>
+                  </button>
+                </div> */}
+                <div className="grid md:grid-cols-2 md:grid-col-1 gap-4 w-[100%] ">
+                  {productData?.product?.customizableOptions && productData?.product?.customizableOptions?.length > 0 ?
+
+                    productData?.product?.customizableOptions.map((field, index) => (
+                      <div
+                        key={index}
+                        className={`flex flex-col`}
+                      // style={{ order: field?.gridConfig?.order }}
+                      >
+                        <label className="mb-1 text-gray-700 font-medium">
+                          {field?.labelName}
+                        </label>
+                        {renderFieldPreview(field)}
+                      </div>
+                    )) : ""
+                  }
+                </div>
+                <div className="flex justify-end">
+                  <button
+                  onClick={finalAddToCart}
+                   className="bg-lightButton hover:bg-lightButton/30 px-2 py-1 rounded-md">
+                    Submit
+                  </button>
+                </div>
+
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
+
+
+
+
+
+
     </div>
   );
 };

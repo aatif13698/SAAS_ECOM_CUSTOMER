@@ -207,6 +207,30 @@ const addToCart = async (data) => {
     }
 }
 
+
+const newaddToCart = async (data) => {
+    const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
+    try {
+        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/cart/add/new`, data, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            }
+        });
+        return response;
+    } catch (error) {
+        if (error.response) {
+            // The request was made, but the server responded with a status code
+            return Promise.reject(error.response.data.message);
+          } else if (error.request) {
+            // The request was made but no response was received
+            return Promise.reject("Network error. Please try again.");
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            return Promise.reject("An error occurred. Please try again later.");
+          }
+    }
+}
+
 const getCarts = async (sessionId) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
@@ -273,6 +297,7 @@ export default {
     deleteAddress,
     getAddresses,
     addToCart,
+    newaddToCart,
     getCarts,
     removeFromCart
 }
