@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import customerService from "../../services/customerService";
 import toast from "react-hot-toast";
 import { Dialog, Transition } from "@headlessui/react";
+import { useSelector } from "react-redux";
 
 
 // Secret key for decryption (same as used for encryption)
@@ -32,26 +33,25 @@ const decryptId = (encryptedId) => {
 const ProductDetail = ({ noFade }) => {
 
   const [showLoadingModal, setShowLoadingModal] = useState(false);
+  const [actionType, setActionType] = useState("")
   const handleCloseLoadingModal = () => {
     setShowLoadingModal(false);
   };
-
-
 
   const { productId: encryptedId } = useParams();
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false); // State to track loading
+  const [isLoading2, setIsLoading2] = useState(false); // State to track loading
   const [error, setError] = useState(null);
 
-  console.log("productData", productData);
+  const { clientUser: customerData, isAuth: isLogedIn, defaultAddress, } = useSelector((state) => state?.authCustomerSlice);
+  console.log("defaultAddress", defaultAddress);
 
 
   // handle customiseable option
   const [customizationValues, setCustomizationValues] = useState({});
-
-  console.log("customizationValues", customizationValues);
-
+  // console.log("customizationValues", customizationValues);
 
   // Handle input changes dynamically
   const handleInputChange = (fieldName, value) => {
@@ -111,20 +111,29 @@ const ProductDetail = ({ noFade }) => {
 
   async function handleAddToCart() {
     const isCustomizable = productData?.product?.isCustomizable;
-    console.log("isCustomizable", isCustomizable);
 
     if (isCustomizable == true) {
-
+      setActionType("cart")
       setShowLoadingModal(true)
-
     } else {
       finalAddToCart()
     }
   }
 
+
+  async function handlePlaceOrder() {
+    const isCustomizable = productData?.product?.isCustomizable;
+
+    if (isCustomizable == true) {
+      setActionType("order")
+      setShowLoadingModal(true)
+    } else {
+      finalPlaceOrder()
+    }
+  }
+
   // new
   async function finalAddToCart() {
-
     setIsLoading(true);
     try {
       const formData = new FormData();
@@ -138,18 +147,49 @@ const ProductDetail = ({ noFade }) => {
 
       formData.append("productStockId", productData?._id);
       formData.append("quantity", 1);
-      formData.append("priceOption", JSON.stringify(selectedPriceOption) );
+      formData.append("priceOption", JSON.stringify(selectedPriceOption));
       formData.append("sessionId", null);
       formData.append("clientId", import.meta.env.VITE_DATABASE_ID)
-     
       const response = await customerService.newaddToCart(formData);
       setShowLoadingModal(false);
       toast.success(response?.data?.message);
       setIsLoading(false);
-      
+
     } catch (error) {
       setIsLoading(false);
       console.log("error while adding to cart", error);
+    }
+  }
+
+
+  // final place order
+  async function finalPlaceOrder() {
+    setIsLoading2(true);
+    try {
+      const formData = new FormData();
+      Object.entries(customizationValues).forEach(([key, value]) => {
+        if (value instanceof File) {
+          formData.append(key, value);
+        } else {
+          formData.append(key, value);
+        }
+      });
+
+      formData.append("productStockId", productData?._id);
+      formData.append("quantity", 1);
+      formData.append("priceOption", JSON.stringify(selectedPriceOption));
+      formData.append("sessionId", null);
+      formData.append("addressId", defaultAddress?._id);
+      formData.append("clientId", import.meta.env.VITE_DATABASE_ID);
+
+      const response = await customerService.newPlaceOrder(formData);
+      setShowLoadingModal(false);
+      toast.success(response?.data?.message);
+      setIsLoading2(false);
+
+    } catch (error) {
+      setIsLoading2(false);
+      console.log("error while placing order", error);
     }
   }
 
@@ -302,12 +342,64 @@ const ProductDetail = ({ noFade }) => {
               {width > breakpoints.md ? (
                 <div className="flex justify-around  gap-4 mx-2">
                   <button
+                    onClick={() => {
+                      console.log("yes1");
+                      if (!customerData) {
+                        alert("Login first")
+                      } else {
+                        if (!defaultAddress) {
+                          alert("please set the default address.")
+                        } else {
+                          handlePlaceOrder()
+                        }
+                      }
+                    }}
                     className="px-6 py-2 h-[4rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65"
                   >
-                    <span>Buy Now</span>
+                    {isLoading2 ? (
+                      <span className="flex items-center justify-center">
+                        <svg
+                          className="animate-spin h-5 w-5 mr-2 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
+                          />
+                        </svg>
+                        Processing...
+                      </span>
+                    ) : (
+                      <span>Buy Now</span>
+                    )}
                   </button>
                   <button
-                    onClick={handleAddToCart}
+                    onClick={() => {
+                      console.log("yes1");
+
+                      if (!customerData) {
+                        alert("Login first")
+                      } else {
+                        if (!defaultAddress) {
+                          alert("please set the default address.")
+                        } else {
+                          handleAddToCart()
+                        }
+                      }
+
+                    }}
+                    // onClick={handleAddToCart}
                     className={`px-6 py-2 h-[4rem] w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg ${isLoading
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-addToCartBUtton/65"
@@ -410,11 +502,67 @@ const ProductDetail = ({ noFade }) => {
                 ""
               ) : (
                 <div className="flex gap-4">
-                  <button className="px-6 py-2 h-[4rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65">
-                    <span>Buy Now</span>
+                  <button
+                    onClick={() => {
+                      console.log("yes1");
+
+                      if (!customerData) {
+                        alert("Login first")
+                      } else {
+                        if (!defaultAddress) {
+                          alert("please set the default address.")
+                        } else {
+                          handlePlaceOrder()
+                        }
+                      }
+
+                    }}
+                    className="px-6 py-2 h-[4rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65">
+                    {isLoading2 ? (
+                      <span className="flex items-center justify-center">
+                        <svg
+                          className="animate-spin h-5 w-5 mr-2 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
+                          />
+                        </svg>
+                        Processing...
+                      </span>
+                    ) : (
+                      <span>Buy Now</span>
+                    )}
+
                   </button>
                   <button
-                    onClick={handleAddToCart}
+                    onClick={() => {
+                      console.log("yes1");
+
+                      if (!customerData) {
+                        alert("Login first")
+                      } else {
+                        if (!defaultAddress) {
+                          alert("please set the default address.")
+                        } else {
+                          handleAddToCart()
+                        }
+                      }
+
+                    }}
+                    // onClick={handleAddToCart}
                     className="px-6 py-2 h-[4rem]  w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg hover:bg-addToCartBUtton/65"
                   >
                     {isLoading ? (
@@ -650,8 +798,14 @@ const ProductDetail = ({ noFade }) => {
                 </div>
                 <div className="flex justify-end">
                   <button
-                  onClick={finalAddToCart}
-                   className="bg-lightButton hover:bg-lightButton/30 px-2 py-1 rounded-md">
+                    onClick={() => {
+                      if (actionType == "order") {
+                        finalPlaceOrder()
+                      } else if (actionType == "cart") {
+                        finalAddToCart()
+                      }
+                    }}
+                    className="bg-lightButton hover:bg-lightButton/30 px-2 py-1 rounded-md">
                     Submit
                   </button>
                 </div>

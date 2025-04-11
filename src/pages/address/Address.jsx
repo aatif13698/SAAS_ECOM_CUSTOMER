@@ -8,6 +8,7 @@ import { Country, State, City } from "country-state-city";
 import toast from "react-hot-toast";
 import customerService from "../../services/customerService";
 import { motion } from "framer-motion"
+import { setDefaultAddress } from "../../store/reducer/auth/authCustomerSlice";
 
 
 const Address = () => {
@@ -19,7 +20,7 @@ const Address = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { clientUser: customerData, isAuth: isLogedIn } = useSelector((state) => state?.authCustomerSlice);
+    const { clientUser: customerData, isAuth: isLogedIn, defaultAddress, } = useSelector((state) => state?.authCustomerSlice);
     const [addresses, setAddresses] = useState([]);
     const [refresh, setRefresh] = useState(0)
 
@@ -634,6 +635,9 @@ const Address = () => {
         try {
             const response = await customerService.getAddresses(customerData?._id);
             setAddresses(response?.data?.addresses)
+            if(!defaultAddress){
+                dispatch(setDefaultAddress(response?.data?.addresses[0]))
+            }
         } catch (error) {
             console.log("error while getting the addresses", error);
         }
@@ -729,10 +733,8 @@ const Address = () => {
                                 <select
                                     name="country"
                                     value={countryName}
-                                    // disabled={isViewed}
                                     className={`w-[100%] ${isDark ? "bg-inputDark text-light" : "border-2 bg-inputLight text-dark"}  p-2  rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
                                     onChange={(e) => handleCountry(e)}
-
                                 >
                                     <option value="">--select country--</option>
                                     {countryList && countryList.length > 0 &&
@@ -742,10 +744,7 @@ const Address = () => {
                                             </option>
                                         ))}
                                 </select>
-
                                 <span className="text-red-800">{formDataErr?.country}</span>
-
-
                             </div>
 
                             <div>

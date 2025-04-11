@@ -21,7 +21,8 @@ const Category = lazy(() => import("../src/pages/category/Category"))
 const Cart = lazy(() => import("../src/pages/cart/Cart"))
 const Account = lazy(() => import("../src/pages/account/Account"))
 const Profile = lazy(() => import("../src/pages/profile/Profile"))
-const Address = lazy(() => import("../src/pages/address/Address"))
+const Address = lazy(() => import("../src/pages/address/Address"));
+const Orders = lazy(() => import("../src/pages/orders/Orders"))
 // import ProducDe
 
 
@@ -82,6 +83,7 @@ export default function App() {
             <Route path="aaa" element={<Testt />} />
             <Route path="categories" element={<Category />} />
             <Route path="cart" element={<Cart />} />
+            <Route path="order" element={<Orders />} />
             <Route path="account" element={<Account />} />
             <Route path="profile" element={<Profile />} />
             <Route path="address" element={<Address />} />

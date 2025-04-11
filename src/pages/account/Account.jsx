@@ -39,7 +39,9 @@ function Account() {
 
         {/* Top Buttons Section */}
         <div className="grid grid-cols-2 gap-3 text-center text-sm sm:text-base">
-          <button className="bg-lightButton hover:bg-lightButton/35 text-lightText p-3 rounded-lg flex items-center justify-center gap-2">
+          <button
+           onClick={() => navigate("/order")}
+           className="bg-lightButton hover:bg-lightButton/35 text-lightText p-3 rounded-lg flex items-center justify-center gap-2">
             <FaBox /> Orders
           </button>
           <button className="bg-lightButton hover:bg-lightButton/35 text-lightText p-3 rounded-lg flex items-center justify-center gap-2">
