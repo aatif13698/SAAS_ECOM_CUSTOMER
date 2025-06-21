@@ -5,8 +5,11 @@ import "../../App.css"
 import images from "../../constant/images";
 import customerService from "../../services/customerService";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
+
+  const navigate = useNavigate()
   const [carts, setCarts] = useState([]);
   useEffect(() => {
     getOrders()
@@ -23,6 +26,10 @@ const Orders = () => {
     }
   }
 
+   const handleTrackOrder = (orderId) => {
+    navigate(`/track-order/${orderId}`);
+  };
+
   return (
    
     <div className="container mx-auto px-4 py-6">
@@ -37,6 +44,8 @@ const Orders = () => {
             </div>
           ) : (
             carts?.map((item) => {
+              console.log("carts",item);
+              
               const name = item?.productStock?.product?.name || "Unnamed Product";
               const priceOption = item?.priceOption || {};
               const price = priceOption?.price || 0;
@@ -93,14 +102,12 @@ const Orders = () => {
                       Total: ${subtotal.toFixed(2)}
                     </div>
                     <div className="flex gap-2">
-                      <button className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 font-medium border border-blue-600 rounded-md hover:bg-blue-50 transition-colors">
-                        View Details
+                      <button
+                       onClick={() => handleTrackOrder(item.id)}
+                       className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 font-medium border border-blue-600 rounded-md hover:bg-blue-50 transition-colors">
+                        Track Order
                       </button>
-                      {status === "DELIVERED" && (
-                        <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800 font-medium border border-gray-600 rounded-md hover:bg-gray-50 transition-colors">
-                          Track Order
-                        </button>
-                      )}
+                      
                     </div>
                   </div>
                 </div>
