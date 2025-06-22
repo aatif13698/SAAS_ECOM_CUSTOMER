@@ -21,54 +21,6 @@ import { FaUser, FaSignOutAlt } from "react-icons/fa";
 
 
 
-
-const Menu = [
-    {
-        id: 1,
-        name: "Home",
-        link: "/#",
-    },
-    {
-        id: 2,
-        name: "Top Rated",
-        link: "/#services",
-    },
-    {
-        id: 3,
-        name: "Kids Wear",
-        link: "/#",
-    },
-    {
-        id: 3,
-        name: "Mens Wear",
-        link: "/#",
-    },
-    {
-        id: 3,
-        name: "Electronics",
-        link: "/#",
-    },
-];
-
-const DropdownLinks = [
-    {
-        id: 1,
-        name: "Trending Products",
-        link: "/#",
-    },
-    {
-        id: 2,
-        name: "Best Selling",
-        link: "/#",
-    },
-    {
-        id: 3,
-        name: "Top Rated",
-        link: "/#",
-    },
-];
-
-
 const Header = ({ noFade }) => {
 
     const navigate = useNavigate();
@@ -155,7 +107,7 @@ const Header = ({ noFade }) => {
                                 {
                                     <img className='md:w-35 md:h-10 ' src={isDark ? images.logo : images.logo} alt="" />
                                 }
-                                <svg
+                                {/* <svg
                                     className="-mr-1 h-5 w-[30px] text-gray-400"
                                     viewBox="0 0 20 20"
                                     fill="currentColor"
@@ -166,10 +118,10 @@ const Header = ({ noFade }) => {
                                         d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
                                         clipRule="evenodd"
                                     />
-                                </svg>
+                                </svg> */}
                             </button>
                         </div>
-                        <div
+                        {/* <div
                             className={`absolute  z-10 mt-2 w-[120%] origin-top-right rounded-md ${isDark ? "bg-dark text-light" : "bg-light"} shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transform transition ease-in-out duration-200 ${isDropdownOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}
                             role="menu"
                             aria-orientation="vertical"
@@ -193,7 +145,7 @@ const Header = ({ noFade }) => {
                                     Favorites
                                 </a>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className='w-[80%] h-[100%]  relative py-2'>
