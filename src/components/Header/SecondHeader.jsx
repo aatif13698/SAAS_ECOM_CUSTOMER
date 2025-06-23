@@ -47,7 +47,7 @@ function SecondHeader() {
                 <div className='flex items-center'>
                   <img className='w-10 h-10 object-cover' src={`${import.meta.env.VITE_API_URL}/icon/${item?.icon}`} alt="" />
                   <a
-                    href={item.link}
+                    href={`/list/product${item.link} `}
                     className="px-4 hover:text-blue-600 duration-200"
                   >
                     {item.name}
@@ -70,7 +70,7 @@ function SecondHeader() {
                     {item.submenu.map((subItem) => (
                       <li key={subItem.id} className="my-1 hover:bg-primary/20">
                         <a
-                          href={subItem.link}
+                          href={`/list/product${subItem.link}`}
                           className="block rounded-md p-2"
                         >
                           {subItem.name}
