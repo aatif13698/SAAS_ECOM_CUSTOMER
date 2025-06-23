@@ -47,7 +47,7 @@ function SecondHeader() {
                 <div className='flex items-center'>
                   <img className='w-10 h-10 object-cover' src={`${import.meta.env.VITE_API_URL}/icon/${item?.icon}`} alt="" />
                   <a
-                    href={`/list/product${item.link} `}
+                    href={`/list/product/${null}${item.link} `}
                     className="px-4 hover:text-blue-600 duration-200"
                   >
                     {item.name}
