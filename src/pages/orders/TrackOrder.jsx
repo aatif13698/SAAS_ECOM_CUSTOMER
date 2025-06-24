@@ -57,7 +57,7 @@ const TrackOrder = () => {
   return (
     <div className="container mx-auto px-4 py-6 max-w-5xl">
       {/* Header */}
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Track Order #{orderNumber}</h2>
+      <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6"> #{orderNumber}</h2>
 
       {/* Order Summary Card */}
       <div className="bg-white shadow-md rounded-lg p-6 mb-6 border border-gray-200">
@@ -91,9 +91,9 @@ const TrackOrder = () => {
           <div>
             <h3 className="text-lg font-semibold text-gray-700 mb-2">Shipping Address</h3>
             <p className="text-sm text-gray-600">
-              {address?.name || customer?.name}
+              {address?.address || customer?.name}
               <br />
-              {address?.street}, {address?.city}, {address?.state} {address?.zipCode}
+              {address?.nearbyLandmark}, {address?.city}, {address?.state} {address?.ZipCode}
               <br />
               {address?.country}
               <br />
