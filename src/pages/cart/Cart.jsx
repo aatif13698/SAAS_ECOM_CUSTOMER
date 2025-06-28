@@ -154,6 +154,7 @@ import toast from "react-hot-toast";
 import { Dialog, Transition } from "@headlessui/react";
 import Select from "react-select";
 import { useSelector } from "react-redux";
+import useDarkmode from "../../Hooks/useDarkMode";
 
 const Cart = () => {
   const { width, breakpoints } = useWidth();
@@ -166,6 +167,8 @@ const Cart = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const clientId = import.meta.env.VITE_DATABASE_ID; // Replace with actual client ID from context/auth
   const { clientUser: customerData, isAuth: isLogedIn, defaultAddress, } = useSelector((state) => state?.authCustomerSlice);
+  
+    const [isDark] = useDarkmode();
   
 
   const fetchAddresses = async (id) => {
@@ -296,7 +299,7 @@ const Cart = () => {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Cart Items */}
           <div
-            className={`space-y-4 lg:col-span-2 bg-white p-4 rounded-md shadow-md md:h-[80vh] ${
+            className={`space-y-4 lg:col-span-2 ${isDark ? "bg-carBgDark" : "bg-white"} p-4 rounded-md shadow-md md:h-[80vh] ${
               width > breakpoints.md ? "h-[90vh] overflow-auto scrollbar-hide" : ""
             } px-3 md:px-0`}
           >
@@ -308,7 +311,9 @@ const Cart = () => {
               return (
                 <div
                   key={item.productStock?._id}
-                  className="flex items-center gap-4 p-2 border-b"
+                  className={`flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-lg border ${
+                    isDark ? "bg-gray-700 border-gray-600" : "bg-gray-100 border-gray-200"
+                  }`}
                 >
                   <img
                     src={`${import.meta.env.VITE_API_URL}/productBluePrint/${image}`}
@@ -317,12 +322,12 @@ const Cart = () => {
                   />
                   <div className="flex-1">
                     <h3 className="text-lg font-medium">{name}</h3>
-                    <p className="text-gray-600 text-lg">${price?.toFixed(2)}</p>
+                    <p className="text-gray-600 dark:text-white/90 text-lg">${price?.toFixed(2)}</p>
                   </div>
                   <button
                     onClick={() => handleRemoveFromCart(item?.productStock?._id)}
                     disabled={isLoading}
-                    className="text-red-500 bg-red-500/35 px-3 py-2 rounded-md hover:bg-red-900 hover:text-white disabled:opacity-50"
+                    className="text-red-500 dark:text-red-100 bg-red-500/35 dark:bg-red-900 px-3 py-2 rounded-md hover:bg-red-900 hover:text-white disabled:opacity-50"
                   >
                     Remove
                   </button>
@@ -332,9 +337,9 @@ const Cart = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="bg-white p-4 rounded-md shadow-md lg:sticky lg:top-4 mb-5">
+          <div className={`${isDark ? "bg-carBgDark" : "bg-white"} p-4 rounded-md shadow-md lg:sticky lg:top-4 mb-5`}>
             <h3 className="text-lg font-semibold mb-2">Order Summary</h3>
-            <div className="flex justify-between text-gray-700">
+            <div className="flex justify-between text-gray-700 dark:text-white/90">
               <span>Subtotal:</span>
               <span>${cartData?.totalAmount?.toFixed(2)}</span>
             </div>

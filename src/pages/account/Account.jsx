@@ -34,7 +34,7 @@ function Account() {
 
   return (
     <div className={` w-[100%] mt-4 mb-3 flex justify-center ${width < breakpoints.sm ? "px-2  " : "px-0 "}  `}>
-      <div className={ ` ${width < breakpoints.sm ? "px-2 w-[100%] " : "px-0 w-[60%] "} bg-lightText px-3 py-3 rounded-md `}>
+      <div className={ ` ${width < breakpoints.sm ? "px-2 w-[100%] " : "px-0 w-[60%] "} bg-lightText dark:bg-carBgDark px-3 py-3 rounded-md `}>
 
 
         {/* Top Buttons Section */}
@@ -103,7 +103,7 @@ function Account() {
 const SettingItem2 = ({ icon, text, action }) => (
   <button 
     onClick={action} 
-    className="bg-white hover:bg-lightButton/30 hover:text-lightButton transition-all duration-300 p-3 border-b-2 border-l-2 border-lightButton hover:border-red-600 flex items-center justify-between w-[100%]"
+    className=" dark:bg-carBgDark hover:bg-lightButton/30 hover:text-lightButton transition-all duration-300 p-3 border-b-2 border-l-2 border-lightButton hover:border-red-600 flex items-center justify-between w-[100%]"
   >
     <div className="flex items-center gap-3">
       {icon} {text}

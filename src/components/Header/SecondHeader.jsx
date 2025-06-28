@@ -74,7 +74,7 @@ function SecondHeader() {
                 </div>
               )}
               {item.submenu && (
-                <div className="absolute left-0 top-[14px] mt-2 z-50 hidden group-hover:block w-48 rounded-md bg-white p-2 text-black shadow-md">
+                <div className={`absolute left-0 top-[14px] mt-2 z-50 hidden group-hover:block w-48 rounded-md ${isDark ? "dark:bg-cardBgDark2 dark:text-white" : "bg-white text-black" }   p-2   shadow-md`}>
                   <ul>
                     {item.submenu.map((subItem) => (
                       <li key={subItem.id} className="my-1 hover:bg-primary/20">

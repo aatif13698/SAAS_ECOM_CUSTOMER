@@ -79,6 +79,9 @@ const conf = withMT({
         buyNowBUtton : "#ff9422",
         addToCartBUtton : "#13c004",
 
+        carBgDark : "#43424a80",
+        cardBgDark2 : "#43424af2",
+
 
 
         cardBg1: "rgb(255, 240, 181)",
@@ -114,8 +117,11 @@ const conf = withMT({
           hsla(333, 73%, 85%, 1) 50%,
           hsla(211, 58%, 79%, 1) 100%
         )`,
+        'custom-gradient-2-dark': 'linear-gradient(90deg, hsl(141deg 15.64% 55.69%) 0%, hsl(333deg 13.87% 51.52%) 50%, hsl(211deg 15.17% 49.06%) 100%)',
+
         'custom-gradient-3': `linear-gradient(90deg, hsla(208, 33%, 21%, 1) 0%, hsla(211, 36%, 46%, 1) 100%)`,
         'custom-gradient-4': `linear-gradient(90deg, hsla(197, 14%, 57%, 1) 0%, hsla(192, 17%, 94%, 1) 100%)`,
+
 
 
       },

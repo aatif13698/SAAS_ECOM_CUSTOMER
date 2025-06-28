@@ -706,7 +706,7 @@ function Profile() {
         <div className={`w-[100%] mt-4 mb-3 flex justify-center ${width < breakpoints.sm ? "px-2" : "px-0"}`}>
           <div className={` ${width < breakpoints.sm ? "px-2 w-[100%]" : "px-0 w-[60%]"} px-3 py-3 rounded-md`}>
             {/* Profile Section Skeleton */}
-            <div className="bg-gray-100 p-4 rounded-lg mb-6">
+            <div className={`  p-4 rounded-lg mb-6 ${isDark ? "bg-carBgDark" : "bg-gray-100"}`}>
               <div className="flex flex-col items-center mb-6">
                 <Skeleton circle={true} height={96} width={96} />
                 <Skeleton width={120} height={20} className="mt-2" />
@@ -727,7 +727,7 @@ function Profile() {
             </div>
 
             {/* Contact Section Skeleton */}
-            <div className="bg-gray-100 p-4 rounded-lg mb-6">
+            <div className={` ${isDark ? "bg-carBgDark" : "bg-gray-100"} p-4 rounded-lg mb-6`}>
               <Skeleton width={150} height={20} className="mb-2" />
               <div className="flex items-center gap-3 mt-2">
                 <div className="w-[100%]">
@@ -746,7 +746,7 @@ function Profile() {
             </div>
 
             {/* PAN Card Section Skeleton */}
-            <div className="bg-gray-100 space-y-4 p-4 rounded-lg mb-6">
+            <div className={`${isDark ? "bg-carBgDark" : "bg-gray-100"} space-y-4 p-4 rounded-lg mb-6`}>
               <Skeleton width={150} height={20} className="mb-2" />
               <div>
                 <Skeleton width={100} height={16} className="mb-1" />
@@ -770,7 +770,7 @@ function Profile() {
             </div>
 
             {/* Business Account Section Skeleton */}
-            <div className="bg-gray-100 space-y-4 p-4 rounded-lg">
+            <div className={`${isDark ? "bg-carBgDark" : "bg-gray-100"} space-y-4 p-4 rounded-lg`}>
               <div className="flex items-center justify-between">
                 <Skeleton width={150} height={20} />
                 <div className="flex items-center">
@@ -812,9 +812,9 @@ function Profile() {
 
   return (
     <div className={`w-[100%] mt-4 mb-3 flex justify-center ${width < breakpoints.sm ? "px-2" : "px-0"}`}>
-      <div className={` ${width < breakpoints.sm ? "px-2 w-[100%]" : "px-0 w-[60%]"} bg-lightText px-3 py-3 rounded-md`}>
+      <div className={` ${width < breakpoints.sm ? "px-2 w-[100%]" : "px-0 w-[60%]"} ${isDark ? "bg-carBgDark" : "bg-white"} px-3 py-3 rounded-md`}>
         {/* Profile Section */}
-        <div className="bg-gray-100 p-4 rounded-lg mb-6">
+        <div className={`${isDark ? "bg-cardBgDark2" : "bg-gray-100"} p-4 rounded-lg mb-6`}>
           <div className="flex flex-col items-center mb-6">
             <div className="flex flex-col justify-center items-center flex-wrap relative">
               <label htmlFor="profileImage" className="cursor-pointer flex flex-col items-center">
@@ -906,7 +906,7 @@ function Profile() {
         </div>
 
         {/* Contact Section */}
-        <div className="bg-gray-100 p-4 rounded-lg mb-6">
+        <div className={`${isDark ? "bg-cardBgDark2" : "bg-gray-100"} p-4 rounded-lg mb-6`}>
           <h2 className="text-lg font-semibold mb-2">Contact Details</h2>
           <div className="flex items-center gap-3 mt-2">
             <div className="w-[100%]">
@@ -947,7 +947,7 @@ function Profile() {
         </div>
 
         {/* PAN Card Section */}
-        <div className="bg-gray-100 space-y-4 p-4 rounded-lg mb-6">
+        <div className={`${isDark ? "bg-cardBgDark2" : "bg-gray-100"} p-4 rounded-lg mb-6`}>
           <h2 className="text-lg font-semibold mb-2">Upload PAN Card</h2>
           <div>
             <label htmlFor="panNumber" className="block text-sm font-medium text-gray-600 mb-1">
@@ -1003,7 +1003,7 @@ function Profile() {
         </div>
 
         {/* Business Account Section */}
-        <div className="bg-gray-100 space-y-4 p-4 rounded-lg">
+        <div className={`${isDark ? "bg-cardBgDark2" : "bg-gray-100"} p-4 rounded-lg mb-6`}>
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">Business Account</h2>
             <label className="flex items-center cursor-pointer">

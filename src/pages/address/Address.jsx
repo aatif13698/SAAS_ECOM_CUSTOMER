@@ -655,11 +655,11 @@ const Address = () => {
 
         <div className={` w-[100%] mt-4 mb-3 flex justify-center ${width < breakpoints.sm ? "px-2  " : "px-0 "}  `}>
 
-            <div className={` ${width < breakpoints.sm ? "px-1 w-[100%] " : "px-2 w-[60%] "} bg-lightText  py-3 rounded-md `}>
+            <div className={` ${width < breakpoints.sm ? "px-1 w-[100%] " : "px-2 w-[60%] "} bg-lightText dark:bg-carBgDark  py-3 rounded-md `}>
                 {/* Add New Address Button */}
                 <button
                     onClick={() => setShowForm(!showForm)}
-                    className="flex items-center  px-4 gap-2 text-blue-900"
+                    className="flex items-center  px-4 gap-2 text-blue-900 dark:text-blue-gray-100"
                 >
                     <FaPlus /> Add a New Address
                 </button>
@@ -672,7 +672,7 @@ const Address = () => {
                         animate="animate"
                         exit="exit"
                         transition={{ duration: 0.4, ease: "easeOut" }}
-                        className={`bg-white ${width < breakpoints.sm ? "px-2 py-3 " : "p-4 "} mt-4 border-1 border-gray-200 rounded-lg`}
+                        className={`${isDark ? "dark:bg-cardBgDark2" : "bg-white"}  ${width < breakpoints.sm ? "px-2 py-3 " : "p-4 "} mt-4 border-1 border-gray-200 rounded-lg`}
                     >
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div className="">
@@ -910,13 +910,13 @@ const Address = () => {
                             {addresses.reverse().map((address, index) => (
                                 <div
                                     key={index}
-                                    className="bg-white shadow-sm p-4 rounded-lg border relative"
+                                    className={`${isDark ? "dark:bg-carBgDark " : "bg-white"}  shadow-sm p-4 rounded-lg border relative`}
                                 >
                                     <p className="font-bold">{address.fullName}</p>
-                                    <p className="text-gray-600">{address.phone}</p>
-                                    <p className="text-gray-600">{address.altPhoneNumber}</p>
-                                    <p className="text-gray-600">{address.houseNumber}, {address.roadName}, {address.city}, {address.state}, {address.country}, {address.pincode}</p>
-                                    <p className="text-gray-500 text-sm">Landmark: {address.nearbyLandmark}</p>
+                                    <p className="text-gray-600  dark:text-white/90">{address.phone}</p>
+                                    <p className="text-gray-600 dark:text-white/90">{address.altPhoneNumber}</p>
+                                    <p className="text-gray-600 dark:text-white/90">{address.houseNumber}, {address.roadName}, {address.city}, {address.state}, {address.country}, {address.pincode}</p>
+                                    <p className="text-gray-500 dark:text-white text-sm">Landmark: {address.nearbyLandmark}</p>
 
                                     {/* Edit & Delete Buttons */}
                                     <div className="flex gap-2 mt-3">

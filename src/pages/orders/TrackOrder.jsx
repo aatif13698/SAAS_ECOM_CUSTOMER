@@ -3,11 +3,14 @@ import { useParams } from "react-router-dom";
 import { FaCheckCircle, FaTimesCircle, FaInfoCircle } from "react-icons/fa";
 import customerService from "../../services/customerService";
 import toast from "react-hot-toast";
+import useDarkmode from "../../Hooks/useDarkMode";
 
 const TrackOrder = () => {
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+      const [isDark] = useDarkmode();
+
 
   useEffect(() => {
     fetchOrderDetails();
@@ -57,14 +60,14 @@ const TrackOrder = () => {
   return (
     <div className="container mx-auto px-4 py-6 max-w-5xl">
       {/* Header */}
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6"> #{orderNumber}</h2>
+      <h2 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-6"> #{orderNumber}</h2>
 
       {/* Order Summary Card */}
-      <div className="bg-white shadow-md rounded-lg p-6 mb-6 border border-gray-200">
+      <div className={`${isDark ? "bg-carBgDark" : "bg-white"} shadow-md rounded-lg p-6 mb-6 border border-gray-200`}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">Order Details</h3>
-            <p className="text-sm text-gray-600">
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-white mb-2">Order Details</h3>
+            <p className="text-sm text-gray-600 dark:text-white/80">
               <span className="font-medium">Status:</span>{" "}
               <span
                 className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
@@ -78,19 +81,19 @@ const TrackOrder = () => {
                 {status}
               </span>
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-white/80">
               <span className="font-medium">Payment Method:</span> {paymentMethod}
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-white/80">
               <span className="font-medium">Payment Status:</span> {paymentStatus}
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-white/80">
               <span className="font-medium">Total Amount:</span> ${totalAmount.toFixed(2)}
             </p>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">Shipping Address</h3>
-            <p className="text-sm text-gray-600">
+            <h3 className="text-lg font-semibold text-gray-700 mb-2 dark:text-white">Shipping Address</h3>
+            <p className="text-sm text-gray-600 dark:text-white/80">
               {address?.address || customer?.name}
               <br />
               {address?.nearbyLandmark}, {address?.city}, {address?.state} {address?.ZipCode}
@@ -104,8 +107,8 @@ const TrackOrder = () => {
       </div>
 
       {/* Vertical Timeline */}
-      <div className="bg-white shadow-md rounded-lg p-6 mb-6 border border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">Order Timeline</h3>
+      <div className={`${isDark ? "bg-carBgDark" : "bg-white"} shadow-md rounded-lg p-6 mb-6 border border-gray-200`}>
+        <h3 className="text-lg font-semibold text-gray-700 mb-4 dark:text-white">Order Timeline</h3>
         <div className="relative pl-6 md:pl-8">
           <div className="absolute left-[1.50rem] md:left-[1.80rem] top-0 bottom-0 w-0.5 bg-gray-300"></div>
           {timelineStatuses.map((timelineStatus, index) => {
@@ -124,7 +127,7 @@ const TrackOrder = () => {
                       ? "bg-green-100 border-green-500"
                       : isActive
                       ? "bg-yellow-100 border-yellow-500"
-                      : "bg-gray-100 border-gray-300"
+                      : "bg-gray-100  border-gray-300"
                   }`}
                 >
                   {isCancelled ? (
@@ -144,7 +147,7 @@ const TrackOrder = () => {
                     {timelineStatus}
                   </h4>
                   {activity && (
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 dark:text-white/80">
                       {new Date(activity.timestamp).toLocaleString()}
                       {activity.notes && (
                         <span className="flex items-center gap-1 mt-1">
@@ -181,8 +184,8 @@ const TrackOrder = () => {
       </div>
 
       {/* Order Items */}
-      <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">Order Items</h3>
+      <div className={`${isDark ? "bg-carBgDark " : "bg-white"} shadow-md rounded-lg p-6 border border-gray-200`}>
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-white mb-4">Order Items</h3>
         <div className="space-y-4">
           {items.map((item, index) => (
             <div
@@ -196,12 +199,12 @@ const TrackOrder = () => {
                 onError={(e) => (e.target.src = "https://via.placeholder.com/80")}
               />
               <div className="flex-1">
-                <h4 className="text-sm font-medium text-gray-800">{item.productStock?.product?.name || "Unnamed Product"}</h4>
-                <p className="text-xs text-gray-600">
+                <h4 className="text-sm font-medium text-gray-800 dark:text-white/90">{item.productStock?.product?.name || "Unnamed Product"}</h4>
+                <p className="text-xs text-gray-600 dark:text-white/80">
                   Quantity: {item.quantity} | Unit Price: ${item.priceOption.price.toFixed(2)}
                 </p>
                 {item.customizationDetails.size > 0 && (
-                  <p className="text-xs text-gray-600">
+                  <p className="text-xs text-gray-600 dark:text-white/80">
                     Customizations: {Array.from(item.customizationDetails.entries()).map(([key, value]) => `${key}: ${value}`).join(", ")}
                   </p>
                 )}
@@ -211,7 +214,7 @@ const TrackOrder = () => {
                   </p>
                 )}
               </div>
-              <div className="text-sm font-semibold text-gray-800">Subtotal: ${item.subtotal.toFixed(2)}</div>
+              <div className="text-sm font-semibold text-gray-800 dark:text-white/80">Subtotal: ${item.subtotal.toFixed(2)}</div>
             </div>
           ))}
         </div>

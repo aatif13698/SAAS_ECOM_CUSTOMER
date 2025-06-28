@@ -18,6 +18,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logOut } from '../../store/reducer/auth/authCustomerSlice';
 import { Dialog, Transition } from "@headlessui/react";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
+import { CiLight } from 'react-icons/ci';
+import { MdDarkMode } from 'react-icons/md';
 
 
 
@@ -33,7 +35,7 @@ const Header = ({ noFade }) => {
         setShowLoadingModal(false);
     };
 
-    const [isDark] = useDarkmode();
+    const [isDark, setDarkMode] = useDarkmode();
 
     const { width, breakpoints } = useWidth();
 
@@ -91,7 +93,7 @@ const Header = ({ noFade }) => {
 
 
     return (
-        <div className={`w-full sticky top-[-1px] z-[999] border-b-[0.5px]  ${isDark ? "bg-dark border-blue-gray-800" : "bg-custom-gradient-2 border-slate-400"}`}>
+        <div className={`w-full sticky top-[-1px] z-[999] border-b-[0.5px]  ${isDark ? "bg-custom-gradient-2-dark border-blue-gray-800" : "bg-custom-gradient-2 border-slate-400"}`}>
             <div className='flex w-[100%] border-b-[1px] border-gray-500/50 flex-row items-center justify-between'>
                 <div className='w-[20%] '>
                     <div className="relative w-[100%]  text-left" ref={dropdownRef}>
@@ -168,6 +170,24 @@ const Header = ({ noFade }) => {
                         </div>
 
                         {
+                            width <= breakpoints.sm ?
+                                <div className="flex items-center mx-3">
+                                    <button
+                                        onClick={() => setDarkMode(!isDark)}
+                                        className={`nav-item flex   cursor-pointer   rounded-md  transition duration-500`}
+                                    >
+                                        <div className={`menu-link flex items-center `}>
+                                            <span className="menu-icon flex-grow-0">
+                                                {isDark ? <CiLight className={` text-lg ${isDark ? "text-white" : "text-white"} w-5 h-5`} /> : <MdDarkMode className={` text-lg ${isDark ? "text-white" : "text-white"} w-5 h-5`} />}
+                                            </span>
+                                        </div>
+                                    </button>
+                                </div> : ""
+                        }
+
+
+
+                        {
                             width <= breakpoints.sm ? "" :
                                 <div className='  md:w-[60%]   w-[40%] h-[100%]  ' ref={profileDropdownRef}>
                                     <div className='flex gap-2  items-center mr-10 justify-end'>
@@ -222,12 +242,27 @@ const Header = ({ noFade }) => {
                                             <span>Cart</span>
                                         </button>
 
+                                        <div className="flex items-center mx-3">
+                                            <button
+                                                onClick={() => setDarkMode(!isDark)}
+                                                className={`nav-item flex   cursor-pointer   rounded-md  transition duration-500`}
+                                            >
+                                                <div className={`menu-link flex items-center `}>
+                                                    <span className="menu-icon flex-grow-0">
+                                                        {isDark ? <CiLight className={` text-lg ${isDark ? "text-white" : "text-white"} w-5 h-5`} /> : <MdDarkMode className={` text-lg ${isDark ? "text-white" : "text-white"} w-5 h-5`} />}
+                                                    </span>
+                                                </div>
+                                            </button>
+                                        </div>
+
                                         {
                                             isLogedIn ?
                                                 <button onClick={toggleProfileDropdown} className='bg-white w-8 h-8 flex justify-center items-center rounded-full'>
                                                     <BsPersonCircle className='w-7 h-7 bg-transparent' color='green' />
                                                 </button> : ""
                                         }
+
+
 
                                     </div>
 

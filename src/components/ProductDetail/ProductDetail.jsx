@@ -434,7 +434,7 @@ const ProductDetail = ({ noFade }) => {
                 : ""
                 }   px-3 md:px-0`}
             >
-              <h1 className="text-2xl font-semibold">
+              <h1 className="text-2xl dark:text-black font-semibold">
                 {productSpecificData?.name}
               </h1>
               {/* price options */}
@@ -457,7 +457,7 @@ const ProductDetail = ({ noFade }) => {
               )} */}
               {productData?.priceOptions && (
                     <div className="p-2 rounded-md">
-                      <h3 className="text-lg font-semibold text-gray-700 mb-2">Select Price Option:</h3>
+                      <h3 className="text-lg font-semibold text-gray-700  mb-2">Select Price Option:</h3>
                       <div className="flex flex-wrap gap-2">
                         {productData?.priceOptions.map((option, index) => (
                           <button
@@ -596,7 +596,7 @@ const ProductDetail = ({ noFade }) => {
               )}
 
               <div className="mt-10">
-                <h3 className="text-xl font-semibold">
+                <h3 className="text-xl dark:text-black font-semibold">
                   More Product Information
                 </h3>
                 <p className="text-gray-600">
@@ -605,7 +605,7 @@ const ProductDetail = ({ noFade }) => {
                 </p>
               </div>
               <div className="mt-10">
-                <h3 className="text-xl font-semibold">
+                <h3 className="text-xl dark:text-black font-semibold">
                   Return & Refund Policy
                 </h3>
                 <p className="text-gray-600">
@@ -615,7 +615,7 @@ const ProductDetail = ({ noFade }) => {
               </div>
 
               <div className="mt-10">
-                <h3 className="text-xl font-semibold">
+                <h3 className="text-xl dark:text-black font-semibold">
                   Return & Refund Policy
                 </h3>
                 <p className="text-gray-600">
@@ -624,7 +624,7 @@ const ProductDetail = ({ noFade }) => {
                 </p>
               </div>
               <div className="mt-10">
-                <h3 className="text-xl font-semibold">
+                <h3 className="text-xl dark:text-black font-semibold">
                   Return & Refund Policy
                 </h3>
                 <p className="text-gray-600">
@@ -633,7 +633,7 @@ const ProductDetail = ({ noFade }) => {
                 </p>
               </div>
               <div className="mt-10">
-                <h3 className="text-xl font-semibold">
+                <h3 className="text-xl dark:text-black font-semibold">
                   Return & Refund Policy
                 </h3>
                 <p className="text-gray-600">
@@ -642,7 +642,7 @@ const ProductDetail = ({ noFade }) => {
                 </p>
               </div>
               <div className="mt-10">
-                <h3 className="text-xl font-semibold">
+                <h3 className="text-xl dark:text-black font-semibold">
                   Return & Refund Policy
                 </h3>
                 <p className="text-gray-600">
@@ -655,7 +655,7 @@ const ProductDetail = ({ noFade }) => {
         </div>
 
         <div className="mt-10 px-3 md:px-0">
-          <h3 className="text-xl font-semibold">Return & Refund Policy</h3>
+          <h3 className="text-xl dark:text-white font-semibold">Return & Refund Policy</h3>
           <p className="text-gray-600">
             Our return policy ensures customer satisfaction. You can return the
             product within 30 days.
@@ -663,11 +663,11 @@ const ProductDetail = ({ noFade }) => {
         </div>
 
         <div className="mt-10 px-3 md:px-0">
-          <h3 className="text-xl font-semibold">Similar Products</h3>
+          <h3 className="text-xl dark:text-white font-semibold">Similar Products</h3>
         </div>
 
         <div className="mt-10 px-3 md:px-0">
-          <h3 className="text-xl font-semibold">More Product Information</h3>
+          <h3 className="text-xl  dark:text-white font-semibold">More Product Information</h3>
           <p className="text-gray-600">
             This product is designed to meet the highest standards of quality
             and performance.
@@ -675,7 +675,7 @@ const ProductDetail = ({ noFade }) => {
         </div>
 
         <div className="mt-10 px-3 md:px-0">
-          <h3 className="text-xl font-semibold">Return & Refund Policy</h3>
+          <h3 className="text-xl dark:text-white font-semibold">Return & Refund Policy</h3>
           <p className="text-gray-600">
             Our return policy ensures customer satisfaction. You can return the
             product within 30 days.
