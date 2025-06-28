@@ -113,8 +113,8 @@ const ProductList = () => {
                   product.product?.images?.[0] || "placeholder.jpg"
                 }`}
                 alt={product.product?.name}
-                className="w-[100%] h-48 object-cover rounded-md border border-gray-300 mb-4"
-                onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
+                className="w-[100%] h-48 object-contain rounded-md border border-gray-300 mb-4"
+                // onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
               />
               <h3 className="text-lg font-semibold text-gray-800 truncate">
                 {product.product?.name || "Unnamed Product"}

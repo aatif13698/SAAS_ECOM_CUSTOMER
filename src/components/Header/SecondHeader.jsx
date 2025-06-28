@@ -5,6 +5,8 @@ import useDarkmode from '../../Hooks/useDarkMode';
 import customerService from '../../services/customerService';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { Link } from 'react-router-dom';
+
 
 function SecondHeader() {
   const { width, breakpoints } = useWidth();
@@ -46,12 +48,19 @@ function SecondHeader() {
               {item.link ? (
                 <div className='flex items-center'>
                   <img className='w-10 h-10 object-cover' src={`${import.meta.env.VITE_API_URL}/icon/${item?.icon}`} alt="" />
-                  <a
+                  {/* <a
                     href={`/list/product/${null}${item.link} `}
                     className="px-4 hover:text-blue-600 duration-200"
                   >
-                    {item.name}
-                  </a>
+                   
+                  </a> */}
+
+                  <Link
+                    to={`/list/product/${null}${item.link}`}
+                    className="px-4 hover:text-blue-600 duration-200"
+                  >
+ {item.name}
+                  </Link>
                 </div>
               ) : (
                 <div className='flex items-center'>
@@ -69,12 +78,18 @@ function SecondHeader() {
                   <ul>
                     {item.submenu.map((subItem) => (
                       <li key={subItem.id} className="my-1 hover:bg-primary/20">
-                        <a
+                        {/* <a
                           href={`/list/product${subItem.link}`}
                           className="block rounded-md p-2"
                         >
                           {subItem.name}
-                        </a>
+                        </a> */}
+                        <Link
+                          to={`/list/product${subItem.link}`}
+                          className="block rounded-md p-2"
+                        >
+                          {subItem.name}
+                        </Link>
                       </li>
                     ))}
                   </ul>
