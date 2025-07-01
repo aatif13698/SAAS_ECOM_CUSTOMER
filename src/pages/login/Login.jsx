@@ -16,6 +16,7 @@ const SignUpLink = memo(() => {
         <div className='w-[100%]'>
             <div className='sm:border-2 border-gray-300 rounded-sm p-6 max-w-md mx-auto'>
                 <div className='rounded-lg flex flex-col'>
+                    <h2 className='text-base'>Forget password? <Link to={"/forgetpassword"} className='text-blue-500 font-bold'>Reset it</Link></h2>
                     <h2 className='text-base'>Don't have an account? <Link to={"/signup"} className='text-blue-500 font-bold'>Sign up</Link></h2>
                     <h2 className='text-base'>Back to home<Link to={"/home"} className='text-blue-500 font-bold'>Go To Product Page</Link></h2>
                 </div>

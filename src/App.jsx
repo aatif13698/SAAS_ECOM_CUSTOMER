@@ -13,6 +13,8 @@ import images from "./constant/images";
 const Layout = lazy(() => import("./layout/Layout"));
 const Login = lazy(() => import("../src/pages/login/Login"));
 const SignUp = lazy(() => import("../src/pages/signup/SignUp"));
+const ForgetPassword = lazy(() => import("../src/pages/ForgetPassword/ForgetPassword"));
+const ResetPassword = lazy(() => import("../src/pages/ResetPassword/ResetPassword"))
 const VerifyOtp = lazy(() => import("../src/pages/verifyOtp/VerifyOtp"))
 const Home = lazy(() => import("../src/pages/home/Home"));
 const ProductDetail = lazy(() => import("../src/components/ProductDetail/ProductDetail"));
@@ -73,6 +75,8 @@ export default function App() {
           <Route element={<PublicRoutes />}>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/forgetpassword" element={<ForgetPassword />} />
+            <Route path="/resetpassword" element={<ResetPassword />} />
             <Route path="/verifyOtp" element={<VerifyOtp />} />
           </Route>
 

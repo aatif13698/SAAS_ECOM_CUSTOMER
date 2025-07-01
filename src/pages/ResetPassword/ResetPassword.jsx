@@ -1,0 +1,567 @@
+// import React, { useState, useCallback, memo } from 'react';
+// import images from '../../constant/images';
+// import logoWhite from "../../assets/logo/instgram_logo_white.png";
+// import useWidth from '../../Hooks/useWidth';
+// import { Link, useLocation, useNavigate } from 'react-router-dom';
+// import useDarkmode from '../../Hooks/useDarkMode';
+// import authSrvice from '../../services/authSrvice';
+// import debounce from 'lodash.debounce';
+
+// import toast, { Toaster } from 'react-hot-toast'
+
+
+
+// const ResetPassword = () => {
+
+//     const navigate = useNavigate()
+//     const location = useLocation();
+//     const identifier = location?.state?.identifier;
+
+//     const { width, breakpoints } = useWidth();
+//     const [isDark] = useDarkmode();
+
+//     const [formData, setFormData] = useState({
+//         otp: '',
+//         password:'',
+//         confirmPassword: '',
+//     });
+
+//     const [formDataError, setFormDataError] = useState({});
+//     const [isSubmitting, setIsSubmitting] = useState(false);
+
+//     const handleValidation = (name, value) => {
+//         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//         const errors = {};
+
+//         switch (name) {
+//             case 'otp':
+//                 if (!value) {
+//                     errors.otp = 'OTP is required.';
+//                 } else {
+//                     errors.otp = '';
+//                 }
+//                 break;
+//             default:
+//                 break;
+//         }
+//         return errors;
+//     };
+
+
+//     function handleChange(e) {
+//         const { name, value } = e.target;
+//         const error = handleValidation(name, value);
+//         setFormDataError((prev) => ({ ...prev, ...error }));
+//         setFormData((prev) => ({ ...prev, [name]: value }));
+//     }
+
+//     const validateFormData = () => {
+//         const errors = {};
+//         let hasError = false;
+
+//         Object.keys(formData).forEach((key) => {
+//             const error = handleValidation(key, formData[key]);
+//             if (Object.keys(error).length > 0) {
+//                 Object.assign(errors, error);
+//             }
+//         });
+//         const isValid = Object.values(errors).every(value => value === '');
+//         if (!isValid) {
+//             hasError = true;
+//         }
+//         setFormDataError(errors);
+//         return hasError;
+//     };
+
+//     async function handleSubmit(e) {
+//         e.preventDefault();
+//         setIsSubmitting(true);
+//         if (validateFormData()) {
+//             setIsSubmitting(false);
+//             return;
+//         }
+//         try {
+//             const dataObject = {
+//                 email: identifier,
+//                 otp: formData?.otp,
+//             }
+//             const response = await authSrvice.resetPassword(dataObject);
+//             toast.success(response.data.message)
+//             navigate("/login");
+//         } catch (error) {
+//             console.error('reset error:', error);
+//             toast.error(error)
+//         } finally {
+//             setIsSubmitting(false);
+//         }
+//     }
+
+//     const LoginLink = memo(() => {
+//         return (
+//             <div className='w-[100%] '>
+//                 <div className='sm:border-2 border-gray-300 rounded-sm p-6  max-w-md mx-auto'>
+//                     <div className='  rounded-lg flex   '>
+//                         <h2>Already have an account? <Link to={"/login"} className='text-blue-500 font-bold'>Log in </Link> </h2>
+//                     </div>
+//                 </div>
+//             </div>
+//         );
+//     }, []);
+
+//     return (
+//         <div className=' min-h-screen w-[100%] flex justify-center '>
+//             <div className='w-ful h-fulll sm:w-[100%] md:w-[60%] '>
+//                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 '>
+//                     {/* image div */}
+//                     {
+//                         width < breakpoints?.md ? "" :
+//                             <div className=' h-full flex items-center justify-center relative'>
+//                                 <div className='relative'>
+//                                     <img
+//                                         src={images?.loginIlustration}
+//                                         alt="loginImg2"
+//                                         className='relative z-10 w-[80%] sm:w-[60%] md:w-[90%] lg:w-[90%]'
+//                                     />
+//                                 </div>
+//                             </div>
+
+//                     }
+
+//                     {/* form div */}
+//                     <div className='  h-full w-[100%] flex flex-col justify-center items-center  '>
+
+//                         <div className='w-[100%] mb-3'>
+
+//                             <div className='sm:border-2  border-gray-300 rounded-sm p-6  max-w-md mx-auto'>
+//                                 <div className='flex justify-center py-6'>
+//                                     <img src={isDark ? images?.logo : images?.logo} alt="Instagram Logo" className='w-36' />
+
+//                                 </div>
+
+//                                 <h1 className='text-3xl text-center font-bold mb-3'>Verify OTP</h1>
+
+//                                 <div className='w-[90%]   rounded-lg flex justify-center items-center mx-auto'>
+
+//                                     <div className='w-[100%] space-y-4'>
+
+//                                         <div
+//                                             className={`w-[100%] ${isDark ? "bg-inputDark text-light" : "border-2 bg-inputLight text-dark"}  p-2  rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
+//                                         >
+//                                             {identifier}
+//                                         </div>
+//                                         <div>
+//                                             <input
+//                                                 name="otp"
+//                                                 type="number"
+//                                                 value={formData?.otp}
+//                                                 placeholder='Enter OTP'
+//                                                 className={`w-[100%] ${isDark ? "bg-inputDark text-light" : "border-2 bg-inputLight text-dark"}  p-2  rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
+//                                                 onChange={handleChange}
+//                                             />
+//                                             <span className='text-deep-orange-400 text-sm mt-4 pb-0 mb-0'>{formDataError?.otp}</span>
+//                                         </div>
+//                                         <button
+//                                             onClick={handleSubmit}
+//                                             disabled={isSubmitting}
+//                                             className="bg-cyan-500 text-white w-[100%] py-2 rounded hover:bg-cyan-600 transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+//                                         >
+//                                             {isSubmitting ? (
+//                                                 <svg
+//                                                     className="animate-spin h-5 w-5 text-white"
+//                                                     xmlns="http://www.w3.org/2000/svg"
+//                                                     fill="none"
+//                                                     viewBox="0 0 24 24"
+//                                                 >
+//                                                     <circle
+//                                                         className="opacity-25"
+//                                                         cx="12"
+//                                                         cy="12"
+//                                                         r="10"
+//                                                         stroke="currentColor"
+//                                                         strokeWidth="4"
+//                                                     ></circle>
+//                                                     <path
+//                                                         className="opacity-75"
+//                                                         fill="currentColor"
+//                                                         d="M4 12a8 8 0 018-8v8H4z"
+//                                                     ></path>
+//                                                 </svg>
+//                                             ) : (
+//                                                 "Submit"
+//                                             )}
+//                                         </button>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         </div>
+
+//                         <LoginLink />
+
+
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default ResetPassword;
+
+
+
+
+import React, { useState, useCallback, memo } from 'react';
+import images from '../../constant/images';
+import useWidth from '../../Hooks/useWidth';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import useDarkmode from '../../Hooks/useDarkMode';
+import authSrvice from '../../services/authSrvice';
+import toast, { Toaster } from 'react-hot-toast';
+
+const ResetPassword = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const identifier = location?.state?.identifier;
+
+  const { width, breakpoints } = useWidth();
+  const [isDark] = useDarkmode();
+
+  const [formData, setFormData] = useState({
+    otp: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const [formDataError, setFormDataError] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const handleValidation = (name, value) => {
+    const errors = {};
+
+    switch (name) {
+      case 'otp':
+        if (!value) {
+          errors.otp = 'OTP is required.';
+        } else {
+          errors.otp = '';
+        }
+        break;
+      case 'password':
+        if (!value) {
+          errors.password = 'Password is required.';
+        } else if (value.length < 8) {
+          errors.password = 'Password must be at least 8 characters long.';
+        } else {
+          errors.password = '';
+        }
+        break;
+      case 'confirmPassword':
+        if (!value) {
+          errors.confirmPassword = 'Confirm Password is required.';
+        } else if (value !== formData.password) {
+          errors.confirmPassword = 'Passwords do not match.';
+        } else {
+          errors.confirmPassword = '';
+        }
+        break;
+      default:
+        break;
+    }
+    return errors;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    const error = handleValidation(name, value);
+    setFormDataError((prev) => ({ ...prev, ...error }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validateFormData = () => {
+    const errors = {};
+    let hasError = false;
+
+    Object.keys(formData).forEach((key) => {
+      const error = handleValidation(key, formData[key]);
+      if (Object.keys(error).length > 0) {
+        Object.assign(errors, error);
+      }
+    });
+    const isValid = Object.values(errors).every((value) => value === '');
+    if (!isValid) {
+      hasError = true;
+    }
+    setFormDataError(errors);
+    return hasError;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    if (validateFormData()) {
+      setIsSubmitting(false);
+      return;
+    }
+    try {
+      const dataObject = {
+        identifier: identifier,
+        otp: formData.otp,
+        password: formData.password,
+      };
+      const response = await authSrvice.resetPassword(dataObject);
+      toast.success(response.data.message);
+      navigate('/login');
+    } catch (error) {
+      console.error('reset error:', error);
+      toast.error(error.message || 'An error occurred during password reset');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const LoginLink = memo(() => {
+    return (
+      <div className="w-[100%]">
+        <div className="sm:border-2 border-gray-300 rounded-sm p-6 max-w-md mx-auto">
+          <div className="rounded-lg flex">
+            <h2>
+              Already have an account?{' '}
+              <Link to="/login" className="text-blue-500 font-bold">
+                Log in
+              </Link>
+            </h2>
+          </div>
+        </div>
+      </div>
+    );
+  }, []);
+
+  return (
+    <div className="min-h-screen w-[100%] flex justify-center">
+      <Toaster />
+      <div className="w-[100%] sm:w-[100%] md:w-[60%]">
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          {/* Image div */}
+          {width < breakpoints?.md ? (
+            ''
+          ) : (
+            <div className="h-full flex items-center justify-center relative">
+              <div className="relative">
+                <img
+                  src={images?.loginIlustration}
+                  alt="login illustration"
+                  className="relative z-10 w-[80%] sm:w-[60%] md:w-[90%] lg:w-[90%]"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Form div */}
+          <div className="h-full w-[100%] flex flex-col justify-center items-center">
+            <div className="w-[100%] mb-3">
+              <div className="sm:border-2 border-gray-300 rounded-sm p-6 max-w-md mx-auto">
+                <div className="flex justify-center py-6">
+                  <img
+                    src={isDark ? images?.logo : images?.logo}
+                    alt="Instagram Logo"
+                    className="w-36"
+                  />
+                </div>
+
+                <h1 className="text-3xl text-center font-bold mb-6">Reset Password</h1>
+
+                <div className="w-[90%] rounded-lg flex justify-center items-center mx-auto">
+                  <div className="w-[100%] space-y-4">
+                    {/* Identifier (read-only) */}
+                    <div
+                      className={`w-[100%] ${
+                        isDark
+                          ? 'bg-inputDark text-light'
+                          : 'border-2 bg-inputLight text-dark'
+                      } p-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
+                    >
+                      {identifier}
+                    </div>
+                    <span className="text-deep-orange-400 text-sm">
+                      {formDataError?.identifier}
+                    </span>
+
+                    {/* OTP */}
+                    <div className="relative">
+                      <input
+                        name="otp"
+                        type="number"
+                        value={formData.otp}
+                        onChange={handleChange}
+                        className={`w-[100%] ${isDark ? "bg-inputDark text-light" : "border-2 bg-inputLight text-dark"}  p-2  rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
+                        placeholder="Enter OTP"
+                      />
+                      <span className="text-deep-orange-400 text-sm">
+                        {formDataError?.otp}
+                      </span>
+                    </div>
+
+                    {/* Password */}
+                    <div className="relative">
+                      <input
+                        name="password"
+                        type={showPassword ? 'text' : 'password'}
+                        value={formData.password}
+                        onChange={handleChange}
+                        className={`w-[100%] ${isDark ? "bg-inputDark text-light" : "border-2 bg-inputLight text-dark"}  p-2  rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
+                        placeholder="Enter Password"
+                      />
+                     
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                      >
+                        {showPassword ? (
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                            ></path>
+                          </svg>
+                        ) : (
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                            ></path>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                            ></path>
+                          </svg>
+                        )}
+                      </button>
+                      <span className="text-deep-orange-400 text-sm">
+                        {formDataError?.password}
+                      </span>
+                    </div>
+
+                    {/* Confirm Password */}
+                    <div className="relative">
+                      <input
+                        name="confirmPassword"
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        className={`w-[100%] ${isDark ? "bg-inputDark text-light" : "border-2 bg-inputLight text-dark"}  p-2  rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
+                        placeholder="Confirm Password"
+                      />
+                     
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                      >
+                        {showConfirmPassword ? (
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                            ></path>
+                          </svg>
+                        ) : (
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                            ></path>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                            ></path>
+                          </svg>
+                        )}
+                      </button>
+                      <span className="text-deep-orange-400 text-sm">
+                        {formDataError?.confirmPassword}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={handleSubmit}
+                      disabled={isSubmitting}
+                      className="bg-cyan-500 text-white w-[100%] py-2 rounded hover:bg-cyan-600 transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                      {isSubmitting ? (
+                        <svg
+                          className="animate-spin h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8H4z"
+                          ></path>
+                        </svg>
+                      ) : (
+                        'Submit'
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <LoginLink />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ResetPassword;
