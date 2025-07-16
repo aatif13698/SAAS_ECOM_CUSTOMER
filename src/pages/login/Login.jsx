@@ -9,6 +9,8 @@ import useDarkmode from '../../Hooks/useDarkMode';
 import authSrvice from '../../services/authSrvice';
 import { setClientUser } from '../../store/reducer/auth/authCustomerSlice';
 import { useDispatch } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
+
 
 
 const SignUpLink = memo(() => {
@@ -130,6 +132,9 @@ const Login = () => {
             // Notify success, redirect, or clear form after successful signup
         } catch (error) {
             console.error('Login error:', error);
+
+            toast.error(error || 'An error occurred during login');
+
             // Show user-friendly error messages
         } finally {
             setIsSubmitting(false);
@@ -140,6 +145,7 @@ const Login = () => {
 
     return (
         <div className=' min-h-screen w-full flex justify-center '>
+            <Toaster />
             <div className='w-ful h-fulll sm:w-[100%] md:w-[60%] '>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 '>
                     {/* image div */}

@@ -21,6 +21,9 @@ const MultiCarousel2 = ({
   items = productData,
   slidesToScroll = 1,
 }) => {
+
+  console.log("items", items);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(7);
   const [isLoading, setIsLoading] = useState(true);
@@ -103,41 +106,40 @@ const MultiCarousel2 = ({
       >
         {isLoading
           ? Array(visibleCount)
-              .fill()
-              .map((_, index) => <SkeletonCard key={index} />)
+            .fill()
+            .map((_, index) => <SkeletonCard key={index} />)
           : items.map((item) => {
-              const title = item?.product?.name?.slice(0, 10);
-              const costInRupee = item?.priceOptions[0]?.price;
-              return (
-                <div
-                  key={item._id}
-                  className="p-2 flex-shrink-0 cursor-pointer"
-                  style={{ width: `${100 / visibleCount}%` }}
-                  onClick={() => handleCardClick(item._id)}
-                >
-                  <div className="bg-white h-[20rem] flex flex-col justify-center items-center rounded overflow-hidden">
-                    <img
-                      src={`${import.meta.env.VITE_API_URL}/productBluePrint/${
-                        item?.product?.images[0]
+            const title = item?.product?.name?.slice(0, 10);
+            // const costInRupee = item?.priceOptions[0]?.price;
+            return (
+              <div
+                key={item._id}
+                className="p-2 flex-shrink-0 cursor-pointer"
+                style={{ width: `${100 / visibleCount}%` }}
+                onClick={() => handleCardClick(item._id)}
+              >
+                <div className="bg-white h-[20rem] flex flex-col justify-center items-center rounded overflow-hidden">
+                  <img
+                    src={`${import.meta.env.VITE_API_URL}/productBluePrint/${item?.product?.images[0]
                       }`}
-                      alt={item?.product?.name}
-                      className="w-[14rem] h-[14rem] object-contain"
-                    />
-                    <div className="p-4">
-                      <h3 className="font-bold text-lg mb-2">{title}</h3>
-                      <p
-                        className="text-sm text-black font-bold"
-                        style={{ fontFamily: "'Noto Sans', Arial, sans-serif" }}
-                      >
-                        ₹ {costInRupee}
-                      </p>
-                    </div>
+                    alt={item?.product?.name}
+                    className="w-[14rem] h-[14rem] object-contain"
+                  />
+                  <div className="p-4">
+                    <h3 className="font-bold text-lg mb-2">{title}</h3>
+                    <p
+                      className="text-sm text-black font-bold"
+                      style={{ fontFamily: "'Noto Sans', Arial, sans-serif" }}
+                    >
+                      ₹ 2300
+                    </p>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
       </div>
-      
+
       {!isLoading && (
         <>
           <button
