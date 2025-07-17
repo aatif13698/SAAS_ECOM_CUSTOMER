@@ -108,8 +108,10 @@ const ProductList = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product) => (
             <div
+               onClick={() => handleViewProduct(product._id)}
+
               key={product._id}
-              className={`${isDark ? "bg-carBgDark" : "bg-white"} rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-200`}
+              className={`${isDark ? "bg-carBgDark" : "bg-white"} cursor-pointer rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-200`}
             >
               <img
                 src={`${import.meta.env.VITE_API_URL}/productBluePrint/${
