@@ -43,7 +43,32 @@ const getParticularProductData = async (id) => {
 
 
 
+const getProductAttribute = async (productId) => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/vendor/attribute/all/attributes/product/${import.meta.env.VITE_DATABASE_ID}/${productId}`
+        );
+        return response.data;
+    } catch (error) {
+        console.log("error",error);
+        
+        if (error.response) {
+            return Promise.reject(error.response.data?.message || "Server error.");
+        } else if (error.request) {
+            return Promise.reject("Network error. Please try again.");
+        } else {
+            return Promise.reject("An error occurred. Please try again later.");
+        }
+    }
+}
+
+
+
+
+
+
 export default {
     getLaptopList1,
-    getParticularProductData
+    getParticularProductData,
+    getProductAttribute
 }

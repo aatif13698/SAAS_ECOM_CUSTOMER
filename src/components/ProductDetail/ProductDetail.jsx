@@ -51,51 +51,29 @@ const ProductDetail = ({ noFade }) => {
   const [selectedOptions, setSelectedOptions] = useState({});
   const [filteredProduct, setFilteredProduct] = useState([]);
 
-  console.log("filteredProduct", filteredProduct);
-
-
   const { clientUser: customerData, isAuth: isLogedIn, defaultAddress, } = useSelector((state) => state?.authCustomerSlice);
 
   useEffect(() => {
-    console.log("attributesArray", attributesArray);
-
-    const filteredProduct = productsData?.filter((item) => {
-      // Get product attributes (e.g., { RAM: "12 GB", ROM: "256 GB", SIZE: "13.6 INCH" })
-      const productAttributes = item?.priceOptions?.attributes;
-
-      // If product has no attributes, exclude it
-      if (!productAttributes) {
-        return false;
-      }
-
-      // Create a map of active attributes from attributesArray
-      const activeAttributes = attributesArray.reduce((acc, attr) => {
-        const key = Object.keys(attr)[0]; // e.g., "RAM", "ROM", "SIZE"
-        const activeValue = attr[key].find((val) => val.value === true)?.name;
-        if (activeValue) {
-          acc[key] = activeValue; // e.g., { RAM: "12 GB", ROM: "256 GB" }
+    const activeAttObject = {};
+    attributesArray.map((item) => {
+      const values = item?.values?.map((val) => {
+        if (val?.value == true) {
+          activeAttObject[item?.name] = val.valueName
         }
-        return acc;
-      }, {});
-
-      // Check if all active attributes match the product's attributes
-      return Object.entries(activeAttributes).every(([key, value]) => {
-        return productAttributes[key]?.toUpperCase() === value?.toUpperCase();
-      });
+      })
     });
-
-    console.log("filteredProduct", filteredProduct);
-
+    const filteredProduct = productsData?.filter((item) => {
+      if (JSON.stringify(item?.varianValue) == JSON.stringify(activeAttObject)) {
+        return item
+      }
+    });
     if (filteredProduct && filteredProduct?.length > 0) {
       setProductData(filteredProduct[0]);
       setFilteredProduct(filteredProduct)
     } else {
       setFilteredProduct([])
     }
-
-    // Optionally, set filteredProduct to state if needed
-    // setFilteredProducts(filteredProduct);
-  }, [attributesArray, productsData]);
+  }, [productsData, attributesArray]);
 
   // console.log("customizationValues", customizationValues);
   const [quantity, setQuantity] = useState(1);
@@ -129,146 +107,83 @@ const ProductDetail = ({ noFade }) => {
         const response = await productService.getParticularProductData(
           decryptedId
         );
-
+        const attribute = await fetchAttributes(response?.data?.product?._id);
         const mainStocks = response?.data?.normalSaleStock;
-
-        const productAttribute = mainStocks && mainStocks?.length > 0 ? mainStocks?.map((item) => {
-          const priceOptions = item?.priceOptions;
-          return priceOptions
-        }) : [];
-
-        const attr = productAttribute[0].attributes;
-        let keys = Object.keys(attr).map((item) => ({ [item]: [] }));
-
-        for (let index = 0; index < productAttribute.length; index++) {
-          const element = productAttribute[index].attributes;
-          const values = Object.entries(element);
-          values.map((items) => {
-            const key = items[0];
-            const value = items[1];
-            const newKeyValue = keys.map((values) => {
-              const a = Object.keys(values);
-              if (a[0] == key) {
-                const b = values[key];
-                if (b.includes(value)) {
-                  return {
-                    [key]: [...b]
-                  }
-                } else {
-                  return {
-                    [key]: [...b, value]
-                  }
-                }
-              } else {
-                return values
-              }
-            });
-            keys = newKeyValue;
+        const firstVariant = mainStocks[0];
+        const firstProductAttribute = firstVariant?.varianValue;
+        setProductData(firstVariant);
+        const newAttributeArray = attribute?.data?.attributes?.map((item) => {
+          const newValues = item.values?.map((attr) => {
+            return {
+              ...attr,
+              value: false
+            }
           });
-        }
-
-
-        function convertToNamedArray(inputArray) {
-          return inputArray.map(item => ({
-            name: item,
-            value: false
-          }));
-        };
-
-
-        const newArr = keys.map((item) => {
-          const a = Object.keys(item);
-          const b = Object.values(item);
-          const name = a[0];
-          const value = convertToNamedArray(b[0]);
           return {
-            [name]: value
+            ...item,
+            values: newValues
           }
         });
-
-        setFilteredProduct([{ ...response?.data?.normalSaleStock }])
-
-        setProductsData(response?.data?.normalSaleStock);
-        setProductData(response?.data?.normalSaleStock[0]);
-
-
-        const firstOption = Object.entries(response?.data?.normalSaleStock[0]?.priceOptions?.attributes).map(([key, value]) => ({
-          name: key,
-          value: value,
-        }));
-
-        // for (let index = 0; index < firstOption.length; index++) {
-        //   const element = firstOption[index];
-        //   const keyName = element?.name;
-
-        //   const newValue = newArr.map((item) => {
-        //     const key = Object.keys(item);
-        //     const value = Object.values(item);
-        //     if (key == keyName) {
-        //       const newBb = value[0].map((items) => {
-        //         if (items?.name == element.value) {
-        //           return {
-        //             ...items, value: true
-        //           }
-        //         } else {
-        //           return items
-        //         }
-        //       });
-
-        //       return {
-        //         [key]: newBb
-        //       }
-
-        //     } else {
-
-        //       return item
-        //     }
-
-        //   });
-
-        //   console.log("newValue",newValue);
-
-
-        // }
-
-        const updatedArr = firstOption.reduce((acc, element) => {
-          const keyName = element.name;
-          const targetValue = element.value;
-
-          return acc.map((item) => {
-            const key = Object.keys(item)[0]; // Get the first key of the item object
-            if (key === keyName) {
-              const updatedValues = item[key].map((subItem) => {
-                if (subItem?.name === targetValue) {
-                  return { ...subItem, value: true };
+        const firstAttArrayOfProduct = Object.entries(firstProductAttribute).map(([key, value]) => {
+          return {
+            name: key,
+            value: value
+          }
+        })
+        let activatedAttributes = newAttributeArray;
+        for (let index = 0; index < firstAttArrayOfProduct.length; index++) {
+          const element = firstAttArrayOfProduct[index];
+          const updatedArrya = activatedAttributes?.map((item) => {
+            if (item?.name == element.name) {
+              const newAttValue = item?.values.map((att) => {
+                if (att.valueName == element.value) {
+                  return {
+                    ...att,
+                    value: true
+                  }
+                } else {
+                  return att
                 }
-                return subItem;
               });
-              return { [key]: updatedValues };
+              return {
+                ...item,
+                values: newAttValue
+              }
+            } else {
+              return item
             }
-            return item;
           });
-        }, newArr);
-
-        setAttributesArray(updatedArr);
-
+          activatedAttributes = updatedArrya;
+        }
+        setAttributesArray(activatedAttributes);
+        setProductsData(response?.data?.normalSaleStock);
         setLoading(false);
-
       } catch (err) {
         setError("Failed to load product details");
         setLoading(false);
       }
     };
     fetchProduct();
+
   }, [encryptedId]);
+
+
+  async function fetchAttributes(decryptedId) {
+    try {
+      const response = await productService.getProductAttribute(
+        decryptedId
+      );
+      return response
+    } catch (error) {
+      console.log("error while getting the attributes", error);
+    }
+  }
 
   const { width, breakpoints } = useWidth();
 
   const [productSpecificData, setProductSpecificData] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedPriceOption, setSelectedPriceOption] = useState(null);
-
-  console.log("productSpecificData", productSpecificData);
 
   useEffect(() => {
     if (productData) {
@@ -277,12 +192,6 @@ const ProductDetail = ({ noFade }) => {
         `${import.meta.env.VITE_API_URL}/productBluePrint/${productData?.images[0]
         }`
       );
-      // const priceOPtions = productData?.priceOptions;
-      // console.log("priceOPtions", priceOPtions);
-
-      // if (priceOPtions.length > 0) {
-      //   setSelectedPriceOption(priceOPtions[0]);
-      // }
     }
   }, [productData]);
 
@@ -512,7 +421,7 @@ const ProductDetail = ({ noFade }) => {
                         }
                       }
                     }}
-                    className="px-6 py-2 h-[4rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65"
+                    className={`px-6 py-2 h-[4rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}
                   >
                     {isLoading2 ? (
                       <span className="flex items-center justify-center">
@@ -558,7 +467,7 @@ const ProductDetail = ({ noFade }) => {
 
                     }}
                     // onClick={handleAddToCart}
-                    className={`px-6 py-2 h-[4rem] w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg ${isLoading
+                    className={`px-6 py-2 h-[4rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg ${isLoading
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-addToCartBUtton/65"
                       }`}
@@ -623,45 +532,53 @@ const ProductDetail = ({ noFade }) => {
                   </p>
                   :
                   <p>
-                    <span className="font-bold">Price :</span> ₹{productSpecificData?.priceOptions?.price}
+                    <span className="font-bold">Price :</span> ₹{productSpecificData?.variant?.priceId?.price[0].unitPrice}
                   </p>
               }
 
 
               {
-                attributesArray && attributesArray?.length > 0 ? attributesArray.map((item) => {
-                  const keyName = Object.keys(item)[0]; // Get the attribute name (e.g., "color", "size")
-                  const keyValue = Object.values(item)[0]; // Get the array of values
+                attributesArray && attributesArray?.length > 0 ? attributesArray.map((item, index) => {
 
                   return (
-                    <div key={keyName}>
-                      <span className="font-bold mb-2">{keyName} :</span>
-                      {/* <p className="mb-2">{keyName} :</p> */}
-                      {keyValue.map((val) => (
+                    <div key={item._id}>
+                      <span className="font-bold mb-2">{item.name} :</span>
+                      {item?.values?.map((val) => (
                         <button
-                          key={val.name}
+                          key={val._id}
                           onClick={() => {
-                            // Update attributesArray when a button is clicked
-                            setAttributesArray((prevArray) =>
-                              prevArray.map((attrItem) => {
-                                const attrKey = Object.keys(attrItem)[0];
-                                if (attrKey === keyName) {
-                                  // Update the values for the matching attribute
+                            setAttributesArray((prevArray) => {
+                              const newArr = prevArray?.map((attrItem) => {
+                                if (attrItem._id === item._id) {
+                                  const updatedAttvalue = attrItem?.values?.map((attValue) => {
+                                    if (attValue._id == val._id) {
+                                      return {
+                                        ...attValue,
+                                        value: true
+                                      }
+                                    } else {
+                                      return {
+                                        ...attValue,
+                                        value: false
+                                      }
+                                    }
+                                  });
                                   return {
-                                    [attrKey]: attrItem[attrKey].map((subItem) => ({
-                                      ...subItem,
-                                      value: subItem.name === val.name ? true : false,
-                                    })),
+                                    ...attrItem,
+                                    values: updatedAttvalue
+
                                   };
+                                } else {
+                                  return attrItem
                                 }
-                                return attrItem; // Return unchanged for other attributes
-                              })
-                            );
+                              });
+                              return newArr
+                            });
                           }}
                           className={`${val?.value ? "border-blue-900 bg-blue-100" : "border-gray-300 bg-gray-100"
                             } mx-2 px-2 py-1 text-sm rounded-md border-2 transition-colors text-gray-700 hover:bg-gray-200`}
                         >
-                          {val?.name}
+                          {val?.valueName}
                         </button>
                       ))}
                     </div>
@@ -692,11 +609,12 @@ const ProductDetail = ({ noFade }) => {
               </div>
 
 
-              {/* {width > breakpoints.md ? (
+              {width > breakpoints.md ? (
                 ""
               ) : (
                 <div className="flex gap-4">
                   <button
+                    disabled={filteredProduct?.length == 0}
                     onClick={() => {
                       console.log("yes1");
 
@@ -711,7 +629,7 @@ const ProductDetail = ({ noFade }) => {
                       }
 
                     }}
-                    className="px-6 py-2 h-[4rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65">
+                    className={`px-6 py-2  ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} h-[4rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}>
                     {isLoading2 ? (
                       <span className="flex items-center justify-center">
                         <svg
@@ -742,6 +660,7 @@ const ProductDetail = ({ noFade }) => {
 
                   </button>
                   <button
+                    disabled={filteredProduct?.length == 0}
                     onClick={() => {
                       console.log("yes1");
 
@@ -757,7 +676,7 @@ const ProductDetail = ({ noFade }) => {
 
                     }}
                     // onClick={handleAddToCart}
-                    className="px-6 py-2 h-[4rem]  w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg hover:bg-addToCartBUtton/65"
+                    className={`px-6 py-2 h-[4rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg hover:bg-addToCartBUtton/65`}
                   >
                     {isLoading ? (
                       <span className="flex items-center justify-center">
@@ -788,7 +707,7 @@ const ProductDetail = ({ noFade }) => {
                     )}
                   </button>
                 </div>
-              )} */}
+              )}
 
               <div className="mt-10">
                 <h3 className="text-xl dark:text-black font-semibold">
@@ -895,7 +814,7 @@ const ProductDetail = ({ noFade }) => {
 
 
 
-      {/* <Transition appear show={showLoadingModal} as={Fragment}>
+      <Transition appear show={showLoadingModal} as={Fragment}>
         <Dialog as="div" className="relative z-[99999]" onClose={handleCloseLoadingModal}>
           <Transition.Child
             as={Fragment}
@@ -956,7 +875,7 @@ const ProductDetail = ({ noFade }) => {
             </Transition.Child>
           </div>
         </Dialog>
-      </Transition> */}
+      </Transition>
     </div>
   );
 };
