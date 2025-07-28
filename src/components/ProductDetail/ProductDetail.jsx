@@ -40,6 +40,7 @@ const ProductDetail = ({ noFade }) => {
   };
 
   const { productId: encryptedId } = useParams();
+  const [decryptedStockId, setDecryptedStockId] = useState(null);
   const [productData, setProductData] = useState(null);
   const [productsData, setProductsData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -50,6 +51,7 @@ const ProductDetail = ({ noFade }) => {
   const [attributesArray, setAttributesArray] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [filteredProduct, setFilteredProduct] = useState([]);
+
 
   const { clientUser: customerData, isAuth: isLogedIn, defaultAddress, } = useSelector((state) => state?.authCustomerSlice);
 
@@ -67,6 +69,7 @@ const ProductDetail = ({ noFade }) => {
         return item
       }
     });
+
     if (filteredProduct && filteredProduct?.length > 0) {
       setProductData(filteredProduct[0]);
       setFilteredProduct(filteredProduct)
@@ -81,6 +84,34 @@ const ProductDetail = ({ noFade }) => {
   const handleQuantityChange = (delta) => {
     setQuantity((prev) => Math.max(1, prev + delta));
   };
+
+  function convertPricingTiers(pricingArray) {
+    return pricingArray.map((item, index, arr) => ({
+      minQuantity: item.quantity,
+      maxQuantity: index < arr.length - 1 ? arr[index + 1].quantity - 1 : null,
+      unitPrice: item.unitPrice
+    }));
+  };
+
+
+  const [price, setPrice] = useState(null);
+  const [unitPrice, setUnitPrice] = useState(null)
+
+  useEffect(() => {
+    if (quantity > 0 && filteredProduct?.length > 0 && productData) {
+      const priceArray = convertPricingTiers(productData?.variant?.priceId?.price);
+      const priceObject = priceArray.find(item =>
+        quantity >= item.minQuantity &&
+        (item.maxQuantity === null || quantity <= item.maxQuantity)
+      ) || null;
+      if (priceObject) {
+        setUnitPrice(priceObject?.unitPrice)
+        setPrice(quantity * priceObject?.unitPrice)
+      } else {
+        setPrice(null)
+      }
+    }
+  }, [quantity, filteredProduct, productData])
 
 
   // handle customiseable option
@@ -98,6 +129,7 @@ const ProductDetail = ({ noFade }) => {
   useEffect(() => {
     const fetchProduct = async () => {
       const decryptedId = decryptId(encryptedId);
+      setDecryptedStockId(decryptedId);
       if (!decryptedId) {
         setError("Invalid product ID");
         setLoading(false);
@@ -181,13 +213,15 @@ const ProductDetail = ({ noFade }) => {
 
   const { width, breakpoints } = useWidth();
 
-  const [productSpecificData, setProductSpecificData] = useState(null);
+  // const [productData, setProductSpecificData] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedPriceOption, setSelectedPriceOption] = useState(null);
 
+
+
   useEffect(() => {
     if (productData) {
-      setProductSpecificData(productData);
+      // setProductSpecificData(productData);
       setSelectedImage(
         `${import.meta.env.VITE_API_URL}/productBluePrint/${productData?.images[0]
         }`
@@ -231,9 +265,14 @@ const ProductDetail = ({ noFade }) => {
         }
       });
 
-      formData.append("productStockId", productData?._id);
+      formData.append("productMainStockId", productData?._id);
+      formData.append("productStockId", decryptedStockId);
       formData.append("quantity", quantity);
-      formData.append("priceOption", JSON.stringify(selectedPriceOption));
+      formData.append("priceOption", JSON.stringify({
+        quantity: quantity,
+        unitPrice: unitPrice,
+        price: price
+      }));
       formData.append("sessionId", null);
       formData.append("clientId", import.meta.env.VITE_DATABASE_ID)
       const response = await customerService.newaddToCart(formData);
@@ -261,9 +300,14 @@ const ProductDetail = ({ noFade }) => {
         }
       });
 
-      formData.append("productStockId", productData?._id);
+      formData.append("productMainStockId", productData?._id);
+      formData.append("productStockId", decryptedStockId);
       formData.append("quantity", quantity);
-      formData.append("priceOption", JSON.stringify(selectedPriceOption));
+      formData.append("priceOption", JSON.stringify({
+        quantity: quantity,
+        unitPrice: unitPrice,
+        price: price
+      }));
       formData.append("sessionId", null);
       formData.append("addressId", defaultAddress?._id);
       formData.append("clientId", import.meta.env.VITE_DATABASE_ID);
@@ -385,7 +429,7 @@ const ProductDetail = ({ noFade }) => {
                 />
               </div>
               <div className="flex gap-2 mt-4 mb-4 justify-center">
-                {productSpecificData?.images?.map((img, index) => (
+                {productData?.images?.map((img, index) => (
                   <img
                     key={index}
                     src={`${import.meta.env.VITE_API_URL
@@ -514,12 +558,12 @@ const ProductDetail = ({ noFade }) => {
                 }   px-3 md:px-0`}
             >
               <h1 className="text-2xl dark:text-black font-semibold">
-                {productSpecificData?.name}
+                {productData?.name}
               </h1>
 
               <p className="text-base dark:text-black ">
 
-                <span className="font-bold"> Description :</span> <span className="text-gray-600">{productSpecificData?.description}</span>
+                <span className="font-bold"> Description :</span> <span className="text-gray-600">{productData?.description}</span>
 
               </p>
 
@@ -532,7 +576,7 @@ const ProductDetail = ({ noFade }) => {
                   </p>
                   :
                   <p>
-                    <span className="font-bold">Price :</span> ₹{productSpecificData?.variant?.priceId?.price[0].unitPrice}
+                    <span className="font-bold">Price :</span> ₹{price}
                   </p>
               }
 
