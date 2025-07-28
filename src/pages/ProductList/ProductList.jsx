@@ -125,7 +125,7 @@ const ProductList = () => {
                 {product.product?.name || "Unnamed Product"}
               </h3>
               <p className="text-sm text-gray-600 dark:text-white/80">
-                Price: ₹{product.priceOptions?.[0]?.price?.toFixed(2) || "N/A"}
+                Price: ₹{product.normalSaleStock[0]?.variant?.priceId?.price[0]?.unitPrice || "N/A"}
               </p>
               <button
                 onClick={() => handleViewProduct(product._id)}

@@ -35,12 +35,7 @@ const ProductList = lazy(() => import("../src/pages/ProductList/ProductList"))
 // import Home from "./pages/home/Home";
 import useDarkmode from "./Hooks/useDarkMode";
 import PublicRoutes from "./pages/PublicRoute/PublicRoutes";
-
-
-
-
-
-
+import customerService from "./services/customerService";
 
 
 export default function App() {
@@ -56,8 +51,6 @@ export default function App() {
       loadingScreen.style.display = 'none';
     }
   }, []);
-
-
 
 
   return (

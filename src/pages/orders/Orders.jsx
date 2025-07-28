@@ -63,17 +63,16 @@ const Orders = () => {
               return (
                 <div
                   key={item.id}
-                  className={`flex w-[100%]  ${isDark ? "dark:bg-carBgDark" : "bg-white"} flex-col md:flex-row items-start md:items-center gap-4 p-4  rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow`}
+                  className={`flex w-[100%]  ${isDark ? "dark:bg-carBgDark" : "bg-white"} flex-col md:flex-row items-start md:justify-between md:items-center gap-4 p-4  rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow`}
                 >
-                  <div className="flex-shrink-0">
+                  <div className="flex-shrink-0 flex items-center gap-4">
                     <img
                       src={`${import.meta.env.VITE_API_URL}/productBluePrint/${image}`}
                       alt={name}
                       className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-md border border-gray-300"
                       // onError={(e) => (e.target.src = "https://via.placeholder.com/80")} // Fallback on error
                     />
-                  </div>
-                  <div className=" md:w-auto">
+                     <div className=" md:w-auto">
                     <h3 className="text-lg text-wrap md:text-xl font-semibold text-gray-900 dark:text-white truncate">
                       {name}
                     </h3>
@@ -100,6 +99,8 @@ const Orders = () => {
                       )}
                     </div>
                   </div>
+                  </div>
+                 
                   <div className="flex flex-col items-end gap-2 w-[100%] md:w-auto">
                     <div className="text-lg font-bold text-gray-800 dark:text-white">
                       Total: ${subtotal.toFixed(2)}

@@ -131,7 +131,7 @@ const MultiCarousel2 = ({
                       className="text-sm text-black font-bold"
                       style={{ fontFamily: "'Noto Sans', Arial, sans-serif" }}
                     >
-                      ₹ 2300
+                      ₹ {item?.normalSaleStock[0]?.variant?.priceId?.price[0]?.unitPrice}
                     </p>
                   </div>
                 </div>

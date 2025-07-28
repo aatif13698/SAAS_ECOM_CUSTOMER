@@ -15,7 +15,7 @@ import SecondHeader from './SecondHeader';
 import { useNavigate } from 'react-router-dom';
 import { BsPersonCircle } from "react-icons/bs";
 import { useDispatch, useSelector } from 'react-redux';
-import { logOut } from '../../store/reducer/auth/authCustomerSlice';
+import { logOut, removeDefaultAddress } from '../../store/reducer/auth/authCustomerSlice';
 import { Dialog, Transition } from "@headlessui/react";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { CiLight } from 'react-icons/ci';
@@ -71,6 +71,7 @@ const Header = ({ noFade }) => {
         localStorage.removeItem("SAAS_ECOM_customerInfo")
         localStorage.removeItem("SAAS_ECOM_expiryTime")
         dispatch(logOut());
+        dispatch(removeDefaultAddress());
         navigate("/login");
     }
 

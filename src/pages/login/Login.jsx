@@ -7,7 +7,7 @@ import useWidth from '../../Hooks/useWidth';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import useDarkmode from '../../Hooks/useDarkMode';
 import authSrvice from '../../services/authSrvice';
-import { setClientUser } from '../../store/reducer/auth/authCustomerSlice';
+import { setClientUser, setDefaultAddress } from '../../store/reducer/auth/authCustomerSlice';
 import { useDispatch } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -126,8 +126,8 @@ const Login = () => {
             );
             localStorage.setItem("SAAS_ECOM_expiryTime", response.data.expiryTime);
             dispatch(setClientUser(response.data?.customerInfo));
-
-            navigate("/home")
+            dispatch(setDefaultAddress(response?.data?.addresses))
+            navigate("/home");
 
             // Notify success, redirect, or clear form after successful signup
         } catch (error) {

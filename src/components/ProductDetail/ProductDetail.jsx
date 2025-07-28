@@ -95,15 +95,22 @@ const ProductDetail = ({ noFade }) => {
 
 
   const [price, setPrice] = useState(null);
-  const [unitPrice, setUnitPrice] = useState(null)
+  const [unitPrice, setUnitPrice] = useState(null);
+
 
   useEffect(() => {
     if (quantity > 0 && filteredProduct?.length > 0 && productData) {
+      
       const priceArray = convertPricingTiers(productData?.variant?.priceId?.price);
+      
       const priceObject = priceArray.find(item =>
         quantity >= item.minQuantity &&
         (item.maxQuantity === null || quantity <= item.maxQuantity)
       ) || null;
+
+      
+
+
       if (priceObject) {
         setUnitPrice(priceObject?.unitPrice)
         setPrice(quantity * priceObject?.unitPrice)
