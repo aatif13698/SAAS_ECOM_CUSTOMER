@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 import { Dialog, Transition } from "@headlessui/react";
 import { useSelector } from "react-redux";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import useDarkmode from "../../Hooks/useDarkMode";
 
 
 // Secret key for decryption (same as used for encryption)
@@ -33,6 +34,7 @@ const decryptId = (encryptedId) => {
 
 const ProductDetail = ({ noFade }) => {
 
+  const [isDark] = useDarkmode();
   const [showLoadingModal, setShowLoadingModal] = useState(false);
   const [actionType, setActionType] = useState("")
   const handleCloseLoadingModal = () => {
@@ -49,11 +51,12 @@ const ProductDetail = ({ noFade }) => {
   const [error, setError] = useState(null);
 
   const [attributesArray, setAttributesArray] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState({});
   const [filteredProduct, setFilteredProduct] = useState([]);
 
+  const [addresses, setAddresses] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
-  const { clientUser: customerData, isAuth: isLogedIn, defaultAddress, } = useSelector((state) => state?.authCustomerSlice);
+  const { clientUser: customerData, isAuth: isLogedIn, } = useSelector((state) => state?.authCustomerSlice);
 
   useEffect(() => {
     const activeAttObject = {};
@@ -78,7 +81,6 @@ const ProductDetail = ({ noFade }) => {
     }
   }, [productsData, attributesArray]);
 
-  // console.log("customizationValues", customizationValues);
   const [quantity, setQuantity] = useState(1);
 
   const handleQuantityChange = (delta) => {
@@ -93,24 +95,16 @@ const ProductDetail = ({ noFade }) => {
     }));
   };
 
-
   const [price, setPrice] = useState(null);
   const [unitPrice, setUnitPrice] = useState(null);
 
-
   useEffect(() => {
     if (quantity > 0 && filteredProduct?.length > 0 && productData) {
-      
       const priceArray = convertPricingTiers(productData?.variant?.priceId?.price);
-      
       const priceObject = priceArray.find(item =>
         quantity >= item.minQuantity &&
         (item.maxQuantity === null || quantity <= item.maxQuantity)
       ) || null;
-
-      
-
-
       if (priceObject) {
         setUnitPrice(priceObject?.unitPrice)
         setPrice(quantity * priceObject?.unitPrice)
@@ -203,6 +197,7 @@ const ProductDetail = ({ noFade }) => {
       }
     };
     fetchProduct();
+    getAdresses()
 
   }, [encryptedId]);
 
@@ -316,7 +311,7 @@ const ProductDetail = ({ noFade }) => {
         price: price
       }));
       formData.append("sessionId", null);
-      formData.append("addressId", defaultAddress?._id);
+      formData.append("addressId", selectedAddress);
       formData.append("clientId", import.meta.env.VITE_DATABASE_ID);
 
       const response = await customerService.newPlaceOrder(formData);
@@ -329,6 +324,21 @@ const ProductDetail = ({ noFade }) => {
       console.log("error while placing order", error);
     }
   }
+
+
+
+  async function getAdresses() {
+    try {
+      const response = await customerService.getAddresses(customerData?._id);
+      setAddresses(response?.data?.addresses);
+      setSelectedAddress(response?.data?.addresses[0]._id)
+    } catch (error) {
+      console.log("error while getting the addresses", error);
+    }
+  }
+
+
+
 
   if (loading) {
     return (
@@ -465,7 +475,7 @@ const ProductDetail = ({ noFade }) => {
                       if (!customerData) {
                         alert("Login first")
                       } else {
-                        if (!defaultAddress) {
+                        if (!addresses) {
                           alert("please set the default address.")
                         } else {
                           handlePlaceOrder()
@@ -509,7 +519,7 @@ const ProductDetail = ({ noFade }) => {
                       if (!customerData) {
                         alert("Login first")
                       } else {
-                        if (!defaultAddress) {
+                        if (!addresses) {
                           alert("please set the default address.")
                         } else {
                           handleAddToCart()
@@ -660,6 +670,30 @@ const ProductDetail = ({ noFade }) => {
               </div>
 
 
+              <div className="flex items-center gap-4">
+                <h3 className="text-lg font-semibold text-gray-700" name="address">Delivery:</h3>
+                <div className="flex items-center border rounded-md">
+                  <select name="address"
+                    className={`w-[100%] ${isDark ? " text-light" : " text-dark"} border-none p-2  rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
+                    id="address"
+                    value={selectedAddress}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setSelectedAddress(value)
+                    }}
+                  >
+                    {
+                      addresses && addresses?.length > 0 ? addresses?.map((item, index) => {
+                        return (
+                          <option key={index} value={item?._id}>{item?.ZipCode}</option>
+                        )
+                      }) : <option value="">No Address Found</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+
               {width > breakpoints.md ? (
                 ""
               ) : (
@@ -672,7 +706,7 @@ const ProductDetail = ({ noFade }) => {
                       if (!customerData) {
                         alert("Login first")
                       } else {
-                        if (!defaultAddress) {
+                        if (!addresses) {
                           alert("please set the default address.")
                         } else {
                           handlePlaceOrder()
@@ -718,7 +752,7 @@ const ProductDetail = ({ noFade }) => {
                       if (!customerData) {
                         alert("Login first")
                       } else {
-                        if (!defaultAddress) {
+                        if (!addresses) {
                           alert("please set the default address.")
                         } else {
                           handleAddToCart()

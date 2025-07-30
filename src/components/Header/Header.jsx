@@ -20,6 +20,14 @@ import { Dialog, Transition } from "@headlessui/react";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { CiLight } from 'react-icons/ci';
 import { MdDarkMode } from 'react-icons/md';
+import { IoPerson } from "react-icons/io5";
+import { FaUserCircle } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa6";
+import { FaBox } from "react-icons/fa6";
+
+
+
+
 
 
 
@@ -219,9 +227,42 @@ const Header = ({ noFade }) => {
                                                 <button
                                                     className="flex items-center gap-3 px-4 py-2 text-sm w-[100%] text-left hover:bg-gray-100  dark:hover:bg-gray-700 transition-all rounded-md"
                                                     role="menuitem"
-                                                    onClick={() => navigate("/account")} // Navigate without reload
+                                                    onClick={() => {
+                                                        navigate("/profile");
+                                                        setIsProfileDropdownOpen(false);
+                                                    }} // Navigate without reload
                                                 >
-                                                    <FaUser className="text-gray-500" /> Account
+                                                    <FaUser className="text-gray-500" /> My Profile
+                                                </button>
+                                                 <button
+                                                    className="flex items-center gap-3 px-4 py-2 text-sm w-[100%] text-left hover:bg-gray-100  dark:hover:bg-gray-700 transition-all rounded-md"
+                                                    role="menuitem"
+                                                    onClick={() => {
+                                                        navigate("/account");
+                                                        setIsProfileDropdownOpen(false);
+                                                    }} // Navigate without reload
+                                                >
+                                                    <FaUserCircle className="text-gray-500" /> Account
+                                                </button>
+                                                                                                 <button
+                                                    className="flex items-center gap-3 px-4 py-2 text-sm w-[100%] text-left hover:bg-gray-100  dark:hover:bg-gray-700 transition-all rounded-md"
+                                                    role="menuitem"
+                                                    onClick={() => {
+                                                        handleCart()
+                                                        setIsProfileDropdownOpen(false)
+                                                    }} // Navigate without reload
+                                                >
+                                                    <FaHeart className="text-gray-500" /> Wishlist
+                                                </button>
+                                                                                                 <button
+                                                    className="flex items-center gap-3 px-4 py-2 text-sm w-[100%] text-left hover:bg-gray-100  dark:hover:bg-gray-700 transition-all rounded-md"
+                                                    role="menuitem"
+                                                    onClick={() => {
+                                                        navigate("/order");
+                                                        setIsProfileDropdownOpen(false);
+                                                    }} // Navigate without reload
+                                                >
+                                                    <FaBox className="text-gray-500" /> Order
                                                 </button>
 
                                                 {/* Logout Button */}
@@ -259,7 +300,7 @@ const Header = ({ noFade }) => {
                                         {
                                             isLogedIn ?
                                                 <button onClick={toggleProfileDropdown} className='bg-white w-8 h-8 flex justify-center items-center rounded-full'>
-                                                    <BsPersonCircle className='w-7 h-7 bg-transparent' color='green' />
+                                                    <IoPerson className='w-6 h-6 bg-transparent'  />
                                                 </button> : ""
                                         }
 

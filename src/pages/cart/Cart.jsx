@@ -161,6 +161,7 @@ const Cart = () => {
   const [cartData, setCartData] = useState(null);
   const [carts, setCarts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const [refreshCount, setRefreshCount] = useState(0);
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [addresses, setAddresses] = useState([]);
@@ -232,13 +233,16 @@ const Cart = () => {
   useEffect(() => {
     const getCarts = async () => {
       try {
+        setIsPageLoading(true);
         const response = await customerService.getCarts(null);
         setCartData(response?.data?.data);
         setCarts(response?.data?.data?.items || []);
+        setIsPageLoading(false)
       } catch (error) {
         setCartData(null);
         setCarts([]);
         console.error("Error fetching carts:", error);
+        setIsPageLoading(false)
         // toast.error("Failed to load cart");
       }
     };
@@ -279,6 +283,15 @@ const Cart = () => {
       color: "#9ca3af",
     }),
   };
+
+
+  if (isPageLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full md:px-8 sm:px-0">

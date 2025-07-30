@@ -10,6 +10,7 @@ import useDarkmode from "../../Hooks/useDarkMode";
 
 const Orders = () => {
   const [isDark] = useDarkmode();
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
 
   const navigate = useNavigate()
@@ -20,18 +21,29 @@ const Orders = () => {
 
   async function getOrders(params) {
     try {
+      setIsPageLoading(true);
       const response = await customerService.getOrders(null);
-      setCarts(response?.data?.data)
+      setCarts(response?.data?.data);
+      setIsPageLoading(false);
     } catch (error) {
       setCartData(null);
       setCarts([])
       console.log("error while fetching the orders", error);
+      setIsPageLoading(false);
     }
   }
 
   const handleTrackOrder = (orderId) => {
     navigate(`/track-order/${orderId}`);
   };
+
+   if (isPageLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
 

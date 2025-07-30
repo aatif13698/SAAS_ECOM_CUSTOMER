@@ -915,7 +915,7 @@ const Address = () => {
                                     <p className="font-bold">{address.fullName}</p>
                                     <p className="text-gray-600  dark:text-white/90">{address.phone}</p>
                                     <p className="text-gray-600 dark:text-white/90">{address.altPhoneNumber}</p>
-                                    <p className="text-gray-600 dark:text-white/90">{address.houseNumber}, {address.roadName}, {address.city}, {address.state}, {address.country}, {address.pincode}</p>
+                                    <p className="text-gray-600 dark:text-white/90">{address.houseNumber}, {address.roadName}, {address.city}, {address.state}, {address.country}, {address.ZipCode}</p>
                                     <p className="text-gray-500 dark:text-white text-sm">Landmark: {address.nearbyLandmark}</p>
 
                                     {/* Edit & Delete Buttons */}
