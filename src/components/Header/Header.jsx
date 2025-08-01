@@ -275,7 +275,7 @@ const Header = ({ noFade }) => {
                                                 </button>
                                             </div>
                                         </div>
-                                        <button onClick={handleCart} class="flex items-center gap-2 bg-lightButton hover:bg-lightButton/80 text-white font-semibold py-1 px-2 rounded">
+                                        <button onClick={handleCart} className="flex items-center gap-2 bg-lightButton hover:bg-lightButton/80 text-white font-semibold py-1 px-2 rounded">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.3 2.6a1 1 0 00.9 1.4h12.8m-14.4 

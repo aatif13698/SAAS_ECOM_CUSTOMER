@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { FaCheckCircle, FaTimesCircle, FaInfoCircle } from "react-icons/fa";
 import customerService from "../../services/customerService";
 import toast from "react-hot-toast";
@@ -8,8 +8,16 @@ import useDarkmode from "../../Hooks/useDarkMode";
 const TrackOrder = () => {
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
+  const [itemData, setItemData] = useState([])
   const [loading, setLoading] = useState(true);
-      const [isDark] = useDarkmode();
+  const [isDark] = useDarkmode();
+  const location = useLocation();
+
+
+  const itemId = location?.state?.itemId;
+
+  console.log("itemData", itemData);
+  
 
 
   useEffect(() => {
@@ -33,6 +41,14 @@ const TrackOrder = () => {
     }
   }
 
+  useEffect(() => {
+    if(order && itemId){
+      const filteredItem = order?.items?.filter((item) => item?._id == itemId);
+      console.log("filteredItem", filteredItem);
+      setItemData(filteredItem)
+    }
+  },[order])
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -52,10 +68,12 @@ const TrackOrder = () => {
 
   const { orderNumber, status, activities, items, totalAmount, paymentMethod, paymentStatus, address, customer } = order;
 
+  
+
   // Define timeline statuses
   const timelineStatuses = ["PENDING", "APPROVED", "IN_PRODUCTION", "SHIPPED", "DELIVERED"];
-  const isCancelled = status === "CANCELLED";
-  const currentStatusIndex = isCancelled ? -1 : timelineStatuses.indexOf(status);
+  const isCancelled = itemData[0]?.status === "CANCELLED";
+  const currentStatusIndex = isCancelled ? -1 : timelineStatuses.indexOf(itemData[0]?.status);
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-5xl">
@@ -73,12 +91,12 @@ const TrackOrder = () => {
                 className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
                   isCancelled
                     ? "bg-red-100 text-red-800"
-                    : status === "DELIVERED"
+                    : itemData[0]?.status === "DELIVERED"
                     ? "bg-green-100 text-green-800"
                     : "bg-yellow-100 text-yellow-800"
                 }`}
               >
-                {status}
+                {itemData[0]?.status}
               </span>
             </p>
             <p className="text-sm text-gray-600 dark:text-white/80">
@@ -112,7 +130,9 @@ const TrackOrder = () => {
         <div className="relative pl-6 md:pl-8">
           <div className="absolute left-[1.50rem] md:left-[1.80rem] top-0 bottom-0 w-0.5 bg-gray-300"></div>
           {timelineStatuses.map((timelineStatus, index) => {
-            const activity = activities.find((act) => act.status === timelineStatus);
+            const activity = itemData[0]?.activities.find((act) => act.status === timelineStatus);
+            console.log("activity",activity);
+            
             const isActive = !isCancelled && index <= currentStatusIndex;
             const isCompleted = isActive && activity;
             const isPending = !isCancelled && index > currentStatusIndex;
@@ -169,11 +189,11 @@ const TrackOrder = () => {
               <div className="ml-6">
                 <h4 className="text-sm font-medium text-red-600">CANCELLED</h4>
                 <p className="text-xs text-gray-500">
-                  {activities.find((act) => act.status === "CANCELLED")?.timestamp.toLocaleString()}
-                  {activities.find((act) => act.status === "CANCELLED")?.notes && (
+                  {itemData[0]?.activities.find((act) => act.status === "CANCELLED")?.timestamp.toLocaleString()}
+                  {itemData[0]?.activities.find((act) => act.status === "CANCELLED")?.notes && (
                     <span className="flex items-center gap-1 mt-1">
                       <FaInfoCircle className="text-blue-500" />
-                      {activities.find((act) => act.status === "CANCELLED")?.notes}
+                      {itemData[0]?.activities.find((act) => act.status === "CANCELLED")?.notes}
                     </span>
                   )}
                 </p>
@@ -185,21 +205,21 @@ const TrackOrder = () => {
 
       {/* Order Items */}
       <div className={`${isDark ? "bg-carBgDark " : "bg-white"} shadow-md rounded-lg p-6 border border-gray-200`}>
-        <h3 className="text-lg font-semibold text-gray-700 dark:text-white mb-4">Order Items</h3>
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-white mb-4">Order Item</h3>
         <div className="space-y-4">
-          {items.map((item, index) => (
+          {itemData && itemData.map((item, index) => (
             <div
               key={index}
               className="flex flex-col md:flex-row items-start gap-4 border-b border-gray-200 pb-4 last:border-b-0"
             >
               <img
-                src={`${import.meta.env.VITE_API_URL}/productBluePrint/${item.productStock?.product?.images?.[0] || "placeholder.jpg"}`}
-                alt={item.productStock?.product?.name}
+                src={`${import.meta.env.VITE_API_URL}/productBluePrint/${item.productMainStock?.images?.[0] || "placeholder.jpg"}`}
+                alt={item.productMainStock?.name}
                 className="w-16 h-16 md:w-20 md:h-20 object-cover rounded-md border border-gray-300"
                 onError={(e) => (e.target.src = "https://via.placeholder.com/80")}
               />
               <div className="flex-1">
-                <h4 className="text-sm font-medium text-gray-800 dark:text-white/90">{item.productStock?.product?.name || "Unnamed Product"}</h4>
+                <h4 className="text-sm font-medium text-gray-800 dark:text-white/90">{item.productMainStock?.name || "Unnamed Product"}</h4>
                 <p className="text-xs text-gray-600 dark:text-white/80">
                   Quantity: {item.quantity} | Unit Price: ${item.priceOption.price.toFixed(2)}
                 </p>

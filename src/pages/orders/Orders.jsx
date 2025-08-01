@@ -17,9 +17,11 @@ const Orders = () => {
   const [carts, setCarts] = useState([]);
   useEffect(() => {
     getOrders()
-  }, [])
+  }, []);
 
-  async function getOrders(params) {
+  console.log("carts aaa",carts);
+
+  async function getOrders() {
     try {
       setIsPageLoading(true);
       const response = await customerService.getOrders(null);
@@ -33,8 +35,8 @@ const Orders = () => {
     }
   }
 
-  const handleTrackOrder = (orderId) => {
-    navigate(`/track-order/${orderId}`);
+  const handleTrackOrder = (orderId, itemId) => {
+    navigate(`/track-order/${orderId}`, { state: { itemId: itemId } });
   };
 
    if (isPageLoading) {
@@ -58,7 +60,7 @@ const Orders = () => {
               <p>Start shopping to see your orders here!</p>
             </div>
           ) : (
-            carts?.map((item) => {
+            carts?.map((item, index) => {
               console.log("carts", item);
 
               const name = item?.productStock?.product?.name || "Unnamed Product";
@@ -74,7 +76,7 @@ const Orders = () => {
 
               return (
                 <div
-                  key={item.id}
+                  key={index+"AES"}
                   className={`flex w-[100%]  ${isDark ? "dark:bg-carBgDark" : "bg-white"} flex-col md:flex-row items-start md:justify-between md:items-center gap-4 p-4  rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow`}
                 >
                   <div className="flex-shrink-0 flex items-center gap-4">
@@ -119,7 +121,7 @@ const Orders = () => {
                     </div>
                     <div className="flex gap-2">
                       <button
-                        onClick={() => handleTrackOrder(item.id)}
+                        onClick={() => handleTrackOrder(item.id, item?._id)}
                         className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 font-medium border border-blue-600 rounded-md hover:bg-blue-50 transition-colors">
                         Track Order
                       </button>

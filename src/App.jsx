@@ -40,10 +40,7 @@ import customerService from "./services/customerService";
 
 export default function App() {
 
-
   const [isDark] = useDarkmode();
-
-  console.log("isDark", isDark);
 
   useEffect(() => {
     const loadingScreen = document.getElementById('loading-screen');

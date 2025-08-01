@@ -126,7 +126,6 @@ const Home = () => {
 
 
 
-
       </div>
       {/* <div className={`${width > breakpoints.xl ? "w-[40%]" : "w-[0%] hidden"}`}>
         <FollowSuggetion />
