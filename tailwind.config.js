@@ -76,8 +76,8 @@ const conf = withMT({
         lightButton: "rgb(19, 206, 183)",
         darkButton: "rgb(0, 114, 92)",
 
-        buyNowBUtton : "#ff9422",
-        addToCartBUtton : "#13c004",
+        buyNowBUtton : "#00ff6e",
+        addToCartBUtton : "#38b0f5",
 
         carBgDark : "#43424a80",
         cardBgDark2 : "#43424af2",

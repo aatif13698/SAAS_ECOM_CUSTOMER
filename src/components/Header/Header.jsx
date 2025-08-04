@@ -49,6 +49,9 @@ const Header = ({ noFade }) => {
 
     const { clientUser: customerData, isAuth: isLogedIn } = useSelector((state) => state?.authCustomerSlice);
 
+    // console.log("customerData", customerData);
+
+
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -234,7 +237,7 @@ const Header = ({ noFade }) => {
                                                 >
                                                     <FaUser className="text-gray-500" /> My Profile
                                                 </button>
-                                                 <button
+                                                <button
                                                     className="flex items-center gap-3 px-4 py-2 text-sm w-[100%] text-left hover:bg-gray-100  dark:hover:bg-gray-700 transition-all rounded-md"
                                                     role="menuitem"
                                                     onClick={() => {
@@ -244,7 +247,7 @@ const Header = ({ noFade }) => {
                                                 >
                                                     <FaUserCircle className="text-gray-500" /> Account
                                                 </button>
-                                                                                                 <button
+                                                <button
                                                     className="flex items-center gap-3 px-4 py-2 text-sm w-[100%] text-left hover:bg-gray-100  dark:hover:bg-gray-700 transition-all rounded-md"
                                                     role="menuitem"
                                                     onClick={() => {
@@ -254,7 +257,7 @@ const Header = ({ noFade }) => {
                                                 >
                                                     <FaHeart className="text-gray-500" /> Wishlist
                                                 </button>
-                                                                                                 <button
+                                                <button
                                                     className="flex items-center gap-3 px-4 py-2 text-sm w-[100%] text-left hover:bg-gray-100  dark:hover:bg-gray-700 transition-all rounded-md"
                                                     role="menuitem"
                                                     onClick={() => {
@@ -300,7 +303,10 @@ const Header = ({ noFade }) => {
                                         {
                                             isLogedIn ?
                                                 <button onClick={toggleProfileDropdown} className='bg-white w-8 h-8 flex justify-center items-center rounded-full'>
-                                                    <IoPerson className='w-6 h-6 bg-transparent'  />
+                                                    {customerData?.profileImage ? <img src={`${import.meta.env.VITE_API_URL
+                                                        }/profile/${customerData?.profileImage}`} className='rounded-full' alt="" />
+                                                        : <IoPerson className='w-6 h-6 bg-transparent' />
+                                                    }
                                                 </button> : ""
                                         }
 

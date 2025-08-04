@@ -16,6 +16,10 @@ import { Dialog, Transition } from "@headlessui/react";
 import { useSelector } from "react-redux";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import useDarkmode from "../../Hooks/useDarkMode";
+import { BsCart4 } from "react-icons/bs";
+
+import { FaBoxOpen } from "react-icons/fa";
+
 
 
 // Secret key for decryption (same as used for encryption)
@@ -468,7 +472,7 @@ const ProductDetail = ({ noFade }) => {
               </div>
 
               {width > breakpoints.md ? (
-                <div className="flex justify-around  gap-4 mx-2">
+                <div className="flex lg:flex-row flex-col justify-around  gap-4 mx-2">
                   <button
                     onClick={() => {
                       console.log("yes1");
@@ -482,7 +486,7 @@ const ProductDetail = ({ noFade }) => {
                         }
                       }
                     }}
-                    className={`px-6 py-2 h-[4rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}
+                    className={`px-6 py-1 h-[3rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} lg:w-[50%] w-[100%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}
                   >
                     {isLoading2 ? (
                       <span className="flex items-center justify-center">
@@ -509,7 +513,10 @@ const ProductDetail = ({ noFade }) => {
                         Processing...
                       </span>
                     ) : (
-                      <span>Buy Now</span>
+                      <div className="flex justify-center items-center gap-2">
+                        <span><FaBoxOpen className="text-[1.6rem]" /></span>
+                        <span>Buy Now</span>
+                      </div>
                     )}
                   </button>
                   <button
@@ -528,7 +535,7 @@ const ProductDetail = ({ noFade }) => {
 
                     }}
                     // onClick={handleAddToCart}
-                    className={`px-6 py-2 h-[4rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg ${isLoading
+                    className={`px-6 py-1 h-[3rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} lg:w-[50%] w-[100%] bg-addToCartBUtton text-white font-semibold rounded-lg ${isLoading
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-addToCartBUtton/65"
                       }`}
@@ -559,7 +566,11 @@ const ProductDetail = ({ noFade }) => {
                         Adding...
                       </span>
                     ) : (
-                      <span>Add to Cart</span>
+                      <div className="flex justify-center items-center gap-2">
+                        <span><BsCart4 className="text-[1.6rem]" /></span>
+                        <span>Add to Cart</span>
+                      </div>
+
                     )}
                   </button>
                 </div>
@@ -714,7 +725,7 @@ const ProductDetail = ({ noFade }) => {
                       }
 
                     }}
-                    className={`px-6 py-2  ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} h-[4rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}>
+                    className={`px-6 py-1  ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} h-[3rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}>
                     {isLoading2 ? (
                       <span className="flex items-center justify-center">
                         <svg
@@ -740,7 +751,10 @@ const ProductDetail = ({ noFade }) => {
                         Processing...
                       </span>
                     ) : (
-                      <span>Buy Now</span>
+                      <div className="flex justify-center items-center gap-1">
+                        <span><FaBoxOpen className="text-[1.2rem]" /></span>
+                        <span>Buy Now</span>
+                      </div>
                     )}
 
                   </button>
@@ -761,7 +775,7 @@ const ProductDetail = ({ noFade }) => {
 
                     }}
                     // onClick={handleAddToCart}
-                    className={`px-6 py-2 h-[4rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg hover:bg-addToCartBUtton/65`}
+                    className={`px-6 py-2 h-[3rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg hover:bg-addToCartBUtton/65`}
                   >
                     {isLoading ? (
                       <span className="flex items-center justify-center">
@@ -788,7 +802,10 @@ const ProductDetail = ({ noFade }) => {
                         Adding...
                       </span>
                     ) : (
-                      <span>Add to Cart</span>
+                      <div className="flex justify-center items-center gap-1">
+                        <span><BsCart4 className="text-[1.2rem]" /></span>
+                        <span>Add to Cart</span>
+                      </div>
                     )}
                   </button>
                 </div>
