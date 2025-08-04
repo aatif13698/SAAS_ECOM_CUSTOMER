@@ -704,6 +704,39 @@ const ProductDetail = ({ noFade }) => {
                 </div>
               </div>
 
+              <div className="bg-white  rounded-lg border-1 max-w-4xl mx-auto my-4 ">
+                <h2 className="text-2xl font-semibold text-gray-800 p-4">Specifications</h2>
+
+                {productData?.specification && productData?.specification.length > 0 ? (
+                  productData.specification.map((specification, index) => (
+                    <div key={index} className="mb-1">
+                      <h3 className="text-lg  font-medium text-gray-700 bg-gray-100 p-3 rounded-t-md">
+                        {specification?.title} 
+                      </h3>
+                      <div className="  rounded-b-md">
+                        {specification?.items && specification.items.length > 0 ? (
+                          <div className="divide-y divide-gray-200">
+                            {specification.items.map((item, itemIndex) => (
+                              <div
+                                key={itemIndex}
+                                className="flex justify-between p-4  hover:bg-gray-50"
+                              >
+                                <span className="text-gray-600 w-1/2">{item?.name}</span>
+                                <span className="text-gray-800 w-1/2">{item?.description}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="p-4 text-gray-500">No items found</div>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-gray-500 text-center p-4">No specifications found</div>
+                )}
+              </div>
+
 
               {width > breakpoints.md ? (
                 ""
@@ -811,61 +844,7 @@ const ProductDetail = ({ noFade }) => {
                 </div>
               )}
 
-              <div className="mt-10">
-                <h3 className="text-xl dark:text-black font-semibold">
-                  More Product Information
-                </h3>
-                <p className="text-gray-600">
-                  This product is designed to meet the highest standards of
-                  quality and performance.
-                </p>
-              </div>
-              <div className="mt-10">
-                <h3 className="text-xl dark:text-black font-semibold">
-                  Return & Refund Policy
-                </h3>
-                <p className="text-gray-600">
-                  Our return policy ensures customer satisfaction. You can
-                  return the product within 30 days.
-                </p>
-              </div>
-
-              <div className="mt-10">
-                <h3 className="text-xl dark:text-black font-semibold">
-                  Return & Refund Policy
-                </h3>
-                <p className="text-gray-600">
-                  Our return policy ensures customer satisfaction. You can
-                  return the product within 30 days.
-                </p>
-              </div>
-              <div className="mt-10">
-                <h3 className="text-xl dark:text-black font-semibold">
-                  Return & Refund Policy
-                </h3>
-                <p className="text-gray-600">
-                  Our return policy ensures customer satisfaction. You can
-                  return the product within 30 days.
-                </p>
-              </div>
-              <div className="mt-10">
-                <h3 className="text-xl dark:text-black font-semibold">
-                  Return & Refund Policy
-                </h3>
-                <p className="text-gray-600">
-                  Our return policy ensures customer satisfaction. You can
-                  return the product within 30 days.
-                </p>
-              </div>
-              <div className="mt-10">
-                <h3 className="text-xl dark:text-black font-semibold">
-                  Return & Refund Policy
-                </h3>
-                <p className="text-gray-600">
-                  Our return policy ensures customer satisfaction. You can
-                  return the product within 30 days.
-                </p>
-              </div>
+             
             </div>
           </div>
         </div>
