@@ -95,12 +95,21 @@ const ProductDetail = ({ noFade }) => {
     return pricingArray.map((item, index, arr) => ({
       minQuantity: item.quantity,
       maxQuantity: index < arr.length - 1 ? arr[index + 1].quantity - 1 : null,
-      unitPrice: item.unitPrice
+      unitPrice: item.unitPrice,
+      hasDiscount: item?.hasDiscount,
+      discountPercent: item?.discountPercent
     }));
   };
 
   const [price, setPrice] = useState(null);
   const [unitPrice, setUnitPrice] = useState(null);
+  const [priceObject, setPriceObject] = useState(null);
+  const [finalPrice, setFinalPrice] = useState(null);
+
+  console.log("unitPrice", unitPrice);
+  console.log("price", price);
+  console.log("finalPrice", finalPrice);
+
 
   useEffect(() => {
     if (quantity > 0 && filteredProduct?.length > 0 && productData) {
@@ -110,8 +119,19 @@ const ProductDetail = ({ noFade }) => {
         (item.maxQuantity === null || quantity <= item.maxQuantity)
       ) || null;
       if (priceObject) {
-        setUnitPrice(priceObject?.unitPrice)
-        setPrice(quantity * priceObject?.unitPrice)
+        setPriceObject(priceObject);
+
+        if (priceObject?.hasDiscount == true) {
+          const discountedUnitPrice = priceObject?.unitPrice - priceObject?.unitPrice * (priceObject?.discountPercent / 100);
+          setFinalPrice(quantity * discountedUnitPrice);
+          setUnitPrice(priceObject?.unitPrice);
+          setPrice(quantity * priceObject?.unitPrice)
+        } else {
+          setUnitPrice(priceObject?.unitPrice);
+          setPrice(quantity * priceObject?.unitPrice)
+        }
+
+
       } else {
         setPrice(null)
       }
@@ -603,15 +623,25 @@ const ProductDetail = ({ noFade }) => {
                     Selected configure product is not available !
                   </p>
                   :
-                  <p>
-                    <span className="font-bold">Price :</span> ₹{price}
-                  </p>
+                  <div className="">
+                    {
+                      priceObject?.hasDiscount ?
+                        <div>
+                          <div className="flex gap-1 justify-start items-center">
+                            <span className="bg-green-600 py-[.30rem] px-[.40rem] text-white rounded-lg font-bold">{`${priceObject?.hasDiscount ? "-" + " " + priceObject?.discountPercent + " " + "%" : ""}`}</span>
+                            <p className="font-bold">Price : ₹{finalPrice} </p>
+                          </div>
+                          <span className="text-base font-serif text-gray-500">MRP: <span className=""><del>{price}</del></span> </span>
+                        </div>
+                        :
+                        <div>
+                          <p className="font-bold">Price : ₹{price} </p>
+                        </div>
+                    }
+                  </div>
               }
-
-
               {
                 attributesArray && attributesArray?.length > 0 ? attributesArray.map((item, index) => {
-
                   return (
                     <div key={item._id}>
                       <span className="font-bold mb-2">{item.name} :</span>
@@ -703,40 +733,6 @@ const ProductDetail = ({ noFade }) => {
                   </select>
                 </div>
               </div>
-
-              <div className="bg-white  rounded-lg border-1 max-w-4xl mx-auto my-4 ">
-                <h2 className="text-2xl font-semibold text-gray-800 p-4">Specifications</h2>
-
-                {productData?.specification && productData?.specification.length > 0 ? (
-                  productData.specification.map((specification, index) => (
-                    <div key={index} className="mb-1">
-                      <h3 className="text-lg  font-medium text-gray-700 bg-gray-100 p-3 rounded-t-md">
-                        {specification?.title} 
-                      </h3>
-                      <div className="  rounded-b-md">
-                        {specification?.items && specification.items.length > 0 ? (
-                          <div className="divide-y divide-gray-200">
-                            {specification.items.map((item, itemIndex) => (
-                              <div
-                                key={itemIndex}
-                                className="flex justify-between p-4  hover:bg-gray-50"
-                              >
-                                <span className="text-gray-600 w-1/2">{item?.name}</span>
-                                <span className="text-gray-800 w-1/2">{item?.description}</span>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="p-4 text-gray-500">No items found</div>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-gray-500 text-center p-4">No specifications found</div>
-                )}
-              </div>
-
 
               {width > breakpoints.md ? (
                 ""
@@ -844,7 +840,43 @@ const ProductDetail = ({ noFade }) => {
                 </div>
               )}
 
-             
+              <div className="bg-white  rounded-lg border-1 max-w-4xl mx-auto my-4 ">
+                <h2 className="text-2xl font-semibold text-gray-800 p-4">Specifications</h2>
+
+                {productData?.specification && productData?.specification.length > 0 ? (
+                  productData.specification.map((specification, index) => (
+                    <div key={index} className="mb-1">
+                      <h3 className="text-lg  font-medium text-gray-700 bg-gray-100 p-3 rounded-t-md">
+                        {specification?.title}
+                      </h3>
+                      <div className="  rounded-b-md">
+                        {specification?.items && specification.items.length > 0 ? (
+                          <div className="divide-y divide-gray-200">
+                            {specification.items.map((item, itemIndex) => (
+                              <div
+                                key={itemIndex}
+                                className="flex justify-between p-4  hover:bg-gray-50"
+                              >
+                                <span className="text-gray-600 w-1/2">{item?.name}</span>
+                                <span className="text-gray-800 w-1/2">{item?.description}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="p-4 text-gray-500">No items found</div>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-gray-500 text-center p-4">No specifications found</div>
+                )}
+              </div>
+
+
+
+
+
             </div>
           </div>
         </div>
