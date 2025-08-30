@@ -653,9 +653,9 @@ const Address = () => {
 
     return (
 
-        <div className={` w-[100%] mt-4 mb-3 flex justify-center ${width < breakpoints.sm ? "px-2  " : "px-0 "}  `}>
+      <div className="container mx-auto px-2 py-6 ">
 
-            <div className={` ${width < breakpoints.sm ? "px-1 w-[100%] " : "px-2 w-[60%] "} bg-lightText dark:bg-carBgDark  py-3 rounded-md `}>
+            <div className={` ${width < breakpoints.sm ? "px-1 w-[100%] " : "px-2 w-[100%] "} bg-lightText dark:bg-carBgDark  py-3 rounded-md `}>
                 {/* Add New Address Button */}
                 <button
                     onClick={() => setShowForm(!showForm)}

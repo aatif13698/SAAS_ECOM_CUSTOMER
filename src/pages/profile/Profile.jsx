@@ -366,6 +366,7 @@ import useDarkmode from "../../Hooks/useDarkMode";
 import profileImg from "../../assets/users/user1.jpg";
 import customerService from "../../services/customerService";
 import toast from "react-hot-toast";
+import Footer from "../../components/footer/Footer";
 
 function Profile() {
   const { width, breakpoints } = useWidth();
@@ -811,8 +812,10 @@ function Profile() {
   }
 
   return (
-    <div className={`w-[100%] mt-4 mb-3 flex justify-center ${width < breakpoints.sm ? "px-2" : "px-0"}`}>
-      <div className={` ${width < breakpoints.sm ? "px-2 w-[100%]" : "px-0 w-[60%]"} ${isDark ? "bg-carBgDark" : "bg-white"} px-3 py-3 rounded-md`}>
+    <>
+
+     <div className="container mx-auto px-2 py-6 ">
+      <div className={` ${width < breakpoints.sm ? "px-2 w-[100%]" : "px-0 w-[100%]"} ${isDark ? "bg-carBgDark" : "bg-white"} px-3 py-3 rounded-md`}>
         {/* Profile Section */}
         <div className={`${isDark ? "bg-cardBgDark2" : "bg-gray-100"} p-4 rounded-lg mb-6`}>
           <div className="flex flex-col items-center mb-6">
@@ -1137,6 +1140,14 @@ function Profile() {
         </div>
       </div>
     </div>
+
+     <div className="w-[100%] flex flex-col items-center justify-center">
+        <div className="w-[100%]  ">
+          <Footer />
+        </div>
+      </div>
+    </>
+   
   );
 }
 

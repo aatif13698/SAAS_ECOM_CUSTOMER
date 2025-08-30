@@ -70,10 +70,6 @@ export default function App() {
             <Route path="/verifyOtp" element={<VerifyOtp />} />
           </Route>
 
-
-
-
-
           <Route path="/" element={<Layout />}>
 
             <Route path="home" element={<Home />} />

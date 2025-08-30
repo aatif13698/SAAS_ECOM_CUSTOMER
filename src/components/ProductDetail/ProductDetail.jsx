@@ -366,27 +366,36 @@ const ProductDetail = ({ noFade }) => {
 
   if (loading) {
     return (
-      <div className="w-[100%] flex md:px-8 sm:px-0">
-        <div className="w-[100%]">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-3 py-4">
-            <div>
-              <Skeleton height={384} />
-              <div className="flex gap-2 mt-4">
-                {[...Array(4)].map((_, i) => (
-                  <Skeleton key={i} width={64} height={64} />
-                ))}
+
+      <div className="w-[100%] h-100% flex  justify-center md:px-4 sm:px-0">
+        <div className="lg:w-[75%] w-[100%] bg-white flex flex-col justify-center">
+          <div className="  w-[100%] overflow-hidden my-3 py-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-8 md:gap-3">
+
+              <div>
+                <Skeleton height={384} />
+                <div className="flex gap-2 mt-4">
+                  {[...Array(4)].map((_, i) => (
+                    <Skeleton key={i} width={64} height={64} />
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="space-y-4 px-3 md:px-0">
-              <Skeleton height={32} width="80%" />
-              <Skeleton height={20} width="60%" />
-              <Skeleton height={24} width="40%" />
-              <Skeleton height={100} />
-              <Skeleton height={150} />
+              <div className="space-y-4 px-3 md:px-0">
+                <Skeleton height={32} width="80%" />
+                <Skeleton height={20} width="60%" />
+                <Skeleton height={24} width="40%" />
+                <Skeleton height={100} />
+                <Skeleton height={150} />
+              </div>
+
             </div>
           </div>
+
         </div>
+
       </div>
+
+
     );
   }
 
@@ -457,539 +466,551 @@ const ProductDetail = ({ noFade }) => {
   };
 
   return (
-    <div className=" w-[100%] flex md:px-8 sm:px-0  ">
-      <div className={`${width > breakpoints.xl ? "w-[100%]" : "w-[100%]"}`}>
-        <div className="bg-white w-[100%] overflow-hidden my-3 py-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 ">
-            <div className=" w-[100%] ">
-              <div className=" w-[100%] object-cover md:h-96 h-80 flex justify-center items-center md:border-2 sm:border-0 rounded-lg ">
-                <img
-                  src={selectedImage}
-                  alt="Product"
-                  className="w-[100%] md:py-4 py-2 h-[100%] object-contain rounded-lg"
-                />
-              </div>
-              <div className="flex gap-2 mt-4 mb-4 justify-center">
-                {productData?.images?.map((img, index) => (
-                  <img
-                    key={index}
-                    src={`${import.meta.env.VITE_API_URL
-                      }/productBluePrint/${img}`}
-                    alt="Thumbnail"
-                    className={`w-16 h-16 object-cover border-2 rounded-lg p-2 cursor-pointer transition-all ${selectedImage ===
-                      `${import.meta.env.VITE_API_URL}/productBluePrint/${img}`
-                      ? "border-red-500 border-3 p-0 "
-                      : "border-gray-300"
-                      }`}
-                    onClick={() =>
-                      setSelectedImage(
-                        `${import.meta.env.VITE_API_URL
-                        }/productBluePrint/${img}`
-                      )
-                    }
-                  />
-                ))}
-              </div>
 
-              {width > breakpoints.md ? (
-                <div className="flex lg:flex-row flex-col justify-around  gap-4 mx-2">
-                  <button
-                    onClick={() => {
-                      console.log("yes1");
-                      if (!customerData) {
-                        alert("Login first")
-                      } else {
-                        if (!addresses) {
-                          alert("please set the default address.")
-                        } else {
-                          handlePlaceOrder()
-                        }
-                      }
-                    }}
-                    className={`px-6 py-1 h-[3rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} lg:w-[50%] w-[100%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}
-                  >
-                    {isLoading2 ? (
-                      <span className="flex items-center justify-center">
-                        <svg
-                          className="animate-spin h-5 w-5 mr-2 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          />
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
-                          />
-                        </svg>
-                        Processing...
-                      </span>
-                    ) : (
-                      <div className="flex justify-center items-center gap-2">
-                        <span><FaBoxOpen className="text-[1.6rem]" /></span>
-                        <span>Buy Now</span>
-                      </div>
-                    )}
-                  </button>
-                  <button
-                    onClick={() => {
-                      console.log("yes1");
+    <>
 
-                      if (!customerData) {
-                        alert("Login first")
-                      } else {
-                        if (!addresses) {
-                          alert("please set the default address.")
-                        } else {
-                          handleAddToCart()
-                        }
-                      }
-
-                    }}
-                    // onClick={handleAddToCart}
-                    className={`px-6 py-1 h-[3rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} lg:w-[50%] w-[100%] bg-addToCartBUtton text-white font-semibold rounded-lg ${isLoading
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-addToCartBUtton/65"
-                      }`}
-                    disabled={isLoading} // Disable button when loading
-                  >
-                    {isLoading ? (
-                      <span className="flex items-center justify-center">
-                        <svg
-                          className="animate-spin h-5 w-5 mr-2 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          />
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
-                          />
-                        </svg>
-                        Adding...
-                      </span>
-                    ) : (
-                      <div className="flex justify-center items-center gap-2">
-                        <span><BsCart4 className="text-[1.6rem]" /></span>
-                        <span>Add to Cart</span>
-                      </div>
-
-                    )}
-                  </button>
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-
-            <div
-              className={`space-y-4 md:h-[70vh] ${width > breakpoints.md
-                ? "h-[90vh] overflow-auto scrollbar-hide"
-                : ""
-                }   px-3 md:px-0`}
+      <div className="w-[100%] flex  justify-center md:px-4 sm:px-0">
+        <div className="lg:w-[75%] w-[100%] bg-white flex flex-col justify-center">
+          <div className="  w-[100%] overflow-hidden my-3 py-4">
+            <div 
+            // className="grid grid-cols-1 md:grid-cols-2 lg:gap-8 md:gap-3"
+             className="flex flex-col md:flex-row md:gap-3 lg:gap-8"
             >
-              <h1 className="text-2xl dark:text-black font-semibold">
-                {productData?.name}
-              </h1>
-
-              <p className="text-base dark:text-black ">
-
-                <span className="font-bold"> Description :</span> <span className="text-gray-600">{productData?.description}</span>
-
-              </p>
-
-              {
-
-                filteredProduct?.length == 0
-                  ?
-                  <p className="text-red-400 font-bold">
-                    Selected configure product is not available !
-                  </p>
-                  :
-                  <div className="">
-                    {
-                      priceObject?.hasDiscount ?
-                        <div>
-                          <div className="flex gap-1 justify-start items-center">
-                            <span className="bg-green-600 py-[.30rem] px-[.40rem] text-white rounded-lg font-bold">{`${priceObject?.hasDiscount ? "-" + " " + priceObject?.discountPercent + " " + "%" : ""}`}</span>
-                            <p className="font-bold">Price : ₹{finalPrice} </p>
-                          </div>
-                          <span className="text-base font-serif text-gray-500">MRP: <span className=""><del>{price}</del></span> </span>
-                        </div>
-                        :
-                        <div>
-                          <p className="font-bold">Price : ₹{price} </p>
-                        </div>
-                    }
-                  </div>
-              }
-              {
-                attributesArray && attributesArray?.length > 0 ? attributesArray.map((item, index) => {
-                  return (
-                    <div key={item._id}>
-                      <span className="font-bold mb-2">{item.name} :</span>
-                      {item?.values?.map((val) => (
-                        <button
-                          key={val._id}
-                          onClick={() => {
-                            setAttributesArray((prevArray) => {
-                              const newArr = prevArray?.map((attrItem) => {
-                                if (attrItem._id === item._id) {
-                                  const updatedAttvalue = attrItem?.values?.map((attValue) => {
-                                    if (attValue._id == val._id) {
-                                      return {
-                                        ...attValue,
-                                        value: true
-                                      }
-                                    } else {
-                                      return {
-                                        ...attValue,
-                                        value: false
-                                      }
-                                    }
-                                  });
-                                  return {
-                                    ...attrItem,
-                                    values: updatedAttvalue
-
-                                  };
-                                } else {
-                                  return attrItem
-                                }
-                              });
-                              return newArr
-                            });
-                          }}
-                          className={`${val?.value ? "border-blue-900 bg-blue-100" : "border-gray-300 bg-gray-100"
-                            } mx-2 px-2 py-1 text-sm rounded-md border-2 transition-colors text-gray-700 hover:bg-gray-200`}
-                        >
-                          {val?.valueName}
-                        </button>
-                      ))}
-                    </div>
-                  );
-                }) : (
-                  <div>Product not available</div>
-                )}
-
-
-              <div className="flex items-center gap-4">
-                <h3 className="text-lg font-semibold text-gray-700">Quantity:</h3>
-                <div className="flex items-center border rounded-md">
-                  <button
-                    onClick={() => handleQuantityChange(-1)}
-                    disabled={quantity <= 1}
-                    className="px-3 py-2 text-gray-600 disabled:text-gray-300 hover:bg-gray-100"
-                  >
-                    <FaMinus />
-                  </button>
-                  <span className="px-4 py-2 text-gray-800">{quantity}</span>
-                  <button
-                    onClick={() => handleQuantityChange(1)}
-                    className="px-3 py-2 text-gray-600 hover:bg-gray-100"
-                  >
-                    <FaPlus />
-                  </button>
+              <div className=" lg:w-[35%] md:w-[40%] w-[100%] ">
+                <div className=" w-[100%] mx-2 object-cover md:h-96 h-80 flex justify-center items-center md:border-2 sm:border-0 rounded-lg ">
+                  <img
+                    src={selectedImage}
+                    alt="Product"
+                    className="w-[100%] md:py-4 py-2 h-[100%] object-contain rounded-lg"
+                  />
                 </div>
-              </div>
-
-
-              <div className="flex items-center gap-4">
-                <h3 className="text-lg font-semibold text-gray-700" name="address">Delivery:</h3>
-                <div className="flex items-center border rounded-md">
-                  <select name="address"
-                    className={`w-[100%] ${isDark ? " text-light" : " text-dark"} border-none p-2  rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
-                    id="address"
-                    value={selectedAddress}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setSelectedAddress(value)
-                    }}
-                  >
-                    {
-                      addresses && addresses?.length > 0 ? addresses?.map((item, index) => {
-                        return (
-                          <option key={index} value={item?._id}>{item?.ZipCode}</option>
+                <div className="flex gap-2 mt-4 mb-4 justify-center">
+                  {productData?.images?.map((img, index) => (
+                    <img
+                      key={index}
+                      src={`${import.meta.env.VITE_API_URL
+                        }/productBluePrint/${img}`}
+                      alt="Thumbnail"
+                      className={`w-16 h-16 object-cover border-2 rounded-lg p-2 cursor-pointer transition-all ${selectedImage ===
+                        `${import.meta.env.VITE_API_URL}/productBluePrint/${img}`
+                        ? "border-red-500 border-3 p-0 "
+                        : "border-gray-300"
+                        }`}
+                      onClick={() =>
+                        setSelectedImage(
+                          `${import.meta.env.VITE_API_URL
+                          }/productBluePrint/${img}`
                         )
-                      }) : <option value="">No Address Found</option>
-                    }
-                  </select>
-                </div>
-              </div>
-
-              {width > breakpoints.md ? (
-                ""
-              ) : (
-                <div className="flex gap-4">
-                  <button
-                    disabled={filteredProduct?.length == 0}
-                    onClick={() => {
-                      console.log("yes1");
-
-                      if (!customerData) {
-                        alert("Login first")
-                      } else {
-                        if (!addresses) {
-                          alert("please set the default address.")
-                        } else {
-                          handlePlaceOrder()
-                        }
                       }
-
-                    }}
-                    className={`px-6 py-1  ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} h-[3rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}>
-                    {isLoading2 ? (
-                      <span className="flex items-center justify-center">
-                        <svg
-                          className="animate-spin h-5 w-5 mr-2 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          />
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
-                          />
-                        </svg>
-                        Processing...
-                      </span>
-                    ) : (
-                      <div className="flex justify-center items-center gap-1">
-                        <span><FaBoxOpen className="text-[1.2rem]" /></span>
-                        <span>Buy Now</span>
-                      </div>
-                    )}
-
-                  </button>
-                  <button
-                    disabled={filteredProduct?.length == 0}
-                    onClick={() => {
-                      console.log("yes1");
-
-                      if (!customerData) {
-                        alert("Login first")
-                      } else {
-                        if (!addresses) {
-                          alert("please set the default address.")
-                        } else {
-                          handleAddToCart()
-                        }
-                      }
-
-                    }}
-                    // onClick={handleAddToCart}
-                    className={`px-6 py-2 h-[3rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg hover:bg-addToCartBUtton/65`}
-                  >
-                    {isLoading ? (
-                      <span className="flex items-center justify-center">
-                        <svg
-                          className="animate-spin h-5 w-5 mr-2 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          />
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
-                          />
-                        </svg>
-                        Adding...
-                      </span>
-                    ) : (
-                      <div className="flex justify-center items-center gap-1">
-                        <span><BsCart4 className="text-[1.2rem]" /></span>
-                        <span>Add to Cart</span>
-                      </div>
-                    )}
-                  </button>
+                    />
+                  ))}
                 </div>
-              )}
 
-              <div className="bg-white  rounded-lg border-1 max-w-4xl mx-auto my-4 ">
-                <h2 className="text-2xl font-semibold text-gray-800 p-4">Specifications</h2>
+                {width > breakpoints.md ? (
+                  <div className="flex lg:flex-row flex-col justify-around  gap-4 mx-2">
+                    <button
+                      onClick={() => {
+                        console.log("yes1");
+                        if (!customerData) {
+                          alert("Login first")
+                        } else {
+                          if (!addresses) {
+                            alert("please set the default address.")
+                          } else {
+                            handlePlaceOrder()
+                          }
+                        }
+                      }}
+                      className={`px-6 py-1 h-[3rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} lg:w-[50%] w-[100%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}
+                    >
+                      {isLoading2 ? (
+                        <span className="flex items-center justify-center">
+                          <svg
+                            className="animate-spin h-5 w-5 mr-2 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
+                            />
+                          </svg>
+                          Processing...
+                        </span>
+                      ) : (
+                        <div className="flex justify-center items-center gap-2">
+                          <span><FaBoxOpen className="text-[1.6rem]" /></span>
+                          <span>Buy Now</span>
+                        </div>
+                      )}
+                    </button>
+                    <button
+                      onClick={() => {
+                        console.log("yes1");
 
-                {productData?.specification && productData?.specification.length > 0 ? (
-                  productData.specification.map((specification, index) => (
-                    <div key={index} className="mb-1">
-                      <h3 className="text-lg  font-medium text-gray-700 bg-gray-100 p-3 rounded-t-md">
-                        {specification?.title}
-                      </h3>
-                      <div className="  rounded-b-md">
-                        {specification?.items && specification.items.length > 0 ? (
-                          <div className="divide-y divide-gray-200">
-                            {specification.items.map((item, itemIndex) => (
-                              <div
-                                key={itemIndex}
-                                className="flex justify-between p-4  hover:bg-gray-50"
-                              >
-                                <span className="text-gray-600 w-1/2">{item?.name}</span>
-                                <span className="text-gray-800 w-1/2">{item?.description}</span>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="p-4 text-gray-500">No items found</div>
-                        )}
-                      </div>
-                    </div>
-                  ))
+                        if (!customerData) {
+                          alert("Login first")
+                        } else {
+                          if (!addresses) {
+                            alert("please set the default address.")
+                          } else {
+                            handleAddToCart()
+                          }
+                        }
+
+                      }}
+                      // onClick={handleAddToCart}
+                      className={`px-6 py-1 h-[3rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} lg:w-[50%] w-[100%] bg-addToCartBUtton text-white font-semibold rounded-lg ${isLoading
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-addToCartBUtton/65"
+                        }`}
+                      disabled={isLoading} // Disable button when loading
+                    >
+                      {isLoading ? (
+                        <span className="flex items-center justify-center">
+                          <svg
+                            className="animate-spin h-5 w-5 mr-2 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
+                            />
+                          </svg>
+                          Adding...
+                        </span>
+                      ) : (
+                        <div className="flex justify-center items-center gap-2">
+                          <span><BsCart4 className="text-[1.6rem]" /></span>
+                          <span>Add to Cart</span>
+                        </div>
+
+                      )}
+                    </button>
+                  </div>
                 ) : (
-                  <div className="text-gray-500 text-center p-4">No specifications found</div>
+                  ""
                 )}
               </div>
 
+              <div
+                className={`space-y-4 md:h-[70vh] lg-w[65%]  md:w-[60%] w-[100%] ${width > breakpoints.md
+                  ? "h-[90vh] overflow-auto scrollbar-hide"
+                  : ""
+                  }   px-3 md:px-0`}
+              >
+                <h1 className="text-2xl dark:text-black font-semibold">
+                  {productData?.name}
+                </h1>
+
+                <p className="text-base dark:text-black ">
+
+                  <span className="font-bold"> Description :</span> <span className="text-gray-600">{productData?.description}</span>
+
+                </p>
+
+                {
+
+                  filteredProduct?.length == 0
+                    ?
+                    <p className="text-red-400 font-bold">
+                      Selected configure product is not available !
+                    </p>
+                    :
+                    <div className="">
+                      {
+                        priceObject?.hasDiscount ?
+                          <div>
+                            <div className="flex gap-1 justify-start items-center">
+                              <span className="bg-green-600 py-[.30rem] px-[.40rem] text-white rounded-lg font-bold">{`${priceObject?.hasDiscount ? "-" + " " + priceObject?.discountPercent + " " + "%" : ""}`}</span>
+                              <p className="font-bold">Price : ₹{finalPrice} </p>
+                            </div>
+                            <span className="text-base font-serif text-gray-500">MRP: <span className=""><del>{price}</del></span> </span>
+                          </div>
+                          :
+                          <div>
+                            <p className="font-bold">Price : ₹{price} </p>
+                          </div>
+                      }
+                    </div>
+                }
+                {
+                  attributesArray && attributesArray?.length > 0 ? attributesArray.map((item, index) => {
+                    return (
+                      <div key={item._id}>
+                        <span className="font-bold mb-2">{item.name} :</span>
+                        {item?.values?.map((val) => (
+                          <button
+                            key={val._id}
+                            onClick={() => {
+                              setAttributesArray((prevArray) => {
+                                const newArr = prevArray?.map((attrItem) => {
+                                  if (attrItem._id === item._id) {
+                                    const updatedAttvalue = attrItem?.values?.map((attValue) => {
+                                      if (attValue._id == val._id) {
+                                        return {
+                                          ...attValue,
+                                          value: true
+                                        }
+                                      } else {
+                                        return {
+                                          ...attValue,
+                                          value: false
+                                        }
+                                      }
+                                    });
+                                    return {
+                                      ...attrItem,
+                                      values: updatedAttvalue
+
+                                    };
+                                  } else {
+                                    return attrItem
+                                  }
+                                });
+                                return newArr
+                              });
+                            }}
+                            className={`${val?.value ? "border-blue-900 bg-blue-100" : "border-gray-300 bg-gray-100"
+                              } mx-2 px-2 py-1 text-sm rounded-md border-2 transition-colors text-gray-700 hover:bg-gray-200`}
+                          >
+                            {val?.valueName}
+                          </button>
+                        ))}
+                      </div>
+                    );
+                  }) : (
+                    <div>Product not available</div>
+                  )}
+
+
+                <div className="flex items-center gap-4">
+                  <h3 className="text-lg font-semibold text-gray-700">Quantity:</h3>
+                  <div className="flex items-center border rounded-md">
+                    <button
+                      onClick={() => handleQuantityChange(-1)}
+                      disabled={quantity <= 1}
+                      className="px-3 py-2 text-gray-600 disabled:text-gray-300 hover:bg-gray-100"
+                    >
+                      <FaMinus />
+                    </button>
+                    <span className="px-4 py-2 text-gray-800">{quantity}</span>
+                    <button
+                      onClick={() => handleQuantityChange(1)}
+                      className="px-3 py-2 text-gray-600 hover:bg-gray-100"
+                    >
+                      <FaPlus />
+                    </button>
+                  </div>
+                </div>
+
+
+                <div className="flex items-center gap-4">
+                  <h3 className="text-lg font-semibold text-gray-700" name="address">Delivery:</h3>
+                  <div className="flex items-center border rounded-md">
+                    <select name="address"
+                      className={`w-[100%] ${isDark ? " text-light" : " text-dark"} border-none p-2  rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
+                      id="address"
+                      value={selectedAddress}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setSelectedAddress(value)
+                      }}
+                    >
+                      {
+                        addresses && addresses?.length > 0 ? addresses?.map((item, index) => {
+                          return (
+                            <option key={index} value={item?._id}>{item?.ZipCode}</option>
+                          )
+                        }) : <option value="">No Address Found</option>
+                      }
+                    </select>
+                  </div>
+                </div>
+
+                {width > breakpoints.md ? (
+                  ""
+                ) : (
+                  <div className="flex gap-4">
+                    <button
+                      disabled={filteredProduct?.length == 0}
+                      onClick={() => {
+                        console.log("yes1");
+
+                        if (!customerData) {
+                          alert("Login first")
+                        } else {
+                          if (!addresses) {
+                            alert("please set the default address.")
+                          } else {
+                            handlePlaceOrder()
+                          }
+                        }
+
+                      }}
+                      className={`px-6 py-1  ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} h-[3rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}>
+                      {isLoading2 ? (
+                        <span className="flex items-center justify-center">
+                          <svg
+                            className="animate-spin h-5 w-5 mr-2 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
+                            />
+                          </svg>
+                          Processing...
+                        </span>
+                      ) : (
+                        <div className="flex justify-center items-center gap-1">
+                          <span><FaBoxOpen className="text-[1.2rem]" /></span>
+                          <span>Buy Now</span>
+                        </div>
+                      )}
+
+                    </button>
+                    <button
+                      disabled={filteredProduct?.length == 0}
+                      onClick={() => {
+                        console.log("yes1");
+
+                        if (!customerData) {
+                          alert("Login first")
+                        } else {
+                          if (!addresses) {
+                            alert("please set the default address.")
+                          } else {
+                            handleAddToCart()
+                          }
+                        }
+
+                      }}
+                      // onClick={handleAddToCart}
+                      className={`px-6 py-2 h-[3rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg hover:bg-addToCartBUtton/65`}
+                    >
+                      {isLoading ? (
+                        <span className="flex items-center justify-center">
+                          <svg
+                            className="animate-spin h-5 w-5 mr-2 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
+                            />
+                          </svg>
+                          Adding...
+                        </span>
+                      ) : (
+                        <div className="flex justify-center items-center gap-1">
+                          <span><BsCart4 className="text-[1.2rem]" /></span>
+                          <span>Add to Cart</span>
+                        </div>
+                      )}
+                    </button>
+                  </div>
+                )}
+
+                <div className="bg-white  rounded-lg border-1 max-w-4xl mx-auto my-4 ">
+                  <h2 className="text-2xl font-semibold text-gray-800 p-4">Specifications</h2>
+
+                  {productData?.specification && productData?.specification.length > 0 ? (
+                    productData.specification.map((specification, index) => (
+                      <div key={index} className="mb-1">
+                        <h3 className="text-lg  font-medium text-gray-700 bg-gray-100 p-3 rounded-t-md">
+                          {specification?.title}
+                        </h3>
+                        <div className="  rounded-b-md">
+                          {specification?.items && specification.items.length > 0 ? (
+                            <div className="divide-y divide-gray-200">
+                              {specification.items.map((item, itemIndex) => (
+                                <div
+                                  key={itemIndex}
+                                  className="flex justify-between p-4  hover:bg-gray-50"
+                                >
+                                  <span className="text-gray-600 w-1/2">{item?.name}</span>
+                                  <span className="text-gray-800 w-1/2">{item?.description}</span>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="p-4 text-gray-500">No items found</div>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-500 text-center p-4">No specifications found</div>
+                  )}
+                </div>
 
 
 
 
+
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="mt-10 px-3 md:px-0">
-          <h3 className="text-xl dark:text-white font-semibold">Return & Refund Policy</h3>
-          <p className="text-gray-600">
-            Our return policy ensures customer satisfaction. You can return the
-            product within 30 days.
-          </p>
-        </div>
-
-        <div className="mt-10 px-3 md:px-0">
-          <h3 className="text-xl dark:text-white font-semibold">Similar Products</h3>
-        </div>
-
-        <div className="mt-10 px-3 md:px-0">
-          <h3 className="text-xl  dark:text-white font-semibold">More Product Information</h3>
-          <p className="text-gray-600">
-            This product is designed to meet the highest standards of quality
-            and performance.
-          </p>
-        </div>
-
-        <div className="mt-10 px-3 md:px-0">
-          <h3 className="text-xl dark:text-white font-semibold">Return & Refund Policy</h3>
-          <p className="text-gray-600">
-            Our return policy ensures customer satisfaction. You can return the
-            product within 30 days.
-          </p>
-        </div>
-        <div>
-          <CarouselWithoutArrow
-            data={products.mobileData}
-            title={"Similar Products"}
-          />
-        </div>
-
-        <div className="flex flex-col bg-red-300 items-center justify-center">
-          <div
-            className={`${width < breakpoints.sm ? "w-[100%]" : "w-[100%]"
-              }  flex flex-col justify-center gap-3 items-center`}
-          >
-            <Footer />
+          <div className="mt-10 px-3 md:px-0">
+            <h3 className="text-xl dark:text-white font-semibold">Return & Refund Policy</h3>
+            <p className="text-gray-600">
+              Our return policy ensures customer satisfaction. You can return the
+              product within 30 days.
+            </p>
           </div>
+
+          <div className="mt-10 px-3 md:px-0">
+            <h3 className="text-xl dark:text-white font-semibold">Similar Products</h3>
+          </div>
+
+          <div className="mt-10 px-3 md:px-0">
+            <h3 className="text-xl  dark:text-white font-semibold">More Product Information</h3>
+            <p className="text-gray-600">
+              This product is designed to meet the highest standards of quality
+              and performance.
+            </p>
+          </div>
+
+          <div className="mt-10 px-3 md:px-0">
+            <h3 className="text-xl dark:text-white font-semibold">Return & Refund Policy</h3>
+            <p className="text-gray-600">
+              Our return policy ensures customer satisfaction. You can return the
+              product within 30 days.
+            </p>
+          </div>
+          <div>
+            <CarouselWithoutArrow
+              data={products.mobileData}
+              title={"Similar Products"}
+            />
+          </div>
+
+
         </div>
-      </div>
 
 
 
-      <Transition appear show={showLoadingModal} as={Fragment}>
-        <Dialog as="div" className="relative z-[99999]" onClose={handleCloseLoadingModal}>
-          <Transition.Child
-            as={Fragment}
-            enter={noFade ? "" : "duration-300 ease-out"}
-            enterFrom={noFade ? "" : "opacity-0"}
-            enterTo={noFade ? "" : "opacity-100"}
-            leave={noFade ? "" : "duration-200 ease-in"}
-            leaveFrom={noFade ? "" : "opacity-100"}
-            leaveTo={noFade ? "" : "opacity-0"}
-          >
-            <div className="fixed inset-0 bg-slate-900/50 backdrop-filter backdrop-blur-sm" />
-          </Transition.Child>
 
-          <div className="fixed inset-0 overflow-y-auto flex justify-center items-center">
+
+        <Transition appear show={showLoadingModal} as={Fragment}>
+          <Dialog as="div" className="relative z-[99999]" onClose={handleCloseLoadingModal}>
             <Transition.Child
               as={Fragment}
               enter={noFade ? "" : "duration-300 ease-out"}
-              enterFrom={noFade ? "" : "opacity-0 scale-95"}
-              enterTo={noFade ? "" : "opacity-100 scale-100"}
+              enterFrom={noFade ? "" : "opacity-0"}
+              enterTo={noFade ? "" : "opacity-100"}
               leave={noFade ? "" : "duration-200 ease-in"}
-              leaveFrom={noFade ? "" : "opacity-100 scale-100"}
-              leaveTo={noFade ? "" : "opacity-0 scale-95"}
+              leaveFrom={noFade ? "" : "opacity-100"}
+              leaveTo={noFade ? "" : "opacity-0"}
             >
-              <Dialog.Panel className="md:w-[70%] w-[100%]  bg-white dark:bg-darkSecondary rounded-md shadow-xl p-6 ">
-
-                <h2 className="text-lg font-semibold mt-2 text-center">This product is customiseable</h2>
-                <p className="text-gray-600 text-sm mt-1 text-center mb-4">Please fill the form</p>
-                <div className="grid md:grid-cols-2 md:grid-col-1 gap-4 w-[100%] ">
-                  {productData?.product?.customizableOptions && productData?.product?.customizableOptions?.length > 0 ?
-
-                    productData?.product?.customizableOptions.map((field, index) => (
-                      <div
-                        key={index}
-                        className={`flex flex-col`}
-                      >
-                        <label className="mb-1 text-gray-700 font-medium">
-                          {field?.labelName}
-                        </label>
-                        {renderFieldPreview(field)}
-                      </div>
-                    )) : ""
-                  }
-                </div>
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => {
-                      if (actionType == "order") {
-                        finalPlaceOrder()
-                      } else if (actionType == "cart") {
-                        finalAddToCart()
-                      }
-                    }}
-                    className="bg-lightButton hover:bg-lightButton/30 px-2 py-1 rounded-md">
-                    Submit
-                  </button>
-                </div>
-              </Dialog.Panel>
+              <div className="fixed inset-0 bg-slate-900/50 backdrop-filter backdrop-blur-sm" />
             </Transition.Child>
-          </div>
-        </Dialog>
-      </Transition>
-    </div>
+
+            <div className="fixed inset-0 overflow-y-auto flex justify-center items-center">
+              <Transition.Child
+                as={Fragment}
+                enter={noFade ? "" : "duration-300 ease-out"}
+                enterFrom={noFade ? "" : "opacity-0 scale-95"}
+                enterTo={noFade ? "" : "opacity-100 scale-100"}
+                leave={noFade ? "" : "duration-200 ease-in"}
+                leaveFrom={noFade ? "" : "opacity-100 scale-100"}
+                leaveTo={noFade ? "" : "opacity-0 scale-95"}
+              >
+                <Dialog.Panel className="md:w-[70%] w-[100%]  bg-white dark:bg-darkSecondary rounded-md shadow-xl p-6 ">
+
+                  <h2 className="text-lg font-semibold mt-2 text-center">This product is customiseable</h2>
+                  <p className="text-gray-600 text-sm mt-1 text-center mb-4">Please fill the form</p>
+                  <div className="grid md:grid-cols-2 md:grid-col-1 gap-4 w-[100%] ">
+                    {productData?.product?.customizableOptions && productData?.product?.customizableOptions?.length > 0 ?
+
+                      productData?.product?.customizableOptions.map((field, index) => (
+                        <div
+                          key={index}
+                          className={`flex flex-col`}
+                        >
+                          <label className="mb-1 text-gray-700 font-medium">
+                            {field?.labelName}
+                          </label>
+                          {renderFieldPreview(field)}
+                        </div>
+                      )) : ""
+                    }
+                  </div>
+                  <div className="flex justify-end">
+                    <button
+                      onClick={() => {
+                        if (actionType == "order") {
+                          finalPlaceOrder()
+                        } else if (actionType == "cart") {
+                          finalAddToCart()
+                        }
+                      }}
+                      className="bg-lightButton hover:bg-lightButton/30 px-2 py-1 rounded-md">
+                      Submit
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition>
+      </div>
+
+      <div className="flex flex-col  items-center justify-center">
+        <div
+          className={`${width < breakpoints.sm ? "w-[100%]" : "w-[100%]"
+            }  flex flex-col justify-center gap-3 items-center`}
+        >
+          <Footer />
+        </div>
+      </div>
+    </>
+
   );
 };
 

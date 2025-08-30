@@ -206,7 +206,7 @@ const Header = ({ noFade }) => {
 
                                         {
                                             isLogedIn ? "" :
-                                                <button onClick={() => navigate("/login")} className="flex items-center gap-2 bg-lightButton hover:bg-lightButton/80 text-white font-semibold py-1 px-2 rounded">
+                                                <button onClick={() => navigate("/login")} className="flex items-center gap-2 hover:bg-lightButton/80 text-white font-semibold py-1 px-2 rounded">
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                                                         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 
                                                                   1.79-4 4 1.79 4 4 4zm0 2c-2.67 
@@ -278,13 +278,13 @@ const Header = ({ noFade }) => {
                                                 </button>
                                             </div>
                                         </div>
-                                        <button onClick={handleCart} className="flex items-center gap-2 bg-lightButton hover:bg-lightButton/80 text-white font-semibold py-1 px-2 rounded">
+                                        <button onClick={handleCart} className="flex items-center gap-2  text-white font-semibold py-1 px-2 rounded">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.3 2.6a1 1 0 00.9 1.4h12.8m-14.4 
                                                        0a1 1 0 110 2 1 1 0 010-2zm10 0a1 1 0 110 2 1 1 0 010-2z" />
                                             </svg>
-                                            <span>Cart</span>
+                                            <span className='text-base'>Cart</span>
                                         </button>
 
                                         <div className="flex items-center mx-3">

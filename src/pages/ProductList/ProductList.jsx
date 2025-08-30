@@ -7,6 +7,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import useWidth from "../../Hooks/useWidth";
 import CryptoJS from "crypto-js";
 import useDarkmode from "../../Hooks/useDarkMode";
+import Footer from "../../components/footer/Footer";
 
 const SECRET_KEY = import.meta.env.VITE_ENCRYPTION_KEY || "my-secret-key";
 
@@ -30,9 +31,9 @@ const ProductList = () => {
   const [isDark] = useDarkmode();
 
 
-  console.log("categoryId",categoryId);
-  console.log("subcategoryId",subcategoryId);
-  
+  console.log("categoryId", categoryId);
+  console.log("subcategoryId", subcategoryId);
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -95,49 +96,62 @@ const ProductList = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-6">
-        {subcategoryId ? `Products in Subcategory` : `Products in Category`}
-      </h2>
-      {products.length === 0 ? (
-        <div className="text-center py-10 text-gray-500 dark:text-white">
-          <p className="text-lg">No products found.</p>
-          <p>Browse other categories to find what you're looking for!</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <div
-               onClick={() => handleViewProduct(product._id)}
 
-              key={product._id}
-              className={`${isDark ? "bg-carBgDark" : "bg-white"} cursor-pointer rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-200`}
-            >
-              <img
-                src={`${import.meta.env.VITE_API_URL}/productBluePrint/${
-                  product.product?.images?.[0] || "placeholder.jpg"
-                }`}
-                alt={product.product?.name}
-                className="w-[100%] h-48 object-contain rounded-md border border-gray-300 mb-4"
-                // onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
-              />
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white truncate">
-                {product.product?.name || "Unnamed Product"}
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-white/80">
-                Price: ₹{product.normalSaleStock[0]?.variant?.priceId?.price[0]?.unitPrice || "N/A"}
-              </p>
-              <button
+    <>
+
+      <div className="container mx-auto px-4 py-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-6">
+          {subcategoryId ? `Products in Subcategory` : `Products in Category`}
+        </h2>
+        {products.length === 0 ? (
+          <div className="text-center min-h-[30vh] py-10 text-gray-500 dark:text-white">
+            <p className="text-lg">No products found.</p>
+            <p>Browse other categories to find what you're looking for!</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <div
                 onClick={() => handleViewProduct(product._id)}
-                className="mt-4 w-[100%] px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors"
+
+                key={product._id}
+                className={`${isDark ? "bg-carBgDark" : "bg-white"} cursor-pointer rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-200`}
               >
-                View Details
-              </button>
-            </div>
-          ))}
+                <img
+                  src={`${import.meta.env.VITE_API_URL}/productBluePrint/${product.product?.images?.[0] || "placeholder.jpg"
+                    }`}
+                  alt={product.product?.name}
+                  className="w-[100%] h-48 object-contain rounded-md border border-gray-300 mb-4"
+                // onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
+                />
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white truncate">
+                  {product.product?.name || "Unnamed Product"}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-white/80">
+                  Price: ₹{product.normalSaleStock[0]?.variant?.priceId?.price[0]?.unitPrice || "N/A"}
+                </p>
+                <button
+                  onClick={() => handleViewProduct(product._id)}
+                  className="mt-4 w-[100%] px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  View Details
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-col  items-center justify-center">
+        <div
+          className={`${width < breakpoints.sm ? "w-[100%]" : "w-[100%]"
+            }  flex flex-col justify-center gap-3 items-center`}
+        >
+          <Footer />
         </div>
-      )}
-    </div>
+      </div>
+    </>
+
   );
 };
 

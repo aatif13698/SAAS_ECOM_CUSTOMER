@@ -33,8 +33,8 @@ function Account() {
 
 
   return (
-    <div className={` w-[100%] mt-4 mb-3 flex justify-center ${width < breakpoints.sm ? "px-2  " : "px-0 "}  `}>
-      <div className={ ` ${width < breakpoints.sm ? "px-2 w-[100%] " : "px-0 w-[60%] "} bg-lightText dark:bg-carBgDark px-3 py-3 rounded-md `}>
+      <div className="container mx-auto px-2 py-6 ">
+      <div className={ ` ${width < breakpoints.sm ? "px-2 w-[100%] " : "px-0 w-[100%] "} bg-lightText dark:bg-carBgDark px-3 py-3 rounded-md `}>
 
 
         {/* Top Buttons Section */}
