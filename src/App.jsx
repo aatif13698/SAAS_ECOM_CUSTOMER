@@ -24,9 +24,10 @@ const Cart = lazy(() => import("../src/pages/cart/Cart"))
 const Account = lazy(() => import("../src/pages/account/Account"))
 const Profile = lazy(() => import("../src/pages/profile/Profile"))
 const Address = lazy(() => import("../src/pages/address/Address"));
-const Orders = lazy(() => import("../src/pages/orders/Orders")); 
+const Orders = lazy(() => import("../src/pages/orders/Orders"));
 const TrackOrder = lazy(() => import("../src/pages/orders/TrackOrder"));
-const ProductList = lazy(() => import("../src/pages/ProductList/ProductList"))
+const ProductList = lazy(() => import("../src/pages/ProductList/ProductList"));
+const CheckOut = lazy(() => import("../src/pages/checkout/CheckOut"));
 
 
 // import ProducDe
@@ -83,6 +84,7 @@ export default function App() {
             <Route path="account" element={<Account />} />
             <Route path="profile" element={<Profile />} />
             <Route path="address" element={<Address />} />
+            <Route path="checkout/:productMainStockId/:productStockId" element={<CheckOut />} />
 
           </Route>
         </Route>

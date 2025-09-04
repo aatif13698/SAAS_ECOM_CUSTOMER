@@ -54,7 +54,7 @@ const Orders = () => {
 
     <>
 
-      <div className="container mx-auto px-4 py-6">
+      <div className="container min-h-[50vh]  mx-auto px-4 py-6">
         <h2 className="text-2xl md:text-3xl font-bold dark:text-white text-gray-800 mb-6">Your Orders</h2>
         <div className=" w-[100%]">
           {/* Orders List */}

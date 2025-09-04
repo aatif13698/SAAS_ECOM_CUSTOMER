@@ -99,7 +99,7 @@ const ProductList = () => {
 
     <>
 
-      <div className="container mx-auto px-4 py-6">
+      <div className="container min-h-[60vh] mx-auto px-4 py-6">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-6">
           {subcategoryId ? `Products in Subcategory` : `Products in Category`}
         </h2>

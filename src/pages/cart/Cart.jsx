@@ -297,7 +297,7 @@ const Cart = () => {
 
   return (
     <>
-      <div className="w-[100%] bg-gray-100 dark:bg-gray-800 flex flex-col justify-center items-center py-6">
+      <div className="w-[100%] min-h-[60vh] bg-gray-100 dark:bg-gray-800 flex flex-col  items-center py-6">
         <div className="w-[100%]  lg:w-3/4 px-2 sm:px-0 lg:px-8">
           <h2 className="text-2xl font-semibold py-3">Shopping Cart</h2>
 

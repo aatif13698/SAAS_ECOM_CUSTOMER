@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import CryptoJS from "crypto-js";
 import productService from "../../services/productService";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import customerService from "../../services/customerService";
 import toast from "react-hot-toast";
 import { Dialog, Transition } from "@headlessui/react";
@@ -20,10 +20,14 @@ import { BsCart4 } from "react-icons/bs";
 
 import { FaBoxOpen } from "react-icons/fa";
 
-
-
 // Secret key for decryption (same as used for encryption)
 const SECRET_KEY = import.meta.env.VITE_ENCRYPTION_KEY || "my-secret-key";
+
+const encryptId = (id) => {
+  const encrypted = CryptoJS.AES.encrypt(id.toString(), SECRET_KEY).toString();
+  // URL-safe encoding
+  return encodeURIComponent(encrypted);
+};
 
 const decryptId = (encryptedId) => {
   try {
@@ -37,6 +41,8 @@ const decryptId = (encryptedId) => {
 };
 
 const ProductDetail = ({ noFade }) => {
+
+  const navigate = useNavigate();
 
   const [isDark] = useDarkmode();
   const [showLoadingModal, setShowLoadingModal] = useState(false);
@@ -56,6 +62,11 @@ const ProductDetail = ({ noFade }) => {
 
   const [attributesArray, setAttributesArray] = useState([]);
   const [filteredProduct, setFilteredProduct] = useState([]);
+
+  console.log("filteredProduct", filteredProduct);
+  console.log("productData", productData);
+  
+
 
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -106,7 +117,7 @@ const ProductDetail = ({ noFade }) => {
   const [priceObject, setPriceObject] = useState(null);
   const [finalPrice, setFinalPrice] = useState(null);
 
-  console.log("unitPrice", unitPrice);
+  console.log("priceObject", priceObject);
   console.log("price", price);
   console.log("finalPrice", finalPrice);
 
@@ -277,6 +288,29 @@ const ProductDetail = ({ noFade }) => {
       finalPlaceOrder()
     }
   }
+
+  const handlePlaceOrderClick = () => {
+    const encryptedIdMainStockId = encryptId(productData?._id);
+    const encryptedProductStockId = encryptId(decryptedStockId);
+    navigate(`/checkout/${encryptedIdMainStockId}/${encryptedProductStockId}`, {
+      state: {
+        paymentOPtions: filteredProduct[0]?.paymentOPtions,
+        customizableOptions: filteredProduct[0]?.product?.customizableOptions, 
+        quantity: quantity, 
+        priceOption: {
+          quantity: quantity,
+          unitPrice: unitPrice,
+          price: price
+        },
+        productDetail: {
+          images : filteredProduct[0]?.images,
+          name: filteredProduct[0]?.name,
+          description: filteredProduct[0]?.description,
+          variant: filteredProduct[0]?.variant
+        }
+      }
+    });
+  };
 
   // new
   async function finalAddToCart() {
@@ -470,13 +504,13 @@ const ProductDetail = ({ noFade }) => {
     <>
 
       <div className="w-[100%] flex  justify-center md:px-4 sm:px-0">
-        <div className="lg:w-[75%] w-[100%] bg-white flex flex-col justify-center">
-          <div className="  w-[100%] overflow-hidden my-3 py-4">
-            <div 
-            // className="grid grid-cols-1 md:grid-cols-2 lg:gap-8 md:gap-3"
-             className="flex flex-col md:flex-row md:gap-3 lg:gap-8"
+        <div className="lg:w-[75%] w-[100%]  flex flex-col  justify-center">
+          <div className=" bg-white  w-[100%] overflow-hidden my-3 py-4">
+            <div
+              // className="grid grid-cols-1 md:grid-cols-2 lg:gap-8 md:gap-3"
+              className="flex  flex-col md:flex-row  justify-center lg:gap-8 "
             >
-              <div className=" lg:w-[35%] md:w-[40%] w-[100%] ">
+              <div className=" lg:w-[35%]  md:w-[40%] w-[100%] ">
                 <div className=" w-[100%] mx-2 object-cover md:h-96 h-80 flex justify-center items-center md:border-2 sm:border-0 rounded-lg ">
                   <img
                     src={selectedImage}
@@ -517,10 +551,11 @@ const ProductDetail = ({ noFade }) => {
                           if (!addresses) {
                             alert("please set the default address.")
                           } else {
-                            handlePlaceOrder()
+                            handlePlaceOrderClick()
                           }
                         }
                       }}
+                      disabled={filteredProduct?.length == 0}
                       className={`px-6 py-1 h-[3rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} lg:w-[50%] w-[100%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}
                     >
                       {isLoading2 ? (
@@ -574,7 +609,7 @@ const ProductDetail = ({ noFade }) => {
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-addToCartBUtton/65"
                         }`}
-                      disabled={isLoading} // Disable button when loading
+                      disabled={filteredProduct?.length == 0}
                     >
                       {isLoading ? (
                         <span className="flex items-center justify-center">
@@ -615,7 +650,7 @@ const ProductDetail = ({ noFade }) => {
               </div>
 
               <div
-                className={`space-y-4 md:h-[70vh] lg-w[65%]  md:w-[60%] w-[100%] ${width > breakpoints.md
+                className={`space-y-4 md:h-[70vh]  lg-w[65%]  md:w-[60%] w-[100%] ${width > breakpoints.md
                   ? "h-[90vh] overflow-auto scrollbar-hide"
                   : ""
                   }   px-3 md:px-0`}
@@ -764,7 +799,7 @@ const ProductDetail = ({ noFade }) => {
                           if (!addresses) {
                             alert("please set the default address.")
                           } else {
-                            handlePlaceOrder()
+                            handlePlaceOrderClick()
                           }
                         }
 
@@ -855,7 +890,7 @@ const ProductDetail = ({ noFade }) => {
                   </div>
                 )}
 
-                <div className="bg-white  rounded-lg border-1 max-w-4xl mx-auto my-4 ">
+                <div className="bg-white  rounded-lg border-1 mx-auto my-4 ">
                   <h2 className="text-2xl font-semibold text-gray-800 p-4">Specifications</h2>
 
                   {productData?.specification && productData?.specification.length > 0 ? (
@@ -888,6 +923,8 @@ const ProductDetail = ({ noFade }) => {
                   )}
                 </div>
 
+                
+
 
 
 
@@ -896,7 +933,7 @@ const ProductDetail = ({ noFade }) => {
             </div>
           </div>
 
-          <div className="mt-10 px-3 md:px-0">
+          <div className="mt-10 px-3  md:px-0">
             <h3 className="text-xl dark:text-white font-semibold">Return & Refund Policy</h3>
             <p className="text-gray-600">
               Our return policy ensures customer satisfaction. You can return the
