@@ -44,8 +44,6 @@ function CheckOut({ noFade }) {
     const { clientUser: customerData } = useSelector((state) => state?.authCustomerSlice);
     const [refreshCount, setRefreshCount] = useState(0);
 
-    console.log("productDetail", productDetail);
-
 
     const [addresses, setAddresses] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(null);
@@ -494,83 +492,10 @@ function CheckOut({ noFade }) {
         }));
     };
 
-    console.log("customizationValues", customizationValues);
-
-
-
-    // const renderFieldPreview = (field) => {
-    //     const baseStyles = "w-[100%] p-2 border border-gray-300 rounded-md";
-    //     const fieldName = field.labelName;
-    //     switch (field.selectedField) {
-    //         case 'text':
-    //         case 'number':
-    //         case 'email':
-    //         case 'hyperlink':
-    //             return (
-    //                 <input
-    //                     type={field?.selectedField}
-    //                     placeholder={field?.labelName}
-    //                     className={baseStyles}
-    //                     value={customizationValues[fieldName] || ""}
-    //                     onChange={(e) => handleInputChange(fieldName, e.target.value)}
-    //                 />
-    //             );
-    //         case 'textarea':
-    //             return (
-    //                 <textarea
-    //                     placeholder={field?.labelName}
-    //                     value={customizationValues[fieldName] || ""}
-    //                     onChange={(e) => handleInputChange(fieldName, e.target.value)}
-    //                     className={`${baseStyles} min-h-[100px]`}
-    //                 />
-    //             );
-    //         case 'select':
-    //         case 'multiselect':
-    //             return (
-    //                 <select
-    //                     className={baseStyles}
-    //                     value={customizationValues[fieldName] || ""}
-    //                     onChange={(e) => handleInputChange(fieldName, e.target.value)}
-    //                 >
-    //                     <option value="">{field?.labelName || 'Select an option'}</option>
-    //                     {field?.selectOptions?.map((opt, idx) => (
-    //                         <option key={idx} value={opt.valueName}>{opt.valueName}</option>
-    //                     ))}
-    //                 </select>
-    //             );
-    //         case 'checkbox':
-    //             return (
-    //                 <input
-    //                     type="checkbox"
-    //                     checked={customizationValues[fieldName] || false}
-    //                     onChange={(e) => handleInputChange(fieldName, e.target.checked)}
-    //                     className="h-5 w-5 text-blue-600"
-    //                 />
-    //             );
-    //         case 'file':
-    //             return (
-    //                 <input
-    //                     type="file"
-    //                     onChange={(e) => handleInputChange(fieldName, e.target.files[0])} // Store file object
-    //                     // accept={field?.validation?.fileTypes?.join(',')}
-    //                     className={baseStyles}
-    //                 />
-    //             );
-    //         default:
-    //             return <div
-    //             // className={baseStyles}
-    //             >{field?.selectedField} (Preview not available)</div>;
-    //     }
-    // };
-
-
     const [previewUrl, setPreviewUrl] = useState(null);
 
     // State for file preview
     const [fileType, setFileType] = useState(null);
-
-    console.log("errorabc", error);
-
 
     // Cleanup object URL on component unmount or file change
     useEffect(() => {
