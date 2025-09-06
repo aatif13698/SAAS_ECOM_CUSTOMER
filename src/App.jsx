@@ -28,6 +28,7 @@ const Orders = lazy(() => import("../src/pages/orders/Orders"));
 const TrackOrder = lazy(() => import("../src/pages/orders/TrackOrder"));
 const ProductList = lazy(() => import("../src/pages/ProductList/ProductList"));
 const CheckOut = lazy(() => import("../src/pages/checkout/CheckOut"));
+const CheckoutFromCart = lazy(() => import("../src/pages/checkout/CheckoutFromCart"));
 
 
 // import ProducDe
@@ -60,7 +61,6 @@ export default function App() {
 
           <Route index element={<Navigate to="/home" />} />
 
-
           {/* <Route path="/" element={<Login />} /> */}
 
           <Route element={<PublicRoutes />}>
@@ -85,6 +85,7 @@ export default function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="address" element={<Address />} />
             <Route path="checkout/:productMainStockId/:productStockId" element={<CheckOut />} />
+            <Route path="checkout/cart" element={<CheckoutFromCart />} />
 
           </Route>
         </Route>

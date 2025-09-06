@@ -171,6 +171,9 @@ const Cart = () => {
   const clientId = import.meta.env.VITE_DATABASE_ID; // Replace with actual client ID from context/auth
   const { clientUser: customerData, isAuth: isLogedIn, defaultAddress, } = useSelector((state) => state?.authCustomerSlice);
 
+  console.log("cartData", cartData);
+  
+
   const [isDark] = useDarkmode();
 
 
@@ -321,10 +324,10 @@ const Cart = () => {
                 } p-4 rounded-md shadow-md   scrollbar-hide`}
               >
                 {carts.map((item) => {
-                  const name = item?.productStock?.product?.name;
+                  const name = item?.productMainStock?.name;
                   const priceOption = item?.priceOption;
                   const price = priceOption?.price;
-                  const image = item?.productStock?.product?.images[0];
+                  const image = item?.productMainStock?.images[0];
                   return (
                     <div
                       key={item.productStock?._id}
@@ -341,6 +344,9 @@ const Cart = () => {
                         <h3 className="text-lg font-medium text-gray-900 dark:text-white">{name}</h3>
                         <p className="text-lg text-gray-600 dark:text-gray-300">
                           ${price?.toFixed(2)}
+                        </p>
+                          <p className="text-lg text-gray-600 dark:text-gray-300">
+                          Quantity: {priceOption?.quantity}
                         </p>
                       </div>
                       <button
@@ -359,7 +365,7 @@ const Cart = () => {
               <div
                 className={`${
                   isDark ? 'bg-gray-700' : 'bg-white'
-                } p-4 rounded-md shadow-md lg:sticky lg:top-4`}
+                } p-4 rounded-md shadow-md lg:sticky lg:top-4 h-fit`}
               >
                 <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
                   Order Summary

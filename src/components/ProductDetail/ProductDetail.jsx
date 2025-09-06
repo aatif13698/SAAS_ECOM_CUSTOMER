@@ -65,7 +65,7 @@ const ProductDetail = ({ noFade }) => {
 
   console.log("filteredProduct", filteredProduct);
   console.log("productData", productData);
-  
+
 
 
   const [addresses, setAddresses] = useState([]);
@@ -295,15 +295,15 @@ const ProductDetail = ({ noFade }) => {
     navigate(`/checkout/${encryptedIdMainStockId}/${encryptedProductStockId}`, {
       state: {
         paymentOPtions: filteredProduct[0]?.paymentOPtions,
-        customizableOptions: filteredProduct[0]?.product?.customizableOptions, 
-        quantity: quantity, 
+        customizableOptions: filteredProduct[0]?.product?.customizableOptions,
+        quantity: quantity,
         priceOption: {
           quantity: quantity,
           unitPrice: unitPrice,
           price: price
         },
         productDetail: {
-          images : filteredProduct[0]?.images,
+          images: filteredProduct[0]?.images,
           name: filteredProduct[0]?.name,
           description: filteredProduct[0]?.description,
           variant: filteredProduct[0]?.variant
@@ -331,7 +331,9 @@ const ProductDetail = ({ noFade }) => {
       formData.append("priceOption", JSON.stringify({
         quantity: quantity,
         unitPrice: unitPrice,
-        price: price
+        price: price,
+        hasDiscount: priceObject?.hasDiscount ? true : false,
+        discountPercent: priceObject?.hasDiscount ? priceObject?.discountPercent : 0
       }));
       formData.append("sessionId", null);
       formData.append("clientId", import.meta.env.VITE_DATABASE_ID)
@@ -923,7 +925,7 @@ const ProductDetail = ({ noFade }) => {
                   )}
                 </div>
 
-                
+
 
 
 

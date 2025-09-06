@@ -1,14 +1,11 @@
-
-
-
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, Fragment, useState } from 'react'
+import customerService from '../../services/customerService';
 import { Dialog, Transition } from '@headlessui/react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import CryptoJS from 'crypto-js';
 import useWidth from '../../Hooks/useWidth';
 import useDarkmode from '../../Hooks/useDarkMode';
-import customerService from '../../services/customerService';
 import Footer from '../../components/footer/Footer';
 import toast from 'react-hot-toast';
 import { RxCross2 } from "react-icons/rx";
@@ -17,51 +14,34 @@ import { FaMinus, FaPlus } from 'react-icons/fa';
 
 
 
-const SECRET_KEY = import.meta.env.VITE_ENCRYPTION_KEY || 'my-secret-key';
+function CheckoutFromCart() {
 
-const encryptId = (id) => {
-    const encrypted = CryptoJS.AES.encrypt(id.toString(), SECRET_KEY).toString();
-    return encodeURIComponent(encrypted);
-};
-
-const decryptId = (encryptedId) => {
-    try {
-        const decoded = decodeURIComponent(encryptedId);
-        const bytes = CryptoJS.AES.decrypt(decoded, SECRET_KEY);
-        return bytes.toString(CryptoJS.enc.Utf8);
-    } catch (error) {
-        console.error('Decryption failed:', error);
-        return null;
-    }
-};
-
-function CheckOut({ noFade }) {
-    const { width, breakpoints } = useWidth();
     const [isDark] = useDarkmode();
-    const { productMainStockId, productStockId } = useParams();
-    const location = useLocation();
-    const { quantity, productDetail } = location.state;
-    const { clientUser: customerData } = useSelector((state) => state?.authCustomerSlice);
+    const { width, breakpoints } = useWidth();
+
+
+    const [isPageLoading, setIsPageLoading] = useState(true);
     const [refreshCount, setRefreshCount] = useState(0);
+    const [cartData, setCartData] = useState(null);
+    const [carts, setCarts] = useState([]);
 
 
     const [addresses, setAddresses] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [showAddressModal, setShowAddressModal] = useState(false);
-    const [showCustomizationModal, setShowCustomizationModal] = useState(false);
-
     const [showAddAddressForm, setShowAddAddressForm] = useState(false);
-    // const [newAddress, setNewAddress] = useState({
-    //     fullName: '',
-    //     roadName: '',
-    //     city: '',
-    //     state: '',
-    //     ZipCode: '',
-    // });
 
 
-    console.log("productDetail", productDetail);
-    
+    const { clientUser: customerData } = useSelector((state) => state?.authCustomerSlice);
+
+
+
+    console.log("cartData", cartData);
+    console.log("carts", carts);
+
+
+
+
 
 
     const [formData, setFormData] = useState({
@@ -382,24 +362,6 @@ function CheckOut({ noFade }) {
     const [quantityNum, setQuantityNum] = useState(1);
 
 
-
-
-
-    useEffect(() => {
-        if (location?.state?.paymentOPtions) {
-            setPaymentOptions(location?.state?.paymentOPtions)
-        }
-        if (location?.state?.customizableOptions) {
-            setCustomizableOption(location?.state?.customizableOptions)
-        }
-        if (location?.state?.priceOption) {
-            setPriceOption(location?.state?.priceOption)
-        }
-        if (location?.state?.quantity) {
-            setQuantityNum(location?.state?.quantity)
-        }
-    }, [location.state])
-
     async function getAddresses() {
         try {
             setIsLoading(true);
@@ -415,41 +377,6 @@ function CheckOut({ noFade }) {
         }
     }
 
-    // async function addAddress() {
-    //     try {
-    //         setIsLoading(true);
-    //         const response = await customerService.addAddress({
-    //             ...newAddress,
-    //             customerId: customerData?._id,
-    //         });
-    //         setAddresses([...addresses, response.data]);
-    //         setSelectedAddress(response.data);
-    //         setShowAddAddressForm(false);
-    //         setNewAddress({ fullName: '', roadName: '', city: '', state: '', ZipCode: '' });
-    //         setShowAddressModal(false);
-    //     } catch (error) {
-    //         console.error('Error adding address:', error);
-    //         alert('Failed to add address. Please try again.');
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
-
-    useEffect(() => {
-
-        getAddresses();
-
-    }, [refreshCount])
-
-    useEffect(() => {
-
-        const decryptedProductMainStockId = decryptId(productMainStockId);
-        const decryptedProductStockId = decryptId(productStockId);
-        setStockIds({
-            productMainStockId: decryptedProductMainStockId,
-            productStockId: decryptedProductStockId,
-        });
-    }, [productMainStockId, productStockId]);
 
     const handleDeliverHere = () => {
         if (!selectedAddress) {
@@ -462,292 +389,15 @@ function CheckOut({ noFade }) {
         setSelectedPaymentOption(option);
     };
 
-    // const handleNewAddressChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setNewAddress((prev) => ({ ...prev, [name]: value }));
-    // };
 
+    const [payableData, setPayableData] = useState({
+        amountBeforeDiscount: 0,
+        discountAmount: 0,
+        totalAmount: 0
+    });
 
-    const [customizationValues, setCustomizationValues] = useState({});
-    const [error, setError] = useState({});
+    console.log("payableData", payableData);
 
-
-    const handleInputChange = (fieldName, value) => {
-
-        if (!value) {
-
-            setError((prev) => {
-                return {
-                    ...prev,
-                    [fieldName]: `${fieldName} is required.`
-                }
-            })
-
-        } else {
-            setError((prev) => {
-                return {
-                    ...prev,
-                    [fieldName]: ""
-                }
-            })
-        }
-        setCustomizationValues((prev) => ({
-            ...prev,
-            [fieldName]: value,
-        }));
-    };
-
-    const [previewUrl, setPreviewUrl] = useState(null);
-
-    // State for file preview
-    const [fileType, setFileType] = useState(null);
-
-    // Cleanup object URL on component unmount or file change
-    useEffect(() => {
-        return () => {
-            if (previewUrl) {
-                URL.revokeObjectURL(previewUrl);
-            }
-        };
-    }, [previewUrl]);
-
-    const renderFieldPreview = (field) => {
-        const baseStyles = 'w-[100%] dark:bg-gray-600 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500';
-        const fieldName = field.labelName;
-
-
-
-        switch (field.selectedField) {
-            case 'text':
-            case 'number':
-            case 'email':
-            case 'hyperlink':
-                return (
-                    <>
-                        <input
-                            type={field.selectedField}
-                            placeholder={field.labelName}
-                            className={baseStyles}
-                            value={customizationValues[fieldName] || ''}
-                            onChange={(e) => handleInputChange(fieldName, e.target.value)}
-                        />
-                        {error[fieldName] && (
-                            <p className="text-red-500 text-sm mt-1">{error[fieldName]}</p>
-                        )}
-                    </>
-
-
-                );
-            case 'textarea':
-                return (
-                    <>
-                        <textarea
-                            placeholder={field.labelName}
-                            value={customizationValues[fieldName] || ''}
-                            onChange={(e) => handleInputChange(fieldName, e.target.value)}
-                            className={`${baseStyles} min-h-[100px]`}
-                        />
-                        {error[fieldName] && (
-                            <p className="text-red-500 text-sm mt-1">{error[fieldName]}</p>
-                        )}
-                    </>
-
-                );
-            case 'select':
-            case 'multiselect':
-                return (
-
-                    <>
-                        <select
-                            className={baseStyles}
-                            value={customizationValues[fieldName] || ''}
-                            onChange={(e) => handleInputChange(fieldName, e.target.value)}
-                        >
-                            <option value="">{field.labelName || 'Select an option'}</option>
-                            {field?.selectOptions?.map((opt, idx) => (
-                                <option key={idx} value={opt.valueName}>{opt.valueName}</option>
-                            ))}
-                        </select>
-
-                        {error[fieldName] && (
-                            <p className="text-red-500 text-sm mt-1">{error[fieldName]}</p>
-                        )}
-                    </>
-
-                );
-            case 'checkbox':
-                return (
-                    <>
-                        <input
-                            type="checkbox"
-                            checked={customizationValues[fieldName] || false}
-                            onChange={(e) => handleInputChange(fieldName, e.target.checked)}
-                            className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
-                        />
-                        {error[fieldName] && (
-                            <p className="text-red-500 text-sm mt-1">{error[fieldName]}</p>
-                        )}
-                    </>
-
-                );
-            case 'file':
-
-                console.log("field?.validation?.maxSize", field?.validation?.maxSize);
-
-
-                const MAX_FILE_SIZE = (field?.validation?.maxSize ? field?.validation?.maxSize : 10) * 1024 * 1024; // 2MB in bytes
-
-                const handleFileChange = (e) => {
-                    const file = e.target.files[0];
-                    let newErrors = { ...error };
-
-
-                    if (file) {
-                        // Check file size
-                        if (file.size > MAX_FILE_SIZE) {
-                            newErrors[fieldName] = `File size exceeds ${field?.validation?.maxSize}MB limit.`;
-                            // setError('÷File size exceeds 2MB limit.');
-                            setPreviewUrl(null);
-                            setFileType(null);
-                            // Optionally, call handleInputChange with null to clear the file
-                            handleInputChange(fieldName, null);
-                            console.log("aaa", newErrors);
-
-                            setError(newErrors);
-
-                            return;
-                        } else {
-                            delete newErrors[fieldName];
-                            setError(newErrors);
-
-                        }
-
-                        // Clean up previous URL if it exists
-                        if (previewUrl) {
-                            URL.revokeObjectURL(previewUrl);
-                        }
-
-                        // Process valid file
-                        handleInputChange(fieldName, file);
-                        const url = URL.createObjectURL(file);
-                        setPreviewUrl(url);
-                        setFileType(file.type); // Store file MIME type
-                    } else {
-                        // Clear states if no file is selected
-                        if (previewUrl) {
-                            URL.revokeObjectURL(previewUrl);
-                        }
-                        setPreviewUrl(null);
-                        setFileType(null);
-                        handleInputChange(fieldName, null);
-                    }
-
-
-
-                };
-
-                return (
-                    <div className="flex flex-col  gap-2">
-                        <input
-                            type="file"
-                            accept={field?.validation?.fileTypes?.join(",")}
-                            onChange={handleFileChange}
-                            className={baseStyles}
-                        />
-                        {error[fieldName] && (
-                            <p className="text-red-500 text-sm mt-1">{error[fieldName]}</p>
-                        )}
-                        {/* {previewUrl && fileType && !error && ( */}
-                        <div className="mt-2 w-[100%]     ">
-                            {customizationValues[fieldName]?.type.startsWith('image/') && (
-                                <img
-                                    src={URL.createObjectURL(customizationValues[fieldName])}
-                                    alt="File preview"
-                                    className="max-w-[100%] h-auto rounded-md border border-gray-200"
-                                // style={{ maxHeight: '200px' }}
-                                />
-                            )}
-                            {/* {fileType.startsWith('video/') && (
-                                <video
-                                    src={URL.createObjectURL(customizationValues[fieldName])}
-                                    controls
-                                    className="max-w-[100%] h-auto rounded-md border border-gray-200"
-                                    style={{ maxHeight: '200px' }}
-                                />
-                            )} */}
-                            {customizationValues[fieldName]?.type === 'application/pdf' && (
-                                <embed
-                                    src={URL.createObjectURL(customizationValues[fieldName])}
-                                    type="application/pdf"
-                                    className="w-[100%] h-[50vh] rounded-md border border-gray-200"
-                                />
-                            )}
-                            {/* {!fileType.startsWith('image/') &&
-                                !fileType.startsWith('video/') &&
-                                fileType !== 'application/pdf' && (
-                                    <p className="text-sm text-gray-500">Preview not available for this file type</p>
-                                )} */}
-                        </div>
-                        {/* )} */}
-                    </div>
-                );
-            default:
-                return (
-                    <div className="text-sm text-gray-500">
-                        {field?.selectedField} (Preview not available)
-                    </div>
-                );
-        }
-    };
-
-
-
-    async function finalPlaceOrder() {
-        setIsLoading2(true);
-        try {
-            const formData = new FormData();
-            Object.entries(customizationValues).forEach(([key, value]) => {
-                if (value instanceof File) {
-                    formData.append(key, value);
-                } else {
-                    formData.append(key, value);
-                }
-            });
-
-            formData.append("productMainStockId", stockIds?.productMainStockId);
-            formData.append("productStockId", stockIds?.productStockId);
-            formData.append("quantity", quantity);
-            formData.append("priceOption", JSON.stringify(priceOption));
-            formData.append("sessionId", null);
-            formData.append("addressId", selectedAddress?._id);
-            formData.append("clientId", import.meta.env.VITE_DATABASE_ID);
-
-            const response = await customerService.newPlaceOrder(formData);
-            setShowCustomizationModal(false);
-            toast.success(response?.data?.message);
-            setIsLoading2(false);
-
-        } catch (error) {
-            setIsLoading2(false);
-            console.log("error while placing order", error);
-        }
-    }
-
-
-    const [price, setPrice] = useState(null);
-    const [unitPrice, setUnitPrice] = useState(null);
-    const [priceObject, setPriceObject] = useState(null);
-    const [finalPrice, setFinalPrice] = useState(null);
-
-
-    console.log("priceObject", priceObject);
-
-    console.log("finalPrice", finalPrice);
-
-    console.log("price", price);
-    
-    
-    
 
 
 
@@ -764,54 +414,126 @@ function CheckOut({ noFade }) {
 
 
     useEffect(() => {
-        if (quantityNum > 0 && productDetail?.variant) {
-            const priceArray = convertPricingTiers(productDetail?.variant?.priceId?.price);
-            const priceObject = priceArray.find(item =>
-                quantityNum >= item.minQuantity &&
-                (item.maxQuantity === null || quantityNum <= item.maxQuantity)
-            ) || null;
-            if (priceObject) {
-                setPriceObject(priceObject);
-                if (priceObject?.hasDiscount == true) {
+        const getCarts = async () => {
+            try {
+                setIsPageLoading(true);
+                const response = await customerService.getCarts(null);
+                setCartData(response?.data?.data);
+
+                const newCartsArray = response?.data?.data?.items?.map((cart) => {
+                    const priceArray = convertPricingTiers(cart?.productMainStock?.variant?.priceId?.price);
+                    const priceObject = priceArray.find(item =>
+                        cart?.quantity >= item.minQuantity &&
+                        (item.maxQuantity === null || cart?.quantity <= item.maxQuantity)
+                    ) || null;
+                    let finalPrice = 0;
+                    if (priceObject) {
+                        const discountedUnitPrice = priceObject?.unitPrice - priceObject?.unitPrice * (priceObject?.discountPercent / 100);
+                        finalPrice = (cart?.quantity * discountedUnitPrice).toFixed(2)
+                    }
+
+                    return {
+                        ...cart,
+                        priceObject: priceObject ? priceObject : null,
+                        finalPrice: priceObject ? finalPrice : null,
+                        price: cart?.quantity * priceObject?.unitPrice
+                    }
+                });
+
+
+
+                setCarts(newCartsArray || []);
+                setIsPageLoading(false)
+            } catch (error) {
+                setCartData(null);
+                setCarts([]);
+                console.error("Error fetching carts:", error);
+                setIsPageLoading(false)
+            }
+        };
+        getCarts();
+        getAddresses();
+
+    }, [refreshCount]);
+
+
+    useEffect(() => {
+
+        // Calculate payable data in a single step
+        const payableData = carts.reduce(
+            (acc, cart) => {
+                const priceObject = cart.priceObject;
+                const itemPrice = (priceObject && priceObject?.hasDiscount)
+                    ? Number(cart.finalPrice)
+                    : Number(cart?.priceOption?.price) || 0;
+                const discount = (priceObject && priceObject?.hasDiscount)
+                    ? Number(priceObject.unitPrice) * (Number(priceObject.discountPercent) / 100)
+                    : 0;
+
+
+                const price = (priceObject && priceObject?.hasDiscount)
+                    ? Number(cart.price)
+                    : Number(cart?.priceOption?.price);
+                return {
+                    amountBeforeDiscount: Number((acc.amountBeforeDiscount + price).toFixed(2)),
+                    discountAmount: acc.discountAmount + discount,
+                    totalAmount: Number((acc.totalAmount + itemPrice).toFixed(2)),
+                };
+            },
+            { amountBeforeDiscount: 0, discountAmount: 0, totalAmount: 0 }
+        );
+
+        setPayableData(payableData)
+
+    }, [carts])
+
+
+   
+
+
+
+    const handleQuantityChange = (delta, id) => {
+
+        const newCartsArray = carts?.map((cart) => {
+
+            if (cart?._id === id) {
+                const priceArray = convertPricingTiers(cart?.productMainStock?.variant?.priceId?.price);
+                const priceObject = priceArray.find(item =>
+                    Math.max(1, cart?.priceOption.quantity + delta) >= item.minQuantity &&
+                    (item.maxQuantity === null || Math.max(1, cart?.priceOption.quantity + delta) <= item.maxQuantity)
+                ) || null;
+                let finalPrice = 0;
+                if (priceObject) {
                     const discountedUnitPrice = priceObject?.unitPrice - priceObject?.unitPrice * (priceObject?.discountPercent / 100);
-                    setFinalPrice(quantityNum * discountedUnitPrice);
-                    setUnitPrice(priceObject?.unitPrice);
-                    setPrice(quantityNum * priceObject?.unitPrice)
-                } else {
-                    setUnitPrice(priceObject?.unitPrice);
-                    setPrice(quantityNum * priceObject?.unitPrice)
+                    finalPrice = (Math.max(1, cart?.priceOption.quantity + delta) * discountedUnitPrice).toFixed(2)
+                }
+                return {
+                    ...cart,
+                    priceOption: { ...cart?.priceOption, quantity: Math.max(1, cart?.priceOption.quantity + delta), price: Math.max(1, cart?.priceOption.quantity + delta) * priceObject?.unitPrice },
+                    priceObject: priceObject ? priceObject : null,
+                    finalPrice: priceObject ? finalPrice : null,
+                    price: (Math.max(1, cart?.priceOption.quantity + delta) * priceObject?.unitPrice).toFixed(2),
                 }
             } else {
-                setPrice(null)
+                return cart
             }
-        }
-    }, [quantityNum, productDetail])
-
-
-
-    const handleQuantityChange = (delta) => {
-        setQuantityNum((prev) => Math.max(1, prev + delta));
+        });
+        setCarts(newCartsArray)
     };
+
+
 
 
     return (
         <>
-            <div className="w-[100%] flex justify-center px-2 sm:px-6 lg:px-8 py-6">
-
-
-
-                {/* <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white ">Checkout</h2> */}
-
-                <div className={`w-[100%] flex md:flex-row flex-col-reverse gap-2 lg:gap-4 lg:w-[60%] md:w-[80%] `}>
-
-
-                    <div className={`w-[100%] md:w-[70%] relative ${isDark ? 'dark:bg-gray-800' : 'bg-white'
+            <div className="w-[100%] min-h-[50vh] flex justify-center px-2 sm:px-6 lg:px-8 py-6">
+                <div className={`w-[100%] flex md:flex-row flex-col-reverse gap-2 lg:gap-4 xl:w-[70%] lg:w-[90%] md:w-[100%] `}>
+                    <div className={`w-[100%] md:w-[70%] h-fit relative ${isDark ? 'dark:bg-gray-800' : 'bg-white'
                         }  rounded-lg  p-4 sm:p-6`}>
                         <div className=''>
                             <div>
-
                                 <div
-                                    className={`relative mb-6 p-4 rounded-lg border border-gray-200 dark:border-gray-600 ${isDark ? 'dark:bg-gray-800' : 'bg-white'
+                                    className={`relative mb-6 p-4  rounded-lg border border-gray-200 dark:border-gray-600 ${isDark ? 'dark:bg-gray-800' : 'bg-white'
                                         }`}
                                 >
                                     <div className='flex mb-3 items-center gap-2'>
@@ -858,170 +580,174 @@ function CheckOut({ noFade }) {
 
                                 </div>
                                 {true && (
-                                    <div
-                                        className={`relative mb-6 p-4 rounded-lg border border-gray-200 dark:border-gray-600 ${isDark ? 'dark:bg-gray-800' : 'bg-white'
-                                            }`}
-                                    >
 
-                                        <div className='flex items-center gap-2'>
-                                            <div className=" top-2 left-2 flex items-center justify-center w-6 h-6 p-2 bg-green-100 border-2 border-green-500 rounded-full">
-                                                <span className="text-sm font-medium text-green-700">2</span>
-                                            </div>
-                                            <h3 className="mt-2 mb-2 text-lg font-semibold text-gray-900  dark:text-white">ORDER SUMMARY</h3>
-                                        </div>
-                                        <div className="">
-                                            <div
-                                                className="flex justify-between flex-col  gap-4 py-2  dark:border-gray-600 lg:flex-row"
-                                            >
-                                                <div className="flex md:items-center gap-4">
-                                                    <img
-                                                        src={`${import.meta.env.VITE_API_URL
-                                                            }/productBluePrint/${productDetail.images[0]}`}
-                                                        alt={productDetail.name}
-                                                        className="object-cover w-20 h-20 rounded-md"
-                                                    />
-                                                    <div>
-                                                        <h3 className="text-base dark:text-gray-100 font-semibold">
-                                                            {productDetail.name}
-                                                        </h3>
-                                                        <p className="text-base dark:text-black ">
-                                                            <span className="font-bold"></span> <span className="text-gray-600 dark:text-gray-400">{productDetail?.description}</span>
-                                                        </p>
-                                                        <div className="flex  flex-col gap-2">
-                                                            {priceObject?.hasDiscount ? (
-                                                                <div className="flex flex-col md:flex-row gap-2 md:items-center">
-                                                                    <span className="inline w-fit bg-green-600 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-lg transition-colors hover:bg-green-700">
-                                                                        {`-${priceObject?.discountPercent}%`}
-                                                                    </span>
-                                                                    <p className="text-lg font-bold text-gray-800 dark:text-gray-200">₹{finalPrice}</p>
-                                                                    <span className="text-sm font-serif text-gray-500 dark:text-gray-200">
-                                                                        MRP: <del>₹{price}</del>
-                                                                    </span>
-                                                                </div>
-                                                            ) : (
-                                                                <p className="text-lg font-bold text-gray-800 dark:text-gray-200">₹{price}</p>
-                                                            )}
-                                                        </div>
-                                                    </div>
+                                    <>
+                                        <div className=''>
+                                            <div className='flex items-center gap-2 px-4 bg-green-600 mb-2'>
+                                                <div className=" top-2 left-2 flex items-center justify-center w-6 h-6 p-2 bg-green-100 border-2 border-green-500 rounded-full">
+                                                    <span className="text-sm font-medium text-green-700">2</span>
                                                 </div>
-                                                <div className="flex items-center  gap-3">
-                                                    <div className="flex items-center px-1 border rounded-full">
-                                                        <button
-                                                            onClick={() => handleQuantityChange(-1)}
-                                                            disabled={quantityNum <= 1}
-                                                            className="px-2 py-2 rounded-full text-gray-600 dark:text-gray-100 disabled:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                                        >
-                                                            <FaMinus />
-                                                        </button>
-                                                        <span className="px-2 py-2 dark:text-gray-100 text-gray-800">{quantityNum}</span>
-                                                        <button
-                                                            onClick={() => handleQuantityChange(1)}
-                                                            className="px-2 py-2 rounded-full text-gray-600 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                                        >
-                                                            <FaPlus />
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                                <h3 className="mt-2 mb-2 text-lg font-semibold text-white  dark:text-white">ORDER SUMMARY</h3>
                                             </div>
-                                        </div>
 
-                                        {
-                                            customizableOption?.length > 0 ?
-                                                <div
-                                                    className={`relative mb-6 p-4 rounded-lg border-2 border-dashed border-gray-200 dark:border-gray-600 ${isDark ? 'dark:bg-gray-800' : 'bg-white'
-                                                        }`}
-                                                >
-                                                    <div className='flex mb-3 items-center gap-2'>
-
-                                                        <h3 className="text-lg font-semibold  text-gray-900 dark:text-white ">Customization Form</h3>
-                                                    </div>
-
-                                                    <div className='flex mb-3 items-center gap-2'>
-                                                        <div className=" w-[100%] relative rounded-md  ">
-                                                            <h2 className="text-sm md:text-lg dark:text-gray-100 font-semibold mt-2 text-center my-3">This product is customiseable</h2>
-                                                            <div className="grid md:grid-cols-2 md:grid-col-1 gap-4 w-[100%] ">
-                                                                {customizableOption && customizableOption?.length > 0 ?
-
-                                                                    customizableOption.map((field, index) => (
-                                                                        <div
-                                                                            key={index}
-                                                                            className={`flex flex-col ${field?.selectedField === "file" ? "md:col-span-2" : ""} `}
-                                                                        >
-                                                                            <label className="mb-1 text-gray-700 dark:text-gray-200 font-medium">
-                                                                                {field?.labelName}
-                                                                            </label>
-                                                                            {renderFieldPreview(field)}
-                                                                        </div>
-                                                                    )) : ""
-                                                                }
-                                                            </div>
-                                                            <div className="flex justify-end mt-4">
-                                                                <button
-                                                                    onClick={() => {
-                                                                        finalPlaceOrder()
-                                                                    }}
-                                                                    className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 transition-colors duration-200 disabled:opacity-50"
+                                            {
+                                                carts && carts?.length > 0 ? carts?.map((cart, index) => {
+                                                    const productDetail = cart?.productMainStock;
+                                                    const priceOption = cart?.priceOption;
+                                                    const priceObject = cart?.priceObject;
+                                                    return (
+                                                        <div
+                                                            key={index}
+                                                            className={`relative mb-6 p-4 rounded-lg border border-gray-200 dark:border-gray-600 ${isDark ? 'dark:bg-gray-800' : 'bg-white'
+                                                                }`}
+                                                        >
+                                                            <div className="">
+                                                                <div
+                                                                    className="flex justify-between flex-col  gap-4 py-2  dark:border-gray-600 lg:flex-row"
                                                                 >
-                                                                    {isLoading2 ? (
-                                                                        <span className="flex items-center justify-center">
-                                                                            <svg
-                                                                                className="animate-spin h-5 w-5 mr-2 text-white"
-                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                fill="none"
-                                                                                viewBox="0 0 24 24"
-                                                                            >
-                                                                                <circle
-                                                                                    className="opacity-25"
-                                                                                    cx="12"
-                                                                                    cy="12"
-                                                                                    r="10"
-                                                                                    stroke="currentColor"
-                                                                                    strokeWidth="4"
-                                                                                />
-                                                                                <path
-                                                                                    className="opacity-75"
-                                                                                    fill="currentColor"
-                                                                                    d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
-                                                                                />
-                                                                            </svg>
-                                                                            Placing order...
-                                                                        </span>
-                                                                    ) : (
-                                                                        <div className="flex justify-center items-center gap-2 ">
-                                                                            <span>Submit</span>
+                                                                    <div className="flex md:items-center gap-4">
+                                                                        <img
+                                                                            src={`${import.meta.env.VITE_API_URL
+                                                                                }/productBluePrint/${productDetail.images[0]}`}
+                                                                            alt={productDetail.name}
+                                                                            className="object-cover w-20 h-20 rounded-md"
+                                                                        />
+                                                                        <div>
+                                                                            <h3 className="text-base dark:text-gray-100 font-semibold">
+                                                                                {productDetail.name}
+                                                                            </h3>
+                                                                            <p className="text-base dark:text-black ">
+                                                                                <span className="font-bold"></span> <span className="text-gray-600 dark:text-gray-400">{productDetail?.description}</span>
+                                                                            </p>
+                                                                            <div className="flex  flex-col gap-2">
+                                                                                {priceObject?.hasDiscount ? (
+                                                                                    <div className="flex flex-col md:flex-row gap-2 md:items-center">
+                                                                                        <span className="inline w-fit bg-green-600 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-lg transition-colors hover:bg-green-700">
+                                                                                            {`-${priceObject?.discountPercent}%`}
+                                                                                        </span>
+                                                                                        <p className="text-lg font-bold text-gray-800 dark:text-gray-200">₹{cart?.finalPrice}</p>
+                                                                                        <span className="text-sm font-serif text-gray-500 dark:text-gray-200">
+                                                                                            MRP: <del>₹{cart?.price}</del>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                ) : (
+                                                                                    <p className="text-lg font-bold text-gray-800 dark:text-gray-200">₹{priceOption?.price}</p>
+                                                                                )}
+                                                                            </div>
                                                                         </div>
-
-                                                                    )}
-
-                                                                </button>
+                                                                    </div>
+                                                                    <div className="flex items-center  gap-3">
+                                                                        <div className="flex items-center px-1 border rounded-full">
+                                                                            <button
+                                                                                onClick={() => handleQuantityChange(-1, cart?._id)}
+                                                                                disabled={priceOption?.quantity <= 1}
+                                                                                className="px-2 py-2 rounded-full text-gray-600 dark:text-gray-100 disabled:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                                                            >
+                                                                                <FaMinus />
+                                                                            </button>
+                                                                            <span className="px-2 py-2 dark:text-gray-100 text-gray-800">{priceOption?.quantity}</span>
+                                                                            <button
+                                                                                onClick={() => handleQuantityChange(1, cart?._id)}
+                                                                                className="px-2 py-2 rounded-full text-gray-600 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                                                            >
+                                                                                <FaPlus />
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
+                                                            {
+                                                                customizableOption?.length > 0 ?
+                                                                    <div
+                                                                        className={`relative mb-6 p-4 rounded-lg border-2 border-dashed border-gray-200 dark:border-gray-600 ${isDark ? 'dark:bg-gray-800' : 'bg-white'
+                                                                            }`}
+                                                                    >
+                                                                        <div className='flex mb-3 items-center gap-2'>
+
+                                                                            <h3 className="text-lg font-semibold  text-gray-900 dark:text-white ">Customization Form</h3>
+                                                                        </div>
+                                                                        <div className='flex mb-3 items-center gap-2'>
+                                                                            <div className=" w-[100%] relative rounded-md  ">
+                                                                                <h2 className="text-sm md:text-lg dark:text-gray-100 font-semibold mt-2 text-center my-3">This product is customiseable</h2>
+                                                                                <div className="grid md:grid-cols-2 md:grid-col-1 gap-4 w-[100%] ">
+                                                                                    {customizableOption && customizableOption?.length > 0 ?
+
+                                                                                        customizableOption.map((field, index) => (
+                                                                                            <div
+                                                                                                key={index}
+                                                                                                className={`flex flex-col ${field?.selectedField === "file" ? "md:col-span-2" : ""} `}
+                                                                                            >
+                                                                                                <label className="mb-1 text-gray-700 dark:text-gray-200 font-medium">
+                                                                                                    {field?.labelName}
+                                                                                                </label>
+                                                                                                {renderFieldPreview(field)}
+                                                                                            </div>
+                                                                                        )) : ""
+                                                                                    }
+                                                                                </div>
+                                                                                <div className="flex justify-end mt-4">
+                                                                                    <button
+                                                                                        onClick={() => {
+                                                                                            finalPlaceOrder()
+                                                                                        }}
+                                                                                        className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 transition-colors duration-200 disabled:opacity-50"
+                                                                                    >
+                                                                                        {isLoading2 ? (
+                                                                                            <span className="flex items-center justify-center">
+                                                                                                <svg
+                                                                                                    className="animate-spin h-5 w-5 mr-2 text-white"
+                                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                                    fill="none"
+                                                                                                    viewBox="0 0 24 24"
+                                                                                                >
+                                                                                                    <circle
+                                                                                                        className="opacity-25"
+                                                                                                        cx="12"
+                                                                                                        cy="12"
+                                                                                                        r="10"
+                                                                                                        stroke="currentColor"
+                                                                                                        strokeWidth="4"
+                                                                                                    />
+                                                                                                    <path
+                                                                                                        className="opacity-75"
+                                                                                                        fill="currentColor"
+                                                                                                        d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
+                                                                                                    />
+                                                                                                </svg>
+                                                                                                Placing order...
+                                                                                            </span>
+                                                                                        ) : (
+                                                                                            <div className="flex justify-center items-center gap-2 ">
+                                                                                                <span>Submit</span>
+                                                                                            </div>
+
+                                                                                        )}
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    : ""
+                                                            }
                                                         </div>
-                                                    </div>
-                                                </div>
-
-                                                : ""
-                                        }
-                                    </div>
+                                                    )
+                                                }) : null
+                                            }
+                                        </div>
+                                    </>
                                 )}
-
                                 <div
                                     className={`relative mb-6 p-4 rounded-lg border border-gray-200 dark:border-gray-600 ${isDark ? 'dark:bg-gray-800' : 'bg-white'
                                         }`}
                                 >
-
                                     <div className='flex mb-3 items-center gap-2'>
                                         <div className=" top-2 left-2 flex items-center justify-center w-6 h-6 p-2 bg-green-100 border-2 border-green-500 rounded-full">
                                             <span className="text-sm font-medium text-green-700">3</span>
                                         </div>
                                         <h3 className="text-lg font-semibold  text-gray-900 dark:text-white ">Payment Options</h3>
-
-
                                     </div>
-
                                     <div className="space-y-4">
                                         {Object.entries(paymentOptions).map(([key, value]) => {
-                                            console.log("kkey", key);
-
                                             if (key === 'paymentSteps' && paymentOptions.multiStep) {
                                                 return (
                                                     <div key={key} className="border-t border-gray-200 dark:border-gray-600 pt-4">
@@ -1073,9 +799,7 @@ function CheckOut({ noFade }) {
                                                         {
                                                             value ? "" : <span className='text-[0.80rem] text-red-600'>{`${labelMap[key]} is not available`}</span>
                                                         }
-
                                                     </>
-
                                                 );
                                             }
                                             return null;
@@ -1089,7 +813,6 @@ function CheckOut({ noFade }) {
                                         {isLoading ? 'Processing...' : 'Continue to Payment'}
                                     </button>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -1099,76 +822,54 @@ function CheckOut({ noFade }) {
                         </h3>
                         <div className='h-[2px] border-dashed border-[1px]'></div>
                         <div className=" text-gray-700 dark:text-gray-300 mt-3">
-
-                            {priceObject?.hasDiscount ? (
+                            {payableData &&
                                 <div className="flex flex-col gap-2 ">
                                     <div className='flex justify-between'>
                                         <span className="text-sm  ">
-                                            Price (1 item):
+                                            {`Price (${carts?.length} item):`}
                                         </span>
                                         <span>
-                                            ₹{price}
+                                            ₹{payableData?.amountBeforeDiscount}
                                         </span>
                                     </div>
-
                                     <div className='flex justify-between'>
                                         <span className="text-sm   ">
-                                            Discount %:
+                                            Discount :
                                         </span>
                                         <span>
-                                            {`-${priceObject?.discountPercent}%`}
+                                            {`-${payableData?.discountAmount}`}
                                         </span>
                                     </div>
-
                                     <div className='flex justify-between'>
                                         <span className="text-sm  ">
                                             Subtotal:
                                         </span>
                                         <span>
-                                            ₹{finalPrice}
+                                            ₹{payableData?.totalAmount}
                                         </span>
                                     </div>
-
                                     <div className='h-[2px] border-dashed border-[1px]'></div>
                                     <div className='flex justify-between'>
                                         <span className="font-bold text-gray-900 dark:text-white ">
                                             Total payable:
                                         </span>
                                         <span className='font-bold text-black dark:text-white'>
-                                            ₹{finalPrice}
+                                            ₹{payableData?.totalAmount}
                                         </span>
                                     </div>
-
                                     <hr />
-
                                     <div className='flex justify-between'>
                                         <span className="font-bold text-green-800 dark:text-white ">
                                             Your total saving on this order:
                                         </span>
                                         <span className='font-bold text-green-800 dark:text-white'>
-                                            ₹{(priceObject?.discountPercent / 100) * price}
+                                            ₹{payableData?.discountAmount}
                                         </span>
                                     </div>
-
                                 </div>
-                            ) : (
-
-                                <div className='flex justify-between'>
-                                    <span className="font-bold text-gray-900 dark:text-white  ">
-                                        Total Payable:
-                                    </span>
-                                    <span>
-                                        ₹{price}
-                                    </span>
-                                </div>
-
-                            )}
-
+                            }
                         </div>
-
                     </div>
-
-
                 </div>
 
 
@@ -1522,7 +1223,7 @@ function CheckOut({ noFade }) {
                 </div>
             </div>
         </>
-    );
+    )
 }
 
-export default CheckOut;
+export default CheckoutFromCart
