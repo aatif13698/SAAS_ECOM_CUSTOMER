@@ -162,6 +162,19 @@ const ProductDetail = ({ noFade }) => {
   };
 
 
+
+  const scrollToTop = () => {
+    console.log("kkkkk");
+    
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth", // This makes the scrolling smooth
+        });
+    };
+
+
+
+
   useEffect(() => {
     const fetchProduct = async () => {
       const decryptedId = decryptId(encryptedId);
@@ -232,7 +245,8 @@ const ProductDetail = ({ noFade }) => {
       }
     };
     fetchProduct();
-    getAdresses()
+    getAdresses();
+    scrollToTop();
 
   }, [encryptedId]);
 
@@ -434,7 +448,6 @@ const ProductDetail = ({ noFade }) => {
 
     );
   }
-
 
   const renderFieldPreview = (field) => {
     const baseStyles = "w-[100%] p-2 border border-gray-300 rounded-md";

@@ -476,7 +476,7 @@ function CheckoutFromCart() {
                     : Number(cart?.priceOption?.price);
                 return {
                     amountBeforeDiscount: Number((acc.amountBeforeDiscount + price).toFixed(2)),
-                    discountAmount: acc.discountAmount + discount,
+                    discountAmount: Number((acc.discountAmount + discount).toFixed(2)),
                     totalAmount: Number((acc.totalAmount + itemPrice).toFixed(2)),
                 };
             },
@@ -488,7 +488,7 @@ function CheckoutFromCart() {
     }, [carts])
 
 
-   
+
 
 
 
@@ -521,6 +521,14 @@ function CheckoutFromCart() {
         setCarts(newCartsArray)
     };
 
+
+    if (isPageLoading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
 
 
 
@@ -816,7 +824,7 @@ function CheckoutFromCart() {
                             </div>
                         </div>
                     </div>
-                    <div className='bg-white h-fit w-[100%] md:w-[30%] px-2 py-3 rounded-md'>
+                    <div className='bg-white sticky md:top-16 top-12 h-fit w-[100%] md:w-[30%] px-2 py-3 rounded-md'>
                         <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
                             Price Details
                         </h3>

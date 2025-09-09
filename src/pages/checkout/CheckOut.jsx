@@ -1093,7 +1093,7 @@ function CheckOut({ noFade }) {
                             </div>
                         </div>
                     </div>
-                    <div className='bg-white h-fit w-[100%] md:w-[30%] px-2 py-3 rounded-md'>
+                    <div className='bg-white sticky md:top-16  h-fit w-[100%] md:w-[30%] px-2 py-3 rounded-md'>
                         <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
                             Price Details
                         </h3>

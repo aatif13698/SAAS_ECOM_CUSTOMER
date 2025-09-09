@@ -12,7 +12,7 @@ import { GoHeart } from "react-icons/go";
 import { FiSearch } from "react-icons/fi";
 import useDarkmode from '../../Hooks/useDarkMode';
 import SecondHeader from './SecondHeader';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BsPersonCircle } from "react-icons/bs";
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut, removeDefaultAddress } from '../../store/reducer/auth/authCustomerSlice';
@@ -35,6 +35,26 @@ const Header = ({ noFade }) => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+
+    const location = useLocation();
+
+    const [showSecondHeader, setShowSecondHeader] = useState(true);
+
+    useEffect(() => {
+
+        if (location?.pathname === "/checkout/cart" || location?.pathname === "/cart") {
+
+            setShowSecondHeader(false);
+
+        } else {
+
+            setShowSecondHeader(true);
+
+        }
+
+    }, [location])
+
 
 
 
@@ -287,9 +307,9 @@ const Header = ({ noFade }) => {
                                             <span className='text-base'>Cart</span>
                                         </button>
 
-                                          <button onClick={() => {
+                                        <button onClick={() => {
                                             navigate("/checkout/cart")
-                                          }} className="flex items-center gap-2  text-white font-semibold py-1 px-2 rounded">
+                                        }} className="flex items-center gap-2  text-white font-semibold py-1 px-2 rounded">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                                                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.3 2.6a1 1 0 00.9 1.4h12.8m-14.4 
@@ -332,9 +352,17 @@ const Header = ({ noFade }) => {
                     </div>
                 </div>
             </div>
-            <div>
-                <SecondHeader />
-            </div>
+
+
+            {
+                showSecondHeader ?
+                    <div>
+                        <SecondHeader />
+                    </div>
+                    : ""
+            }
+
+
 
 
             {/* login alert  */}
