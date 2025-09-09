@@ -847,7 +847,7 @@ const ProductDetail = ({ noFade }) => {
                       ) : (
                         <div className="flex justify-center items-center gap-1">
                           <span><FaBoxOpen className="text-[1.2rem]" /></span>
-                          <span>Buy Now</span>
+                          <span className="text-[.90rem]">Buy Now</span>
                         </div>
                       )}
 
@@ -897,8 +897,8 @@ const ProductDetail = ({ noFade }) => {
                         </span>
                       ) : (
                         <div className="flex justify-center items-center gap-1">
-                          <span><BsCart4 className="text-[1.2rem]" /></span>
-                          <span>Add to Cart</span>
+                          <span><BsCart4 className="md:text-[1.2rem] " /></span>
+                          <span className="text-[.90rem]">Add to Cart</span>
                         </div>
                       )}
                     </button>

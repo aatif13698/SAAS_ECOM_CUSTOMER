@@ -156,7 +156,7 @@ import Select from "react-select";
 import { useSelector } from "react-redux";
 import useDarkmode from "../../Hooks/useDarkMode";
 import Footer from "../../components/footer/Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { width, breakpoints } = useWidth();
@@ -170,6 +170,8 @@ const Cart = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const clientId = import.meta.env.VITE_DATABASE_ID; // Replace with actual client ID from context/auth
   const { clientUser: customerData, isAuth: isLogedIn, defaultAddress, } = useSelector((state) => state?.authCustomerSlice);
+
+  const navigate = useNavigate();
 
   console.log("cartData", cartData);
   
@@ -380,11 +382,11 @@ const Cart = () => {
                   <span>${cartData?.totalAmount?.toFixed(2)}</span>
                 </div>
                 <button
-                  onClick={() => setShowAddressModal(true)}
+                  onClick={() => navigate("/checkout/cart")}
                   disabled={isLoading}
                   className="w-[100%] mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50"
                 >
-                  {isLoading ? 'Processing...' : 'Place Order'}
+                  {isLoading ? 'Processing...' : 'Check out'}
                 </button>
               </div>
             </div>
