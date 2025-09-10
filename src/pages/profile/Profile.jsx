@@ -359,7 +359,7 @@ import { BsFillPencilFill } from "react-icons/bs";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
 import useWidth from "../../Hooks/useWidth";
-import { logOut } from "../../store/reducer/auth/authCustomerSlice";
+import { logOut, setClientUser } from "../../store/reducer/auth/authCustomerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import useDarkmode from "../../Hooks/useDarkMode";
@@ -369,6 +369,7 @@ import toast from "react-hot-toast";
 import Footer from "../../components/footer/Footer";
 
 function Profile() {
+  const dispatch = useDispatch()
   const { width, breakpoints } = useWidth();
   const [isDark] = useDarkmode();
   const { clientUser: customerData, isAuth: isLogedIn } = useSelector((state) => state?.authCustomerSlice);
@@ -383,6 +384,9 @@ function Profile() {
     firstName: "",
     lastName: ""
   });
+
+  console.log("customerData", customerData);
+  
 
   // Business Account State
   const [isBusinessAccount, setIsBusinessAccount] = useState(false);
@@ -565,6 +569,18 @@ function Profile() {
       formAppend.append("firstName", profileData?.firstName);
       formAppend.append("lastName", profileData?.lastName);
       const response = await customerService.updateProfile(formAppend);
+
+      console.log("resposne profile", response.data?.data?.profileImage);
+      
+
+      dispatch(setClientUser({
+        ...customerData,
+        profileImage : response.data?.data?.profileImage,
+        firstName : response?.data?.data?.firstName,
+        lastName : response?.data?.data?.lastName
+      }));
+      
+
       toast.success(response.data.message);
     } catch (error) {
       console.error("Error while editing the profile", error);
