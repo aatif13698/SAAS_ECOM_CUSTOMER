@@ -367,6 +367,8 @@ import profileImg from "../../assets/users/user1.jpg";
 import customerService from "../../services/customerService";
 import toast from "react-hot-toast";
 import Footer from "../../components/footer/Footer";
+import { FiEdit } from "react-icons/fi";
+
 
 function Profile() {
   const dispatch = useDispatch()
@@ -836,7 +838,7 @@ function Profile() {
         <div className={`${isDark ? "bg-cardBgDark2" : "bg-gray-100"} p-4 rounded-lg mb-6`}>
           <div className="flex flex-col items-center mb-6">
             <div className="flex flex-col justify-center items-center flex-wrap relative">
-              <label htmlFor="profileImage" className="cursor-pointer flex flex-col items-center">
+              <label htmlFor="profileImage" className="cursor-pointer relative flex flex-col items-center">
                 <img
                   src={imgPreview ? imgPreview : profileImg}
                   className="w-24 h-24 object-cover border-[3px] border-[#ffffff] shadow-md rounded-md"
@@ -845,6 +847,8 @@ function Profile() {
                 <p className="dark:text-white text-center mt-2 text-sm font-medium text-gray-600">
                   {!imgPreview ? "Upload Photo" : selectedFile?.name}
                 </p>
+
+                <span className="absolute right-[-14px] top-[-4px]"><FiEdit className="text-[#13ceb7]" /></span>
               </label>
               <input
                 id="profileImage"
@@ -859,7 +863,7 @@ function Profile() {
             </div>
             <div className="w-[100%] space-y-4 mt-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-600 mb-1">
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
                   First Name
                 </label>
                 <input
@@ -874,7 +878,7 @@ function Profile() {
                 <span className="text-red-900">{profileDataError?.firstName}</span>
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-600 mb-1">
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
                   Last Name
                 </label>
                 <input
@@ -929,7 +933,7 @@ function Profile() {
           <h2 className="text-lg font-semibold mb-2">Contact Details</h2>
           <div className="flex items-center gap-3 mt-2">
             <div className="w-[100%]">
-              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-600 mb-1">
+              <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
                 Phone Number
               </label>
               <input
@@ -947,7 +951,7 @@ function Profile() {
           </div>
           <div className="flex items-center gap-3 mt-2">
             <div className="w-[100%]">
-              <label htmlFor="emailAddress" className="block text-sm font-medium text-gray-600 mb-1">
+              <label htmlFor="emailAddress" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
                 Email Address
               </label>
               <input
@@ -966,10 +970,10 @@ function Profile() {
         </div>
 
         {/* PAN Card Section */}
-        <div className={`${isDark ? "bg-cardBgDark2" : "bg-gray-100"} p-4 rounded-lg mb-6`}>
+        <div className={`${isDark ? "bg-cardBgDark2" : "bg-gray-100"} flex flex-col gap-2 p-4 rounded-lg mb-6`}>
           <h2 className="text-lg font-semibold mb-2">Upload PAN Card</h2>
           <div>
-            <label htmlFor="panNumber" className="block text-sm font-medium text-gray-600 mb-1">
+            <label htmlFor="panNumber" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
               PAN Card Number
             </label>
             <input
@@ -980,7 +984,7 @@ function Profile() {
             />
           </div>
           <div>
-            <label htmlFor="panFullName" className="block text-sm font-medium text-gray-600 mb-1">
+            <label htmlFor="panFullName" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
               Full Name (as per PAN)
             </label>
             <input
@@ -991,7 +995,7 @@ function Profile() {
             />
           </div>
           <div className="mt-2">
-            <label htmlFor="panFile" className="block text-sm font-medium text-gray-600 mb-1">
+            <label htmlFor="panFile" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
               Upload PAN Card
             </label>
             <input
@@ -1023,10 +1027,10 @@ function Profile() {
 
         {/* Business Account Section */}
         <div className={`${isDark ? "bg-cardBgDark2" : "bg-gray-100"} p-4 rounded-lg mb-6`}>
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Business Account</h2>
+          <div className="flex md:flex-row flex-col md:items-center md:justify-between gap-2 mb-2">
+            <h2 className="md:text-lg text-bas  font-semibold">Business Account</h2>
             <label className="flex items-center cursor-pointer">
-              <span className="mr-2 text-sm">Enable Business Account</span>
+              <span className="mr-2 md:text-sm text-xs">Enable Business Account</span>
               <input
                 type="checkbox"
                 checked={isBusinessAccount}
