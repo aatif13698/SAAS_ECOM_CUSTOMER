@@ -679,7 +679,7 @@ function Profile() {
         firstName: data?.firstName,
         lastName: data?.lastName
       });
-      setImgPreview(`${import.meta.env.VITE_API_URL}/profile/${data?.profileImage}`);
+      setImgPreview(`${data?.profileImage}`);
     } catch (error) {
       console.error("Error while getting the profile", error);
     }

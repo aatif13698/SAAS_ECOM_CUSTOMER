@@ -335,8 +335,7 @@ const Header = ({ noFade }) => {
                                         {
                                             isLogedIn ?
                                                 <button onClick={toggleProfileDropdown} className='bg-white w-8 h-8 flex justify-center items-center rounded-full'>
-                                                    {customerData?.profileImage ? <img src={`${import.meta.env.VITE_API_URL
-                                                        }/profile/${customerData?.profileImage}`} className='rounded-full' alt="" />
+                                                    {customerData?.profileImage ? <img src={`${customerData?.profileImage}`} className='rounded-full' alt="" />
                                                         : <IoPerson className='w-6 h-6 bg-transparent' />
                                                     }
                                                 </button> : ""
