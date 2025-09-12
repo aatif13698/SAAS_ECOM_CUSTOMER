@@ -538,7 +538,7 @@ const ProductDetail = ({ noFade }) => {
                       key={index}
                       src={`${img}`}
                       alt="Thumbnail"
-                      className={`w-16 h-16 object-cover border-2 rounded-lg p-2 cursor-pointer transition-all ${selectedImage ===
+                      className={`w-16 h-16 object-contain border-2 rounded-lg p-2 cursor-pointer transition-all ${selectedImage ===
                         `${img}`
                         ? "border-red-500 border-3 p-0 "
                         : "border-gray-300"
