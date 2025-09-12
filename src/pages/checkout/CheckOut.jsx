@@ -875,8 +875,7 @@ function CheckOut({ noFade }) {
                                             >
                                                 <div className="flex md:items-center gap-4">
                                                     <img
-                                                        src={`${import.meta.env.VITE_API_URL
-                                                            }/productBluePrint/${productDetail.images[0]}`}
+                                                        src={`${productDetail.images[0]}`}
                                                         alt={productDetail.name}
                                                         className="object-cover w-20 h-20 rounded-md"
                                                     />

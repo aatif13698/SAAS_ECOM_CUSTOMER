@@ -274,8 +274,7 @@ const ProductDetail = ({ noFade }) => {
     if (productData) {
       // setProductSpecificData(productData);
       setSelectedImage(
-        `${import.meta.env.VITE_API_URL}/productBluePrint/${productData?.images[0]
-        }`
+        `${productData?.images[0]}`
       );
     }
   }, [productData]);
@@ -537,18 +536,16 @@ const ProductDetail = ({ noFade }) => {
                   {productData?.images?.map((img, index) => (
                     <img
                       key={index}
-                      src={`${import.meta.env.VITE_API_URL
-                        }/productBluePrint/${img}`}
+                      src={`${img}`}
                       alt="Thumbnail"
                       className={`w-16 h-16 object-cover border-2 rounded-lg p-2 cursor-pointer transition-all ${selectedImage ===
-                        `${import.meta.env.VITE_API_URL}/productBluePrint/${img}`
+                        `${img}`
                         ? "border-red-500 border-3 p-0 "
                         : "border-gray-300"
                         }`}
                       onClick={() =>
                         setSelectedImage(
-                          `${import.meta.env.VITE_API_URL
-                          }/productBluePrint/${img}`
+                          `${img}`
                         )
                       }
                     />

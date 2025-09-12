@@ -120,7 +120,7 @@ const MultiCarousel2 = ({
               >
                 <div className="bg-white h-[20rem] flex flex-col justify-center items-center rounded overflow-hidden">
                   <img
-                    src={`${import.meta.env.VITE_API_URL}/productBluePrint/${item?.product?.images[0]
+                    src={`${item?.product?.images[0]
                       }`}
                     alt={item?.product?.name}
                     className="w-[14rem] h-[14rem] object-contain"

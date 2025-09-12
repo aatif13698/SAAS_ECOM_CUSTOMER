@@ -338,7 +338,7 @@ const Cart = () => {
                       }`}
                     >
                       <img
-                        src={`${import.meta.env.VITE_API_URL}/productBluePrint/${image}`}
+                        src={`${image}`}
                         alt={`${name} product image`}
                         className="w-20 h-20 object-cover border-2 rounded-lg transition-all"
                       />

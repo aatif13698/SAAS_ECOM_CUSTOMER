@@ -86,7 +86,7 @@ const Orders = () => {
                   >
                     <div className="flex-shrink-0 flex items-center gap-4">
                       <img
-                        src={`${import.meta.env.VITE_API_URL}/productBluePrint/${image}`}
+                        src={`${image}`}
                         alt={name}
                         className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-md border border-gray-300"
                       // onError={(e) => (e.target.src = "https://via.placeholder.com/80")} // Fallback on error
