@@ -118,7 +118,7 @@ const ProductList = () => {
                 className={`${isDark ? "bg-carBgDark" : "bg-white"} cursor-pointer rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-200`}
               >
                 <img
-                  src={`${import.meta.env.VITE_API_URL}/productBluePrint/${product.product?.images?.[0] || "placeholder.jpg"
+                  src={`${product.product?.images?.[0] || "placeholder.jpg"
                     }`}
                   alt={product.product?.name}
                   className="w-[100%] h-48 object-contain rounded-md border border-gray-300 mb-4"
@@ -132,7 +132,9 @@ const ProductList = () => {
                 </p>
                 <button
                   onClick={() => handleViewProduct(product._id)}
-                  className="mt-4 w-[100%] px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors"
+                  // className="mt-4 w-[100%] px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors"
+                    className="bg-lightButton w-[100%] px-4 py-2 mt-4  text-white  hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 p-3 rounded-lg "
+
                 >
                   View Details
                 </button>

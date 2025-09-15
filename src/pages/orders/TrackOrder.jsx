@@ -217,10 +217,9 @@ const TrackOrder = () => {
                 className="flex flex-col md:flex-row items-start gap-4 border-b border-gray-200 pb-4 last:border-b-0"
               >
                 <img
-                  src={`${import.meta.env.VITE_API_URL}/productBluePrint/${item.productMainStock?.images?.[0] || "placeholder.jpg"}`}
+                  src={`${item.productMainStock?.images?.[0] || "placeholder.jpg"}`}
                   alt={item.productMainStock?.name}
                   className="w-16 h-16 md:w-20 md:h-20 object-cover rounded-md border border-gray-300"
-                  onError={(e) => (e.target.src = "https://via.placeholder.com/80")}
                 />
                 <div className="flex-1">
                   <h4 className="text-sm font-medium text-gray-800 dark:text-white/90">{item.productMainStock?.name || "Unnamed Product"}</h4>

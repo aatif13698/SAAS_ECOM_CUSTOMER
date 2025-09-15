@@ -384,7 +384,7 @@ const Cart = () => {
                 <button
                   onClick={() => navigate("/checkout/cart")}
                   disabled={isLoading}
-                  className="w-[100%] mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50"
+                  className="w-[100%] mt-4 px-6 py-2  font-semibold rounded-md bg-lightButton hover:bg-lightButton/35 hover:text-black text-lightText transition-colors duration-200 disabled:opacity-50"
                 >
                   {isLoading ? 'Processing...' : 'Check out'}
                 </button>

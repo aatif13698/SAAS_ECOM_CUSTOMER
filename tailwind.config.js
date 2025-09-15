@@ -73,7 +73,7 @@ const conf = withMT({
         mediumDark: "rgb(57 57 57)",
         inputLight: "rgb(230 233 237 / 73%)",
         inputDark: "rgb(78 85 95 / 75%)",
-        lightButton: "rgb(19, 206, 183)",
+        lightButton: "#4caf50",
         darkButton: "rgb(0, 114, 92)",
 
         buyNowBUtton : "#00a246",

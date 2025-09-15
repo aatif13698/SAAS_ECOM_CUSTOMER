@@ -41,16 +41,16 @@ function Account() {
         <div className="grid grid-cols-2 gap-3 text-center text-sm sm:text-base">
           <button
            onClick={() => navigate("/order")}
-           className="bg-lightButton hover:bg-lightButton/35 text-lightText p-3 rounded-lg flex items-center justify-center gap-2">
+           className="bg-lightButton px-4 py-3  text-white  hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 p-3 rounded-lg flex items-center justify-center gap-2">
             <FaBox /> Orders
           </button>
-          <button className="bg-lightButton hover:bg-lightButton/35 text-lightText p-3 rounded-lg flex items-center justify-center gap-2">
+          <button className="bg-lightButton px-4 py-3  text-white  hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 p-3 rounded-lg flex items-center justify-center gap-2">
             <FaHeart /> Wishlist
           </button>
-          <button className="bg-lightButton hover:bg-lightButton/35 text-lightText p-3 rounded-lg flex items-center justify-center gap-2">
+          <button className="bg-lightButton px-4 py-3  text-white  hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 p-3 rounded-lg flex items-center justify-center gap-2">
             <FaQuestionCircle /> Ask Query
           </button>
-          <button className="bg-lightButton hover:bg-lightButton/35 text-lightText p-3 rounded-lg flex items-center justify-center gap-2">
+          <button className="bg-lightButton px-4 py-3  text-white  hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 p-3 rounded-lg flex items-center justify-center gap-2">
             <FaHeadset /> Help Center
           </button>
         </div>
@@ -114,7 +114,9 @@ const SettingItem2 = ({ icon, text, action }) => (
 
 
 const SettingItem = ({ icon, text  }) => (
-  <button className="bg-lightButton hover:bg-lightButton/35 text-lightText p-3 rounded-lg flex items-center justify-center gap-2">
+  <button 
+  className="bg-lightButton px-4 py-3  text-white  hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 p-3 rounded-lg flex items-center justify-center gap-2"
+  >
  {icon} {text}
 </button>
 );
