@@ -897,7 +897,7 @@ function Profile() {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className={`bg-lightButton hover:bg-lightButton/35 text-white ${width < breakpoints.sm ? "w-[100%]" : "w-[20%]"} py-2 rounded transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50`}
+                className={`group relative px-4  border-2 border-lightButton  py-2 text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md  ${width < breakpoints.sm ? "w-[100%]" : "w-[20%]"}`}
               >
                 {isSubmitting ? (
                   <svg
@@ -944,13 +944,13 @@ function Profile() {
               />
             </div>
             <button
-              className={`bg-lightButton hover:bg-lightButton/35 text-white px-4 py-2 rounded transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50 mt-6`}
+              className={`group mt-6 relative px-4  border-2 border-lightButton  py-2 text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md `}
             >
               Update
             </button>
           </div>
           <div className="flex items-center gap-3 mt-2">
-            <div className="w-[100%]">
+            <div className="w-[100%] ">
               <label htmlFor="emailAddress" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
                 Email Address
               </label>
@@ -962,7 +962,7 @@ function Profile() {
               />
             </div>
             <button
-              className={`bg-lightButton hover:bg-lightButton/35 text-white px-4 py-2 rounded transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50 mt-6`}
+              className={`group relative mt-6 px-4  border-2 border-lightButton  py-2 text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md `}
             >
               Verify
             </button>
@@ -1018,7 +1018,7 @@ function Profile() {
           <div className="flex justify-end">
             <button
               onClick={handlePanSubmit}
-              className={`bg-lightButton hover:bg-lightButton/35 text-white ${width < breakpoints.sm ? "w-[100%]" : "w-[20%]"} py-2 rounded transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50`}
+                  className={`group mt-6 relative px-4  border-2 border-lightButton  py-2 text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md${width < breakpoints.sm ? "w-[100%]" : "w-[20%]"} py-2 rounded transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50`}
             >
               Submit
             </button>
@@ -1127,7 +1127,7 @@ function Profile() {
                 <button
                   onClick={handleBusinessSubmit}
                   disabled={isBusinessSubmitting}
-                  className={`bg-lightButton hover:bg-lightButton/35 text-white ${width < breakpoints.sm ? "w-[100%]" : "w-[20%]"} py-2 rounded transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50`}
+                  className={`group mt-6 relative px-4  border-2 border-lightButton  py-2 text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md${width < breakpoints.sm ? "w-[100%]" : "w-[20%]"} py-2 rounded transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50`}
                 >
                   {isBusinessSubmitting ? (
                     <svg

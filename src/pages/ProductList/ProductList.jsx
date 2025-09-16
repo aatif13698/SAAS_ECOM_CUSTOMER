@@ -133,7 +133,7 @@ const ProductList = () => {
                 <button
                   onClick={() => handleViewProduct(product._id)}
                   // className="mt-4 w-[100%] px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors"
-                    className="bg-lightButton w-[100%] px-4 py-2 mt-4  text-white  hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 p-3 rounded-lg "
+                    className="group w-[100%] mt-6 relative px-4  border-2 border-lightButton  py-2 text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md "
 
                 >
                   View Details
