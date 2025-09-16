@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, useRef, Fragment } from "react";
 import "./ProductDetail.css";
 import Footer from "../footer/Footer";
 import useWidth from "../../Hooks/useWidth";
@@ -19,6 +19,8 @@ import useDarkmode from "../../Hooks/useDarkMode";
 import { BsCart4 } from "react-icons/bs";
 
 import { FaBoxOpen } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+
 
 // Secret key for decryption (same as used for encryption)
 const SECRET_KEY = import.meta.env.VITE_ENCRYPTION_KEY || "my-secret-key";
@@ -41,6 +43,54 @@ const decryptId = (encryptedId) => {
 };
 
 const ProductDetail = ({ noFade }) => {
+
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
+
+  const handleNextImage = () => {
+    setSelectedImageIndex((prevIndex) =>
+      prevIndex === productData.images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const handlePrevImage = () => {
+    setSelectedImageIndex((prevIndex) =>
+      prevIndex === 0 ? productData.images.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const diffX = touchStartX.current - touchEndX.current;
+    if (Math.abs(diffX) > 50) {
+      if (diffX > 0) {
+        handleNextImage();
+      } else {
+        handlePrevImage();
+      }
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  const handleThumbnailClick = (index) => {
+    setSelectedImageIndex(index);
+  };
+
+
+
+
+
+
 
   const navigate = useNavigate();
 
@@ -165,12 +215,12 @@ const ProductDetail = ({ noFade }) => {
 
   const scrollToTop = () => {
     console.log("kkkkk");
-    
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth", // This makes the scrolling smooth
-        });
-    };
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // This makes the scrolling smooth
+    });
+  };
 
 
 
@@ -525,7 +575,7 @@ const ProductDetail = ({ noFade }) => {
               className="flex  flex-col md:flex-row  justify-center lg:gap-8 "
             >
               <div className=" lg:w-[35%]  md:w-[40%] w-[100%] ">
-                <div className=" w-[100%] mx-2 object-cover md:h-96 h-80 flex justify-center items-center md:border-2 sm:border-0 rounded-lg ">
+                {/* <div className=" w-[100%] mx-2 object-cover md:h-96 h-80 flex justify-center items-center md:border-2 sm:border-0 rounded-lg ">
                   <img
                     src={selectedImage}
                     alt="Product"
@@ -550,6 +600,56 @@ const ProductDetail = ({ noFade }) => {
                       }
                     />
                   ))}
+                </div> */}
+
+                <div
+                  className="relative w-[100%] h-80 md:h-96 flex justify-center items-center md:border-2 border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden"
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                >
+                  <div className="relative w-[100%] h-[100%] flex items-center">
+                    {productData?.images?.map((img, index) => (
+                      <img
+                        key={index}
+                        src={img}
+                        alt={`Product ${index + 1}`}
+                        className={`absolute w-[100%] h-[100%] object-contain p-2 md:p-4 rounded-lg transition-transform duration-500 ease-in-out ${selectedImageIndex === index
+                          ? 'translate-x-0 opacity-100'
+                          : selectedImageIndex > index
+                            ? '-translate-x-full opacity-0'
+                            : 'translate-x-full opacity-0'
+                          }`}
+                        style={{ transitionProperty: 'transform, opacity' }}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    onClick={handlePrevImage}
+                    className="hidden md:block absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <FaChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={handleNextImage}
+                    className="hidden md:block absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <FaChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className="flex gap-2 mt-4 mb-4 justify-center flex-wrap">
+                  {productData?.images?.map((img, index) => (
+                    <img
+                      key={index}
+                      src={img}
+                      alt={`Thumbnail ${index + 1}`}
+                      className={`w-16 h-16 object-contain border-2 rounded-lg p-1 cursor-pointer transition-all duration-300 hover:shadow-md ${selectedImageIndex === index
+                        ? 'border-blue-500 border-3 p-0'
+                        : 'border-gray-300 dark:border-gray-600'
+                        }`}
+                      onClick={() => handleThumbnailClick(index)}
+                    />
+                  ))}
                 </div>
 
                 {width > breakpoints.md ? (
@@ -568,7 +668,7 @@ const ProductDetail = ({ noFade }) => {
                         }
                       }}
                       disabled={filteredProduct?.length == 0}
-                      className={`px-6 py-1 h-[3rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} lg:w-[50%] w-[100%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}
+                      className={`px-6 py-1 h-[3rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} lg:w-[50%] w-[100%] group relative px-4 py-3 border-2 border-lightButton text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md disabled:opacity-50`}
                     >
                       {isLoading2 ? (
                         <span className="flex items-center justify-center">
@@ -617,7 +717,7 @@ const ProductDetail = ({ noFade }) => {
 
                       }}
                       // onClick={handleAddToCart}
-                      className={`px-6 py-1 h-[3rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} lg:w-[50%] w-[100%] bg-addToCartBUtton text-white font-semibold rounded-lg ${isLoading
+                      className={`px-6 py-1 h-[3rem] ${filteredProduct?.length == 0 ? "grayscale" : "grayscale-0"} lg:w-[50%] w-[100%] group relative px-4 py-3 border-2 border-addToCartBUtton text-addToCartBUtton hover:border-addToCartBUtton/60 hover:bg-addToCartBUtton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md disabled:opacity-50${isLoading
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-addToCartBUtton/65"
                         }`}
@@ -816,7 +916,7 @@ const ProductDetail = ({ noFade }) => {
                         }
 
                       }}
-                      className={`px-6 py-1  ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} h-[3rem] w-[50%] bg-buyNowBUtton text-white font-semibold rounded-lg hover:bg-buyNowBUtton/65`}>
+                      className={`px-6 py-1  ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} h-[3rem] w-[50%] group relative px-4 py-3 border-2 border-lightButton text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md disabled:opacity-50`}>
                       {isLoading2 ? (
                         <span className="flex items-center justify-center">
                           <svg
@@ -866,7 +966,7 @@ const ProductDetail = ({ noFade }) => {
 
                       }}
                       // onClick={handleAddToCart}
-                      className={`px-6 py-2 h-[3rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} w-[50%] bg-addToCartBUtton text-white font-semibold rounded-lg hover:bg-addToCartBUtton/65`}
+                      className={`px-6 py-2 h-[3rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} w-[50%] group relative px-4 py-3 border-2 border-addToCartBUtton text-addToCartBUtton hover:border-addToCartBUtton/60 hover:bg-addToCartBUtton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md disabled:opacity-50`}
                     >
                       {isLoading ? (
                         <span className="flex items-center justify-center">
@@ -903,12 +1003,12 @@ const ProductDetail = ({ noFade }) => {
                 )}
 
                 <div className="bg-white  rounded-lg border-1 mx-auto my-4 ">
-                  <h2 className="text-2xl font-semibold text-gray-800 p-4">Specifications</h2>
+                  <h2 className="md:text-xl text-xl  font-semibold text-gray-800 p-4">Specifications</h2>
 
                   {productData?.specification && productData?.specification.length > 0 ? (
                     productData.specification.map((specification, index) => (
                       <div key={index} className="mb-1">
-                        <h3 className="text-lg  font-medium text-gray-700 bg-gray-100 p-3 rounded-t-md">
+                        <h3 className="md:text-lg text-base font-medium text-gray-700 bg-gray-100 p-3 rounded-t-md">
                           {specification?.title}
                         </h3>
                         <div className="  rounded-b-md">
@@ -919,8 +1019,8 @@ const ProductDetail = ({ noFade }) => {
                                   key={itemIndex}
                                   className="flex justify-between p-4  hover:bg-gray-50"
                                 >
-                                  <span className="text-gray-600 w-1/2">{item?.name}</span>
-                                  <span className="text-gray-800 w-1/2">{item?.description}</span>
+                                  <span className="text-gray-600 md:text-base text-sm w-1/2">{item?.name}</span>
+                                  <span className="text-gray-800 md:text-base text-sm  w-1/2">{item?.description}</span>
                                 </div>
                               ))}
                             </div>
