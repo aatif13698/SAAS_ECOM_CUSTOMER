@@ -20,6 +20,7 @@ import { BsCart4 } from "react-icons/bs";
 
 import { FaBoxOpen } from "react-icons/fa";
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { RxCross2 } from "react-icons/rx";
 
 
 // Secret key for decryption (same as used for encryption)
@@ -1110,7 +1111,15 @@ const ProductDetail = ({ noFade }) => {
                 leaveFrom={noFade ? "" : "opacity-100 scale-100"}
                 leaveTo={noFade ? "" : "opacity-0 scale-95"}
               >
-                <Dialog.Panel className="md:w-[70%] w-[100%]  bg-white dark:bg-darkSecondary rounded-md shadow-xl p-6 ">
+                <Dialog.Panel className="md:w-[70%] w-[100%] relative  bg-white dark:bg-darkSecondary rounded-md shadow-xl p-6 ">
+
+                  <span className='absolute right-2 top-2'>
+                    <button
+                    onClick={handleCloseLoadingModal}
+                    >
+                      <RxCross2 size={24} className='text-red-600 bg-red-100 rounded-full p-1 border-2' />
+                    </button>
+                  </span>
 
                   <h2 className="text-lg font-semibold mt-2 text-center">This product is customiseable</h2>
                   <p className="text-gray-600 text-sm mt-1 text-center mb-4">Please fill the form</p>
@@ -1139,7 +1148,10 @@ const ProductDetail = ({ noFade }) => {
                           finalAddToCart()
                         }
                       }}
-                      className="bg-lightButton hover:bg-lightButton/30 px-2 py-1 rounded-md">
+                      // className="bg-lightButton hover:bg-lightButton/30 px-2 py-1 rounded-md"
+                                        className="group  mt-6 relative px-4  border-2 border-lightButton  py-2 text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md"
+
+                      >
                       Submit
                     </button>
                   </div>

@@ -23,8 +23,8 @@ const Home = () => {
 
   const state = useSelector((state) => state);
 
-  console.log("state",state);
-  
+  console.log("state", state);
+
 
 
   const fetchPosts = async (page) => {
@@ -75,62 +75,74 @@ const Home = () => {
   // }, [hasMore, loading]);
 
   return (
-    <div className=' w-[100%] flex md:px-8 sm:px-0  '
-    >
-      <div className={`${width > breakpoints.xl ? "w-[100%]" : "w-[100%]"}`}>
+    <>
 
-        <div>
-          <CustomCarousel2 />
-        </div>
+     
 
-        {/* Best of Electronics */}
-        <div>
-          <OneDivissionProducts />
-        </div>
 
-        {/* Mobiles */}
-        <div>
-          <CarouselWithoutArrow data={products.mobileData} title={"Offers On Mobile"} />
-        </div>
+      <div className=' w-[100%] flex md:px-8 sm:px-0  '
+      >
+        <div className={`${width > breakpoints.xl ? "w-[100%]" : "w-[100%]"}`}>
 
-        {/* Product list */}
-        <div>
-          <ProductList columnsData={products.columnsData} />
-        </div>
-
-        {/* Best of watches  */}
-        <div className='bg-white w-[100%] overflow-hidden my-3 py-4  '>
-          <span className='font-bold text-lg px-4'>Best of Watches</span>
-          <MultiCarousel productData={products.watchProductData} />
-        </div>
-
-        {/* Best of laptops */}
-        <div>
-          <CarouselWithoutArrow data={products.laptopData} title={"Offers On Laptops"} />
-        </div>
-
-        {/* Product list */}
-        <div>
-          <ProductList columnsData={products.columnsData} />
-        </div>
-
-        <div>
-          <Testimonials />
-        </div>
-
-        <div className='flex flex-col bg-red-300 items-center justify-center'>
-          <div className={`${width < breakpoints.sm ? "w-[100%]" : "w-[100%]"}  flex flex-col justify-center gap-3 items-center`}>
-            <Footer />
+          <div>
+            <CustomCarousel2 />
           </div>
+
+          {/* Best of Electronics */}
+          <div>
+            <OneDivissionProducts />
+          </div>
+
+          {/* Mobiles */}
+          <div>
+            <CarouselWithoutArrow data={products.mobileData} title={"Offers On Mobile"} />
+          </div>
+
+          {/* Product list */}
+          <div>
+            <ProductList columnsData={products.columnsData} />
+          </div>
+
+          {/* Best of watches  */}
+          <div className='bg-white w-[100%] overflow-hidden my-3 py-4  '>
+            <span className='font-bold text-lg px-4'>Best of Watches</span>
+            <MultiCarousel productData={products.watchProductData} />
+          </div>
+
+          {/* Best of laptops */}
+          <div>
+            <CarouselWithoutArrow data={products.laptopData} title={"Offers On Laptops"} />
+          </div>
+
+          {/* Product list */}
+          <div>
+            <ProductList columnsData={products.columnsData} />
+          </div>
+
+          <div>
+            <Testimonials />
+          </div>
+
+
+
+
+
         </div>
-
-
-
-      </div>
-      {/* <div className={`${width > breakpoints.xl ? "w-[40%]" : "w-[0%] hidden"}`}>
+        {/* <div className={`${width > breakpoints.xl ? "w-[40%]" : "w-[0%] hidden"}`}>
         <FollowSuggetion />
       </div> */}
-    </div>
+      </div>
+
+       <div className='flex flex-col bg-red-300 items-center justify-center'>
+        <div className={`${width < breakpoints.sm ? "w-[100%]" : "w-[100%]"}  flex flex-col justify-center gap-3 items-center`}>
+          <Footer />
+        </div>
+      </div>
+
+
+
+    </>
+
   );
 }
 
