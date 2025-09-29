@@ -61,7 +61,7 @@ function CheckOut({ noFade }) {
 
 
     console.log("productDetail", productDetail);
-    
+
 
 
     const [formData, setFormData] = useState({
@@ -380,6 +380,9 @@ function CheckOut({ noFade }) {
     const [priceOption, setPriceOption] = useState({})
     const [customizableOption, setCustomizableOption] = useState([]);
     const [quantityNum, setQuantityNum] = useState(1);
+
+    console.log("priceOption", priceOption);
+    
 
 
 
@@ -716,8 +719,8 @@ function CheckOut({ noFade }) {
 
             formData.append("productMainStockId", stockIds?.productMainStockId);
             formData.append("productStockId", stockIds?.productStockId);
-            formData.append("quantity", quantity);
-            formData.append("priceOption", JSON.stringify(priceOption));
+            formData.append("quantity", quantityNum);
+            formData.append("priceOption", JSON.stringify({ unitPrice: priceObject?.unitPrice, price: finalPrice, hasDiscount: priceObject?.hasDiscount, discountPercent: priceObject?.discountPercent,  quantity: quantityNum,  }));
             formData.append("sessionId", null);
             formData.append("addressId", selectedAddress?._id);
             formData.append("clientId", import.meta.env.VITE_DATABASE_ID);
@@ -742,12 +745,12 @@ function CheckOut({ noFade }) {
 
     console.log("priceObject", priceObject);
 
-    console.log("finalPrice", finalPrice);
+    // console.log("finalPrice", finalPrice);
 
-    console.log("price", price);
-    
-    
-    
+    // console.log("price", price);
+
+
+
 
 
 
@@ -776,7 +779,7 @@ function CheckOut({ noFade }) {
                     const discountedUnitPrice = priceObject?.unitPrice - priceObject?.unitPrice * (priceObject?.discountPercent / 100);
                     setFinalPrice(quantityNum * discountedUnitPrice);
                     setUnitPrice(priceObject?.unitPrice);
-                    setPrice(quantityNum * priceObject?.unitPrice)
+                    setPrice(quantityNum * priceObject?.unitPrice);
                 } else {
                     setUnitPrice(priceObject?.unitPrice);
                     setPrice(quantityNum * priceObject?.unitPrice)
@@ -792,6 +795,8 @@ function CheckOut({ noFade }) {
     const handleQuantityChange = (delta) => {
         setQuantityNum((prev) => Math.max(1, prev + delta));
     };
+
+    
 
 
     return (
@@ -1081,7 +1086,7 @@ function CheckOut({ noFade }) {
                                         })}
                                     </div>
                                     <button
-                                        onClick={() => setShowCustomizationModal(true)}
+                                        onClick={() => finalPlaceOrder()}
                                         disabled={isLoading || !selectedPaymentOption}
                                         className="mt-4 w-[100%] sm:w-auto px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 transition-colors duration-200 disabled:opacity-50"
                                     >
