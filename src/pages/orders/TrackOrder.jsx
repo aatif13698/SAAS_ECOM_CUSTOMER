@@ -224,8 +224,15 @@ const TrackOrder = () => {
                 <div className="flex-1">
                   <h4 className="text-sm font-medium text-gray-800 dark:text-white/90">{item.productMainStock?.name || "Unnamed Product"}</h4>
                   <p className="text-xs text-gray-600 dark:text-white/80">
-                    Quantity: {item.quantity} | Unit Price: ${item.priceOption.price.toFixed(2)}
+                    Quantity: {item.quantity} | Unit Price: ${item.priceOption.unitPrice.toFixed(2)}
                   </p>
+                  {
+                    item.priceOption.hasDiscount ?
+                      <p className="text-xs text-gray-600 dark:text-white/80">
+                        Discount %: {item.priceOption.discountPercent} 
+                      </p> : ""
+                  }
+
                   {item.customizationDetails.size > 0 && (
                     <p className="text-xs text-gray-600 dark:text-white/80">
                       Customizations: {Array.from(item.customizationDetails.entries()).map(([key, value]) => `${key}: ${value}`).join(", ")}
