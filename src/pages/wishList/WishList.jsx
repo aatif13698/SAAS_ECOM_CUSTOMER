@@ -8,14 +8,17 @@ import customerService from "../../services/customerService";
 import toast from "react-hot-toast";
 import { Dialog, Transition } from "@headlessui/react";
 import Select from "react-select";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useDarkmode from "../../Hooks/useDarkMode";
 import Footer from "../../components/footer/Footer";
 import { Link, useNavigate } from "react-router-dom";
 import { IoMdHeart } from "react-icons/io";
+import { setDefaultWishList } from "../../store/reducer/auth/authCustomerSlice";
 
 
 const WishList = () => {
+
+    const dispatch = useDispatch();
     const { width, breakpoints } = useWidth();
     const [cartData, setCartData] = useState(null);
     const [carts, setCarts] = useState([]);
@@ -65,6 +68,7 @@ const WishList = () => {
             };
             const response = await customerService.removeFromWishList(dataObject);
             toast.success(response?.data?.message);
+            dispatch(setDefaultWishList(response?.data?.data));
             setRefreshCount((prev) => prev + 1);
         } catch (error) {
             console.error("Error removing from wishlist:", error);
@@ -92,7 +96,7 @@ const WishList = () => {
         getCarts();
     }, [refreshCount]);
 
-    
+
     const addressSelectStyles = {
         control: (provided) => ({
             ...provided,
@@ -173,7 +177,7 @@ const WishList = () => {
                                                 <p className="text-sm text-gray-600 dark:text-gray-300">{description}</p>
                                             </div>
                                             <button
-                                                onClick={() => handleRemoveFromCart(item?.productStock?._id)}
+                                                onClick={() => handleRemoveFromCart(item?.productMainStock?._id)}
                                                 disabled={isLoading}
                                                 className="px-3 py-2 text-red-500 dark:text-red-300 bg-red-500/20 dark:bg-red-700/50 rounded-md hover:bg-red-600 hover:text-white dark:hover:bg-red-600 transition-colors duration-200 disabled:opacity-50"
                                             >

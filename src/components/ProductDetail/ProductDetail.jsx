@@ -13,7 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import customerService from "../../services/customerService";
 import toast from "react-hot-toast";
 import { Dialog, Transition } from "@headlessui/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import useDarkmode from "../../Hooks/useDarkMode";
 import { BsCart4 } from "react-icons/bs";
@@ -22,6 +22,8 @@ import { FaBoxOpen } from "react-icons/fa";
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { RxCross2 } from "react-icons/rx";
 import { FiHeart } from "react-icons/fi";
+import { IoMdHeart } from "react-icons/io";
+import { setDefaultWishList } from "../../store/reducer/auth/authCustomerSlice";
 
 
 // Secret key for decryption (same as used for encryption)
@@ -45,6 +47,8 @@ const decryptId = (encryptedId) => {
 };
 
 const ProductDetail = ({ noFade }) => {
+
+  const dispatch = useDispatch()
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const touchStartX = useRef(null);
@@ -123,7 +127,8 @@ const ProductDetail = ({ noFade }) => {
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
 
-  const { clientUser: customerData, isAuth: isLogedIn, } = useSelector((state) => state?.authCustomerSlice);
+  const { clientUser: customerData, isAuth: isLogedIn, wishList } = useSelector((state) => state?.authCustomerSlice);
+
 
   useEffect(() => {
     const activeAttObject = {};
@@ -412,8 +417,39 @@ const ProductDetail = ({ noFade }) => {
       console.log("error while adding to cart", error);
     }
   }
+  const [wishListed, setWishListed] = useState(false);
 
-  async function handleWishList() {
+  function handleWishList() {
+
+    if (wishListed) {
+      handleRemoveFromWishList(productData?._id)
+    } else {
+      handleAddWishList()
+    }
+
+  }
+
+  const handleRemoveFromWishList = async (productStockId) => {
+    setIsLoading(true);
+    try {
+      const dataObject = {
+        productStockId,
+        sessionId: null,
+      };
+      const response = await customerService.removeFromWishList(dataObject);
+      toast.success(response?.data?.message);
+      dispatch(setDefaultWishList(response?.data?.data))
+    } catch (error) {
+      console.error("Error removing from wishlist:", error);
+      toast.error("Failed to remove item from wishlist");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
+
+  async function handleAddWishList() {
     setIsLoading(true);
     try {
       const formData = new FormData();
@@ -424,6 +460,7 @@ const ProductDetail = ({ noFade }) => {
       const response = await customerService.addToWishList(formData);
       setShowLoadingModal(false);
       toast.success(response?.data?.message);
+      dispatch(setDefaultWishList(response?.data?.data))
       setIsLoading(false);
 
     } catch (error) {
@@ -480,6 +517,23 @@ const ProductDetail = ({ noFade }) => {
       console.log("error while getting the addresses", error);
     }
   }
+
+
+  useEffect(() => {
+    if (wishList && wishList?.items?.length > 0 && productData) {
+      let count = 0;
+      wishList?.items?.map((item) => {
+        if (item?.productMainStock == productData?._id) {
+          count++
+        }
+      });
+      if (count > 0) {
+        setWishListed(true)
+      } else {
+        setWishListed(false)
+      }
+    }
+  }, [wishList, productData])
 
 
 
@@ -631,7 +685,11 @@ const ProductDetail = ({ noFade }) => {
                 >
                   <div className="relative w-[100%] h-[100%] flex items-center">
                     <span onClick={() => handleWishList()} className="absolute z-[999999] bg-gray-100 cursor-pointer top-1 right-1 border p-1 rounded-full ">
-                      <FiHeart className="w-5 h-5 text-red-500" />
+
+                      {
+                        wishListed ? <IoMdHeart className="w-5 h-5 text-red-500" /> : <FiHeart className="w-5 h-5 text-red-500" />
+                      }
+
                     </span>
                     {productData?.images?.map((img, index) => (
                       <img

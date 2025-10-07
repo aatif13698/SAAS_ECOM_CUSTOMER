@@ -9,9 +9,10 @@ const storedCustomer = JSON.parse(localStorage.getItem("SAAS_ECOM_customerInfo")
 export const authCustomerSlice = createSlice({
   name: "auth",
   initialState: {
-    clientUser:  storedCustomer ? storedCustomer : null,
+    clientUser: storedCustomer ? storedCustomer : null,
     isAuth: storedCustomer ? true : false,
     defaultAddress: null,
+    wishList: null,
   },
   reducers: {
     setClientUser: (state, action) => {
@@ -24,6 +25,12 @@ export const authCustomerSlice = createSlice({
     removeDefaultAddress: (state, action) => {
       state.defaultAddress = null;
     },
+    setDefaultWishList: (state, action) => {
+      state.wishList = action.payload;
+    },
+    removeDefaultWishList: (state, action) => {
+      state.wishList = null;
+    },
     logOut: (state, action) => {
       state.clientUser = null;
       state.isAuth = false;
@@ -31,5 +38,5 @@ export const authCustomerSlice = createSlice({
   },
 });
 
-export const { setClientUser, logOut, setDefaultAddress, removeDefaultAddress  } = authCustomerSlice.actions;
+export const { setClientUser, logOut, setDefaultAddress, removeDefaultAddress, setDefaultWishList, removeDefaultWishList } = authCustomerSlice.actions;
 export default authCustomerSlice.reducer;
