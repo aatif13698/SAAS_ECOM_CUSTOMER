@@ -20,7 +20,8 @@ const Home = lazy(() => import("../src/pages/home/Home"));
 const ProductDetail = lazy(() => import("../src/components/ProductDetail/ProductDetail"));
 const Testt = lazy(() => import("../src/components/Testt/Testt"));
 const Category = lazy(() => import("../src/pages/category/Category"))
-const Cart = lazy(() => import("../src/pages/cart/Cart"))
+const Cart = lazy(() => import("../src/pages/cart/Cart"));
+const WishList = lazy(() => import("../src/pages/wishList/WishList"));
 const Account = lazy(() => import("../src/pages/account/Account"))
 const Profile = lazy(() => import("../src/pages/profile/Profile"))
 const Address = lazy(() => import("../src/pages/address/Address"));
@@ -79,6 +80,7 @@ export default function App() {
             <Route path="aaa" element={<Testt />} />
             <Route path="categories" element={<Category />} />
             <Route path="cart" element={<Cart />} />
+            <Route path="wishlist" element={<WishList />} />
             <Route path="order" element={<Orders />} />
             <Route path="track-order/:orderId" element={<TrackOrder />} />
             <Route path="account" element={<Account />} />

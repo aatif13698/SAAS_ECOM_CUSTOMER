@@ -21,6 +21,7 @@ import { BsCart4 } from "react-icons/bs";
 import { FaBoxOpen } from "react-icons/fa";
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { RxCross2 } from "react-icons/rx";
+import { FiHeart } from "react-icons/fi";
 
 
 // Secret key for decryption (same as used for encryption)
@@ -412,6 +413,25 @@ const ProductDetail = ({ noFade }) => {
     }
   }
 
+  async function handleWishList() {
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("productMainStockId", productData?._id);
+      formData.append("productStockId", decryptedStockId);
+      formData.append("sessionId", null);
+      formData.append("clientId", import.meta.env.VITE_DATABASE_ID)
+      const response = await customerService.addToWishList(formData);
+      setShowLoadingModal(false);
+      toast.success(response?.data?.message);
+      setIsLoading(false);
+
+    } catch (error) {
+      setIsLoading(false);
+      console.log("error while adding to wishlist", error);
+    }
+  }
+
 
   // final place order
   async function finalPlaceOrder() {
@@ -610,6 +630,9 @@ const ProductDetail = ({ noFade }) => {
                   onTouchEnd={handleTouchEnd}
                 >
                   <div className="relative w-[100%] h-[100%] flex items-center">
+                    <span onClick={() => handleWishList()} className="absolute z-[999999] bg-gray-100 cursor-pointer top-1 right-1 border p-1 rounded-full ">
+                      <FiHeart className="w-5 h-5 text-red-500" />
+                    </span>
                     {productData?.images?.map((img, index) => (
                       <img
                         key={index}
@@ -1115,7 +1138,7 @@ const ProductDetail = ({ noFade }) => {
 
                   <span className='absolute right-2 top-2'>
                     <button
-                    onClick={handleCloseLoadingModal}
+                      onClick={handleCloseLoadingModal}
                     >
                       <RxCross2 size={24} className='text-red-600 bg-red-100 rounded-full p-1 border-2' />
                     </button>
@@ -1149,9 +1172,9 @@ const ProductDetail = ({ noFade }) => {
                         }
                       }}
                       // className="bg-lightButton hover:bg-lightButton/30 px-2 py-1 rounded-md"
-                                        className="group  mt-6 relative px-4  border-2 border-lightButton  py-2 text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md"
+                      className="group  mt-6 relative px-4  border-2 border-lightButton  py-2 text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md"
 
-                      >
+                    >
                       Submit
                     </button>
                   </div>

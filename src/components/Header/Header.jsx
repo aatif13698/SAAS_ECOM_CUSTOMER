@@ -123,6 +123,14 @@ const Header = ({ noFade }) => {
         }
     }
 
+     function handleWishList() {
+        if (!isLogedIn) {
+            setShowLoadingModal(true)
+        } else {
+            navigate(`/wishlist`)
+        }
+    }
+
 
     return (
         <div className={`w-full sticky top-[-1px] z-[999] border-b-[0.5px]  ${isDark ? "bg-custom-gradient-2-dark border-blue-gray-800" : "bg-custom-gradient-2 border-slate-400"}`}>
@@ -271,7 +279,7 @@ const Header = ({ noFade }) => {
                                                     className="flex items-center gap-3 px-4 py-2 text-sm w-[100%] text-left hover:bg-gray-100  dark:hover:bg-gray-700 transition-all rounded-md"
                                                     role="menuitem"
                                                     onClick={() => {
-                                                        handleCart()
+                                                        handleWishList()
                                                         setIsProfileDropdownOpen(false)
                                                     }} // Navigate without reload
                                                 >
