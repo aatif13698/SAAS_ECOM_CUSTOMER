@@ -85,6 +85,7 @@ export default function App() {
             <Route path="wishlist" element={<WishList />} />
             <Route path="rating/:productMainStockId/:productStockId" element={<RatingAndReview />} />
             <Route path="list/rating" element={<ListRatingAndReview />} />
+            <Route path="edit-review/:productMainStockId/:productStockId/:reviewId" element={<RatingAndReview />} />
             <Route path="order" element={<Orders />} />
             <Route path="track-order/:orderId" element={<TrackOrder />} />
             <Route path="account" element={<Account />} />
