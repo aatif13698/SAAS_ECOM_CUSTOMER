@@ -15,6 +15,7 @@ import { FaMinus, FaPlus } from 'react-icons/fa';
 
 
 function CheckoutFromCart() {
+    const clientId = import.meta.env.VITE_DATABASE_ID; // Replace with actual client ID from context/auth
 
     const [isDark] = useDarkmode();
     const { width, breakpoints } = useWidth();
@@ -521,6 +522,34 @@ function CheckoutFromCart() {
         setCarts(newCartsArray)
     };
 
+    // place order 
+    const handlePlaceOrder = async () => {
+        if (!selectedAddress) {
+            toast.error("Please select a delivery address");
+            return;
+        }
+
+        console.log("selectedAddress", selectedAddress);
+        
+        setIsLoading(true);
+        try {
+            // const response = await customerService.placeOrderFromCart({
+            //     clientId,
+            //     addressId: selectedAddress.value,
+            // });
+            // toast.success(response?.data?.message);
+            // setCartData(null);
+            // setCarts([]);
+            // setRefreshCount((prev) => prev + 1);
+            // setShowAddressModal(false);
+        } catch (error) {
+            console.error("Error placing order:", error);
+            toast.error(error?.response?.data?.message || "Failed to place order");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
 
     if (isPageLoading) {
         return (
@@ -814,7 +843,7 @@ function CheckoutFromCart() {
                                     </div>
                                     <button
                                         onClick={() => setShowCustomizationModal(true)}
-                                        disabled={isLoading || !selectedPaymentOption}
+                                        disabled={isLoading}
                                         className="mt-4 w-[100%] sm:w-auto px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 transition-colors duration-200 disabled:opacity-50"
                                     >
                                         {isLoading ? 'Processing...' : 'Continue to Payment'}

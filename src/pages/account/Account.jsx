@@ -89,7 +89,7 @@ function Account() {
         <div className="mt-2 w-[100%] bg-white dark:bg-gray-800 shadow-lg px-2 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4 rounded-lg">
           <span className="font-bold text-lg text-gray-900 dark:text-gray-100">My Activity</span>
           <div className="grid grid-cols-2 gap-3 mt-3 w-[100%]">
-            <SettingItem icon={<FaStar className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="Reviews" />
+            <SettingItem action={() => navigate("/list/rating")} icon={<FaStar className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="Reviews" />
             <SettingItem icon={<FaQuestionCircle className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="Questions & Answers" />
           </div>
         </div>
@@ -122,8 +122,9 @@ const SettingItem2 = ({ icon, text, action }) => (
 
 
 
-const SettingItem = ({ icon, text }) => (
+const SettingItem = ({ icon, text, action }) => (
   <button
+   onClick={action}
     className="group relative px-4 py-3 border-2 border-lightButton text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md disabled:opacity-50"
   >
     {icon} {text}

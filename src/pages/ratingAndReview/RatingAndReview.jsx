@@ -1,8 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useDarkmode from '../../Hooks/useDarkMode';
+import CryptoJS from 'crypto-js';
+import { useParams } from 'react-router-dom';
+import customerService from '../../services/customerService';
+import toast from 'react-hot-toast';
+
+
+
+const SECRET_KEY = import.meta.env.VITE_ENCRYPTION_KEY || 'my-secret-key';
+const encryptId = (id) => {
+  const encrypted = CryptoJS.AES.encrypt(id.toString(), SECRET_KEY).toString();
+  return encodeURIComponent(encrypted);
+};
+
+const decryptId = (encryptedId) => {
+  try {
+    const decoded = decodeURIComponent(encryptedId);
+    const bytes = CryptoJS.AES.decrypt(decoded, SECRET_KEY);
+    return bytes.toString(CryptoJS.enc.Utf8);
+  } catch (error) {
+    console.error('Decryption failed:', error);
+    return null;
+  }
+};
 
 const StarRating = ({ rating, setRating }) => {
+
   const [hover, setHover] = useState(0);
+
+
+
+
+
 
   return (
     <div className="flex">
@@ -18,9 +47,8 @@ const StarRating = ({ rating, setRating }) => {
               className="hidden"
             />
             <span
-              className={`text-2xl cursor-pointer mr-2 ${
-                ratingValue <= (hover || rating) ? 'text-yellow-400' : 'text-gray-300'
-              }`}
+              className={`text-2xl cursor-pointer mr-2 ${ratingValue <= (hover || rating) ? 'text-yellow-400' : 'text-gray-300'
+                }`}
               onMouseEnter={() => setHover(ratingValue)}
               onMouseLeave={() => setHover(0)}
             >
@@ -33,7 +61,9 @@ const StarRating = ({ rating, setRating }) => {
   );
 };
 
-function RatingAndReview({ productMainStockId }) {
+function RatingAndReview({ }) {
+  const { productMainStockId, productStockId } = useParams();
+  const [stockIds, setStockIds] = useState({});
   const [isDark] = useDarkmode();
 
   const [rating, setRating] = useState(0);
@@ -76,28 +106,44 @@ function RatingAndReview({ productMainStockId }) {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (rating === 0) {
       setError('Please select a rating.');
       return;
     }
 
-    const formData = new FormData();
-    formData.append('productMainStockId', productMainStockId);
-    formData.append('rating', rating);
-    formData.append('name', name);
-    formData.append('description', description);
-    images.forEach(({ file }) => formData.append('images', file));
-
-    console.log('Submitting review:', { rating, name, description, images: images.map(i => i.file.name) });
-    alert('Review submitted!');
-    setRating(0);
-    setName('');
-    setDescription('');
-    setImages([]);
-    setError('');
+    try {
+      const formData = new FormData();
+      formData.append("clientId", import.meta.env.VITE_DATABASE_ID);
+      formData.append("productMainStockId", stockIds?.productMainStockId);
+      formData.append("productStock", stockIds?.productStockId);
+      formData.append('rating', rating);
+      formData.append('name', name);
+      formData.append('description', description);
+      images.forEach(({ file }) => formData.append('file', file));
+      const response = await customerService.postRating(formData);
+      toast.success("Rating added successfully.")
+      setRating(0);
+      setName('');
+      setDescription('');
+      setImages([]);
+      setError('');
+    } catch (error) {
+      toast.error(error)
+      console.log("error while submiting the rating", error);
+    }
   };
+
+  useEffect(() => {
+    const decryptedProductMainStockId = decryptId(productMainStockId);
+    const decryptedProductStockId = decryptId(productStockId);
+    setStockIds({
+      productMainStockId: decryptedProductMainStockId,
+      productStockId: decryptedProductStockId,
+    });
+  }, [productMainStockId, productStockId]);
+
 
   return (
     <div className={`max-w-4xl mx-auto py-8 px-4 ${isDark ? "bg-cardBgDark2" : "bg-white"} my-6  min-h-[60vh] flex flex-col items-center`}>
@@ -144,7 +190,7 @@ function RatingAndReview({ productMainStockId }) {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-                  className={`w-[100%] ${isDark ? "bg-inputDark text-light" : "border-2 bg-inputLight text-dark"} p-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
+              className={`w-[100%] ${isDark ? "bg-inputDark text-light" : "border-2 bg-inputLight text-dark"} p-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
             />
           </div>
 
@@ -154,7 +200,7 @@ function RatingAndReview({ productMainStockId }) {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={5}
-                  className={`w-[100%] ${isDark ? "bg-inputDark text-light" : "border-2 bg-inputLight text-dark"} p-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
+              className={`w-[100%] ${isDark ? "bg-inputDark text-light" : "border-2 bg-inputLight text-dark"} p-2 rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
             />
           </div>
 
@@ -189,7 +235,7 @@ function RatingAndReview({ productMainStockId }) {
 
           <button
             type="submit"
-                className={`group relative px-4  border-2 border-lightButton  py-2 text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md `}
+            className={`group relative px-4  border-2 border-lightButton  py-2 text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md `}
           >
             Submit Review
           </button>

@@ -22,7 +22,8 @@ const Testt = lazy(() => import("../src/components/Testt/Testt"));
 const Category = lazy(() => import("../src/pages/category/Category"))
 const Cart = lazy(() => import("../src/pages/cart/Cart"));
 const WishList = lazy(() => import("../src/pages/wishList/WishList"));
-const RatingAndReview = lazy(() => import("../src/pages/ratingAndReview/RatingAndReview"))
+const RatingAndReview = lazy(() => import("../src/pages/ratingAndReview/RatingAndReview"));
+const ListRatingAndReview = lazy(() => import("../src/pages/ratingAndReview/ListRatingAndReview"));
 const Account = lazy(() => import("../src/pages/account/Account"))
 const Profile = lazy(() => import("../src/pages/profile/Profile"))
 const Address = lazy(() => import("../src/pages/address/Address"));
@@ -82,7 +83,8 @@ export default function App() {
             <Route path="categories" element={<Category />} />
             <Route path="cart" element={<Cart />} />
             <Route path="wishlist" element={<WishList />} />
-            <Route path="rating" element={<RatingAndReview />} />
+            <Route path="rating/:productMainStockId/:productStockId" element={<RatingAndReview />} />
+            <Route path="list/rating" element={<ListRatingAndReview />} />
             <Route path="order" element={<Orders />} />
             <Route path="track-order/:orderId" element={<TrackOrder />} />
             <Route path="account" element={<Account />} />

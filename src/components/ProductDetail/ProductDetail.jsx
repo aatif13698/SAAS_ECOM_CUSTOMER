@@ -24,6 +24,7 @@ import { RxCross2 } from "react-icons/rx";
 import { FiHeart } from "react-icons/fi";
 import { IoMdHeart } from "react-icons/io";
 import { setDefaultWishList } from "../../store/reducer/auth/authCustomerSlice";
+import { MdStarRate } from "react-icons/md";
 
 
 // Secret key for decryption (same as used for encryption)
@@ -363,6 +364,29 @@ const ProductDetail = ({ noFade }) => {
     const encryptedIdMainStockId = encryptId(productData?._id);
     const encryptedProductStockId = encryptId(decryptedStockId);
     navigate(`/checkout/${encryptedIdMainStockId}/${encryptedProductStockId}`, {
+      state: {
+        paymentOPtions: filteredProduct[0]?.paymentOPtions,
+        customizableOptions: filteredProduct[0]?.product?.customizableOptions,
+        quantity: quantity,
+        priceOption: {
+          quantity: quantity,
+          unitPrice: unitPrice,
+          price: price
+        },
+        productDetail: {
+          images: filteredProduct[0]?.images,
+          name: filteredProduct[0]?.name,
+          description: filteredProduct[0]?.description,
+          variant: filteredProduct[0]?.variant
+        }
+      }
+    });
+  };
+
+  const handleReviewAndRatingClick = () => {
+    const encryptedIdMainStockId = encryptId(productData?._id);
+    const encryptedProductStockId = encryptId(decryptedStockId);
+    navigate(`/rating/${encryptedIdMainStockId}/${encryptedProductStockId}`, {
       state: {
         paymentOPtions: filteredProduct[0]?.paymentOPtions,
         customizableOptions: filteredProduct[0]?.product?.customizableOptions,
@@ -1116,6 +1140,29 @@ const ProductDetail = ({ noFade }) => {
                     <div className="text-gray-500 text-center p-4">No specifications found</div>
                   )}
                 </div>
+
+                <div className="bg-white  rounded-lg border-1 mx-auto my-4 ">
+                  <div className="flex justify-between items-center p-4">
+                    <h2 className="md:text-xl text-xl  font-semibold text-gray-800 ">Ratings & Reviews</h2>
+                    <button
+                      onClick={() => {
+                        if (!customerData) {
+                          alert("Login first")
+                        } else {
+                          handleReviewAndRatingClick()
+                        }
+                      }}
+                      className={`px-6 py-2 h-[3rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"}  group relative px-4 py-3 border-2 border-ratingButton text-ratingButton hover:border-ratingButton/60 hover:bg-ratingButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md disabled:opacity-50`}
+                    >
+                      <div className="flex justify-center items-center gap-1">
+                        <span><MdStarRate className="md:text-[1.2rem] " /></span>
+                        <span className="text-[.90rem]">Rate Product</span>
+                      </div>
+                    </button>
+
+                  </div>
+                </div>
+
 
 
 

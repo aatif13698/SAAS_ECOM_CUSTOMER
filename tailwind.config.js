@@ -78,6 +78,7 @@ const conf = withMT({
 
         buyNowBUtton : "#00a246",
         addToCartBUtton : "#38b0f5",
+        ratingButton: "#FAB12F",
 
         carBgDark : "#43424a80",
         cardBgDark2 : "#43424af2",
