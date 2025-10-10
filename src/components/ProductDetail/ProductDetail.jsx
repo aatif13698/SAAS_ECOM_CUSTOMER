@@ -668,7 +668,7 @@ const ProductDetail = ({ noFade }) => {
 
       <div className="w-[100%] flex  justify-center md:px-4 sm:px-0">
         <div className="lg:w-[75%] w-[100%]  flex flex-col  justify-center">
-          <div className=" bg-white  w-[100%] overflow-hidden my-3 py-4">
+          <div className={` ${isDark ? "bg-carBgDark" : "bg-white"}   w-[100%] overflow-hidden my-3 py-4`}>
             <div
               // className="grid grid-cols-1 md:grid-cols-2 lg:gap-8 md:gap-3"
               className="flex  flex-col md:flex-row  justify-center lg:gap-8 "
@@ -702,13 +702,13 @@ const ProductDetail = ({ noFade }) => {
                 </div> */}
 
                 <div
-                  className="relative w-[100%] h-80 md:h-96 flex justify-center items-center md:border-2 border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden"
+                  className={` ${isDark ? "bg-carBgDark" : "bg-white"}   w-[100%]  my-3 py-4 relative  h-80 md:h-96 flex justify-center items-center md:border-2 border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden`}
                   onTouchStart={handleTouchStart}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
                 >
                   <div className="relative w-[100%] h-[100%] flex items-center">
-                    <span onClick={() => handleWishList()} className="absolute z-[999999] bg-gray-100 cursor-pointer top-1 right-1 border p-1 rounded-full ">
+                    <span onClick={() => handleWishList()} className="absolute z-[99] bg-gray-100 cursor-pointer top-1 right-1 border p-1 rounded-full ">
 
                       {
                         wishListed ? <IoMdHeart className="w-5 h-5 text-red-500" /> : <FiHeart className="w-5 h-5 text-red-500" />
@@ -873,13 +873,13 @@ const ProductDetail = ({ noFade }) => {
                   : ""
                   }   px-3 md:px-0`}
               >
-                <h1 className="text-2xl dark:text-black font-semibold">
+                <h1 className={`text-2xl ${isDark ? "dark:text-white" : "text-black" }   font-semibold`}>
                   {productData?.name}
                 </h1>
 
-                <p className="text-base dark:text-black ">
+                <p className={`text-base ${isDark ? "text-white" : "text-black"}  `}>
 
-                  <span className="font-bold"> Description :</span> <span className="text-gray-600">{productData?.description}</span>
+                  <span className="font-bold"> Description :</span> <span className={` ${isDark ? "text-gray-300 " : "text-gray-600"} `}>{productData?.description}</span>
 
                 </p>
 
@@ -959,7 +959,7 @@ const ProductDetail = ({ noFade }) => {
 
 
                 <div className="flex items-center gap-4">
-                  <h3 className="text-lg font-semibold text-gray-700">Quantity:</h3>
+                  <h3 className={`text-lg font-semibold ${isDark ? " text-white" : "text-gray-700"} `}>Quantity:</h3>
                   <div className="flex items-center border rounded-md">
                     <button
                       onClick={() => handleQuantityChange(-1)}
@@ -968,7 +968,7 @@ const ProductDetail = ({ noFade }) => {
                     >
                       <FaMinus />
                     </button>
-                    <span className="px-4 py-2 text-gray-800">{quantity}</span>
+                    <span className={`px-4 py-2 ${isDark ? "text-white" : "text-gray-800"} `}>{quantity}</span>
                     <button
                       onClick={() => handleQuantityChange(1)}
                       className="px-3 py-2 text-gray-600 hover:bg-gray-100"
@@ -980,10 +980,10 @@ const ProductDetail = ({ noFade }) => {
 
 
                 <div className="flex items-center gap-4">
-                  <h3 className="text-lg font-semibold text-gray-700" name="address">Delivery:</h3>
+                  <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-700"} `} name="address">Delivery:</h3>
                   <div className="flex items-center border rounded-md">
                     <select name="address"
-                      className={`w-[100%] ${isDark ? " text-light" : " text-dark"} border-none p-2  rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
+                      className={`w-[100%] ${isDark ? " text-light bg-transparent" : " text-dark bg-white"} border-none p-2  rounded focus:outline-none focus:ring-2 focus:ring-cyan-100`}
                       id="address"
                       value={selectedAddress}
                       onChange={(e) => {
@@ -1108,13 +1108,13 @@ const ProductDetail = ({ noFade }) => {
                   </div>
                 )}
 
-                <div className="bg-white  rounded-lg border-1 mx-auto my-4 ">
-                  <h2 className="md:text-xl text-xl  font-semibold text-gray-800 p-4">Specifications</h2>
+                <div className={` rounded-lg border-1 mx-auto my-4`}>
+                  <h2 className={`md:text-xl text-base   font-semibold ${isDark ? "text-white" : "text-gray-800"} p-4`}>Specifications</h2>
 
                   {productData?.specification && productData?.specification.length > 0 ? (
                     productData.specification.map((specification, index) => (
                       <div key={index} className="mb-1">
-                        <h3 className="md:text-lg text-base font-medium text-gray-700 bg-gray-100 p-3 rounded-t-md">
+                        <h3 className={`md:text-lg text-base font-medium  ${isDark ? "bg-cardBgDark2" : "text-gray-700 bg-gray-100"}   p-3 rounded-t-md`}>
                           {specification?.title}
                         </h3>
                         <div className="  rounded-b-md">
@@ -1123,10 +1123,10 @@ const ProductDetail = ({ noFade }) => {
                               {specification.items.map((item, itemIndex) => (
                                 <div
                                   key={itemIndex}
-                                  className="flex justify-between p-4  hover:bg-gray-50"
+                                  className={`flex justify-between p-4 ${isDark ? "hover:bg-carBgDark" : "hover:bg-gray-50"}  `}
                                 >
-                                  <span className="text-gray-600 md:text-base text-sm w-1/2">{item?.name}</span>
-                                  <span className="text-gray-800 md:text-base text-sm  w-1/2">{item?.description}</span>
+                                  <span className={` ${isDark ? "text-white/80" : "text-gray-60"} 0 md:text-base text-sm w-1/2`}>{item?.name}</span>
+                                  <span className={`${isDark ? "text-white/80" : "text-gray-800"} md:text-base text-sm  w-1/2`}>{item?.description}</span>
                                 </div>
                               ))}
                             </div>
@@ -1141,9 +1141,9 @@ const ProductDetail = ({ noFade }) => {
                   )}
                 </div>
 
-                <div className="bg-white  rounded-lg border-1 mx-auto my-4 ">
+                <div className="  rounded-lg border-1 mx-auto my-4 ">
                   <div className="flex justify-between items-center p-4">
-                    <h2 className="md:text-xl text-xl  font-semibold text-gray-800 ">Ratings & Reviews</h2>
+                    <h2 className={`${isDark ? "text-white" : "text-gray-800"}md:text-xl text-base  font-semibold `}>Ratings & Reviews</h2>
                     <button
                       onClick={() => {
                         if (!customerData) {
@@ -1152,11 +1152,11 @@ const ProductDetail = ({ noFade }) => {
                           handleReviewAndRatingClick()
                         }
                       }}
-                      className={`px-6 py-2 h-[3rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"}  group relative px-4 py-3 border-2 border-ratingButton text-ratingButton hover:border-ratingButton/60 hover:bg-ratingButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md disabled:opacity-50`}
+                      className={` md:px-6 px-2 py-2 md:h-[3rem] h-[2rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"}  group relative  border-2 border-ratingButton text-ratingButton hover:border-ratingButton/60 hover:bg-ratingButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md disabled:opacity-50`}
                     >
                       <div className="flex justify-center items-center gap-1">
-                        <span><MdStarRate className="md:text-[1.2rem] " /></span>
-                        <span className="text-[.90rem]">Rate Product</span>
+                        <span><MdStarRate className="md:text-[1.2rem] text-[1rem]" /></span>
+                        <span className="md:text-[.90rem] text-[.60rem]">Rate Product</span>
                       </div>
                     </button>
 
