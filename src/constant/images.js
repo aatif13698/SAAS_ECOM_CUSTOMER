@@ -36,6 +36,12 @@ import lap4 from "../assets/products/lap4.webp"
 import lap5 from "../assets/products/lap5.webp"
 import emptycart from "../assets/images/e-commerce/cart-icon/emptycart.jpg"
 
+import banner1 from "../assets/banner/b-1.webp"
+import banner2 from "../assets/banner/b-2.webp"
+import banner3 from "../assets/banner/b-3.webp"
+import banner4 from "../assets/banner/b-4.webp"
+import banner5 from "../assets/banner/b-5.webp"
+
 
 
  export default {
@@ -74,6 +80,12 @@ import emptycart from "../assets/images/e-commerce/cart-icon/emptycart.jpg"
     lap3,
     lap4,
     lap5,
+
+    banner1,
+    banner2,
+    banner3,
+    banner4,
+    banner5,
 
 
     emptycart

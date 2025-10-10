@@ -6,82 +6,82 @@ import images from '../../constant/images';
 const productData = [
     {
         id: 1,
-        title: 'Product 1',
-        image: images.one,
-        description: 'Description for product 1.',
+        title: '"',
+        image: images.banner1,
+        description: ' ',
     },
     {
         id: 2,
-        title: 'Product 2',
-        image: images.two,
-        description: 'Description for product 2.',
+        title: '',
+        image: images.banner2,
+        description: ' ',
     },
     {
         id: 3,
-        title: 'Product 3',
-        image: images.three,
-        description: 'Description for product 3.',
+        title: '',
+        image: images.banner3,
+        description: ' ',
     },
     {
         id: 4,
-        title: 'Product 4',
-        image: images.four,
-        description: 'Description for product 4.',
+        title: '',
+        image: images.banner4,
+        description: ' ',
     },
     {
         id: 5,
-        title: 'Product 5',
-        image: images.five,
-        description: 'Description for product 5.',
+        title: '',
+        image: images.banner5,
+        description: ' ',
     },
-    {
-        id: 6,
-        title: 'Product 6',
-        image: images.six,
-        description: 'Description for product 6.',
-    },
-    {
-        id: 7,
-        title: 'Product 7',
-        image: images.seven,
-        description: 'Description for product 7.',
-    },
-    {
-        id: 8,
-        title: 'Product 8',
-        image: images.eight,
-        description: 'Description for product 5.',
-    },
-    {
-        id: 9,
-        title: 'Product 9',
-        image: images.nine,
-        description: 'Description for product 6.',
-    },
-    {
-        id: 10,
-        title: 'Product 10',
-        image: images.ten,
-        description: 'Description for product 7.',
-    },
-    {
-        id: 11,
-        title: 'Product 11',
-        image: images.eleven,
-        description: 'Description for product 5.',
-    },
-    {
-        id: 12,
-        title: 'Product 12',
-        image: images.one,
-        description: 'Description for product 6.',
-    },
-    {
-        id: 13,
-        title: 'Product 13',
-        image: images.two,
-        description: 'Description for product 7.',
-    }
+    // {
+    //     id: 6,
+    //     title: 'Product 6',
+    //     image: images.six,
+    //     description: 'Description for product 6.',
+    // },
+    // {
+    //     id: 7,
+    //     title: 'Product 7',
+    //     image: images.seven,
+    //     description: 'Description for product 7.',
+    // },
+    // {
+    //     id: 8,
+    //     title: 'Product 8',
+    //     image: images.eight,
+    //     description: 'Description for product 5.',
+    // },
+    // {
+    //     id: 9,
+    //     title: 'Product 9',
+    //     image: images.nine,
+    //     description: 'Description for product 6.',
+    // },
+    // {
+    //     id: 10,
+    //     title: 'Product 10',
+    //     image: images.ten,
+    //     description: 'Description for product 7.',
+    // },
+    // {
+    //     id: 11,
+    //     title: 'Product 11',
+    //     image: images.eleven,
+    //     description: 'Description for product 5.',
+    // },
+    // {
+    //     id: 12,
+    //     title: 'Product 12',
+    //     image: images.one,
+    //     description: 'Description for product 6.',
+    // },
+    // {
+    //     id: 13,
+    //     title: 'Product 13',
+    //     image: images.two,
+    //     description: 'Description for product 7.',
+    // }
     // Add more products as needed
 ];
 
@@ -154,15 +154,15 @@ const CustomCarousel2 = ({
                         <div className=" h-[20rem] flex md:flex-row flex-col  bg-cover bg-no-repeat bg-center justify-around items-center rounded overflow-hidden"
                             style={{ backgroundImage: `url(${item.image})` }}
                         >
-                            <img
+                            {/* <img
                                 src={item.image}
                                 alt={item.title}
                                 className="w-[16rem] md:block hidden h-[18rem] object-contain"
-                            />
+                            /> */}
                             <div className="relative text-center text-white">
                                 <h2 className="text-2xl font-bold mb-2">{item.title}</h2>
                                 <p className="mb-4">{item.description}</p>
-                                <div className="flex gap-4 justify-center">
+                                {/* <div className="flex gap-4 justify-center">
                                     <button
                                     style={{fontSize : "clamp(.70rem, .60vw + .30rem, 3rem"}}
                                      className="bg-cardBg2 hover:bg-cardBg2/80 text-black font-semibold py-2 px-4 rounded">
@@ -173,7 +173,7 @@ const CustomCarousel2 = ({
                                     className="bg-cardBg1 hover:bg-cardBg1/80 text-black font-semibold py-2 px-4 rounded">
                                         Explore More
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>

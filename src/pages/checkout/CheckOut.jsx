@@ -60,7 +60,12 @@ function CheckOut({ noFade }) {
     // });
 
 
-    console.log("productDetail", productDetail);
+
+    const [price, setPrice] = useState(null);
+    const [unitPrice, setUnitPrice] = useState(null);
+    const [priceObject, setPriceObject] = useState(null);
+    const [finalPrice, setFinalPrice] = useState(null);
+
 
 
 
@@ -382,7 +387,7 @@ function CheckOut({ noFade }) {
     const [quantityNum, setQuantityNum] = useState(1);
 
     console.log("priceOption", priceOption);
-    
+
 
 
 
@@ -720,7 +725,7 @@ function CheckOut({ noFade }) {
             formData.append("productMainStockId", stockIds?.productMainStockId);
             formData.append("productStockId", stockIds?.productStockId);
             formData.append("quantity", quantityNum);
-            formData.append("priceOption", JSON.stringify({ unitPrice: priceObject?.unitPrice, price: finalPrice, hasDiscount: priceObject?.hasDiscount, discountPercent: priceObject?.discountPercent,  quantity: quantityNum,  }));
+            formData.append("priceOption", JSON.stringify({ unitPrice: priceObject?.unitPrice, price: priceObject?.hasDiscount ? finalPrice : price, hasDiscount: priceObject?.hasDiscount, discountPercent: priceObject?.discountPercent, quantity: quantityNum, }));
             formData.append("sessionId", null);
             formData.append("addressId", selectedAddress?._id);
             formData.append("clientId", import.meta.env.VITE_DATABASE_ID);
@@ -737,10 +742,7 @@ function CheckOut({ noFade }) {
     }
 
 
-    const [price, setPrice] = useState(null);
-    const [unitPrice, setUnitPrice] = useState(null);
-    const [priceObject, setPriceObject] = useState(null);
-    const [finalPrice, setFinalPrice] = useState(null);
+
 
 
     console.log("priceObject", priceObject);
@@ -796,7 +798,7 @@ function CheckOut({ noFade }) {
         setQuantityNum((prev) => Math.max(1, prev + delta));
     };
 
-    
+
 
 
     return (
@@ -1024,8 +1026,6 @@ function CheckOut({ noFade }) {
 
                                     <div className="space-y-4">
                                         {Object.entries(paymentOptions).map(([key, value]) => {
-                                            console.log("kkey", key);
-
                                             if (key === 'paymentSteps' && paymentOptions.multiStep) {
                                                 return (
                                                     <div key={key} className="border-t border-gray-200 dark:border-gray-600 pt-4">
