@@ -151,29 +151,15 @@ const CustomCarousel2 = ({
                         className="p-2 flex-shrink-0"
                         style={{ width: `${100 / visibleCount}%` }}
                     >
+
+                        
                         <div className=" h-[20rem] flex md:flex-row flex-col  bg-cover bg-no-repeat bg-center justify-around items-center rounded overflow-hidden"
-                            style={{ backgroundImage: `url(${item.image})` }}
+                            style={{ backgroundImage: `url(${item.image})`, objectFit: "contain" }}
                         >
-                            {/* <img
-                                src={item.image}
-                                alt={item.title}
-                                className="w-[16rem] md:block hidden h-[18rem] object-contain"
-                            /> */}
+
                             <div className="relative text-center text-white">
                                 <h2 className="text-2xl font-bold mb-2">{item.title}</h2>
                                 <p className="mb-4">{item.description}</p>
-                                {/* <div className="flex gap-4 justify-center">
-                                    <button
-                                    style={{fontSize : "clamp(.70rem, .60vw + .30rem, 3rem"}}
-                                     className="bg-cardBg2 hover:bg-cardBg2/80 text-black font-semibold py-2 px-4 rounded">
-                                        Place Order
-                                    </button>
-                                    <button 
-                                    style={{fontSize : "clamp(.70rem, .60vw + .30rem, 3rem"}}
-                                    className="bg-cardBg1 hover:bg-cardBg1/80 text-black font-semibold py-2 px-4 rounded">
-                                        Explore More
-                                    </button>
-                                </div> */}
                             </div>
                         </div>
                     </div>

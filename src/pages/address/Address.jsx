@@ -901,7 +901,7 @@ const Address = () => {
                 )}
 
                 {/* Saved Addresses */}
-                <div className="mt-6">
+                <div className="mt-6 mb-10">
                     <h2 className="font-bold text-lg  px-2 mb-3">Saved Addresses</h2>
                     {addresses.length === 0 ? (
                         <p className="text-gray-500">No addresses saved yet.</p>
