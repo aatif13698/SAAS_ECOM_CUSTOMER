@@ -1,7 +1,7 @@
 import React, { useEffect, Fragment, useState } from 'react'
 import customerService from '../../services/customerService';
 import { Dialog, Transition } from '@headlessui/react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import CryptoJS from 'crypto-js';
 import useWidth from '../../Hooks/useWidth';
@@ -16,6 +16,7 @@ import { FaMinus, FaPlus } from 'react-icons/fa';
 
 function CheckoutFromCart() {
     const clientId = import.meta.env.VITE_DATABASE_ID; // Replace with actual client ID from context/auth
+    const navigate = useNavigate()
 
     const [isDark] = useDarkmode();
     const { width, breakpoints } = useWidth();
@@ -533,11 +534,22 @@ function CheckoutFromCart() {
         
         setIsLoading(true);
         try {
-            // const response = await customerService.placeOrderFromCart({
-            //     clientId,
-            //     addressId: selectedAddress.value,
-            // });
-            // toast.success(response?.data?.message);
+
+            const itemsArray = carts?.map((item) => {
+                return {
+                    quantity: item?.priceOption?.quantity,
+                    productMainStockId: item?.productMainStock?._id,
+                    productStockId: item?.productStock?._id
+                }
+            });
+
+            const response = await customerService.placeOrderFromCart({
+                clientId,
+                addressId: selectedAddress?._id,
+                itemsArray: JSON.stringify(itemsArray)
+            });
+            toast.success(response?.data?.message);
+            navigate("/order");
             // setCartData(null);
             // setCarts([]);
             // setRefreshCount((prev) => prev + 1);
@@ -842,7 +854,7 @@ function CheckoutFromCart() {
                                         })}
                                     </div>
                                     <button
-                                        onClick={() => setShowCustomizationModal(true)}
+                                        onClick={() => handlePlaceOrder()}
                                         disabled={isLoading}
                                         className="mt-4 w-[100%] sm:w-auto px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 transition-colors duration-200 disabled:opacity-50"
                                     >
