@@ -707,7 +707,7 @@ const ProductDetail = ({ noFade }) => {
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
                 >
-                  <div className="relative w-[100%] h-[100%] flex items-center">
+                  <div className=" w-[100%] h-[100%] flex items-center">
                     <span onClick={() => handleWishList()} className="absolute z-[99] bg-gray-100 cursor-pointer top-1 right-1 border p-1 rounded-full ">
 
                       {
