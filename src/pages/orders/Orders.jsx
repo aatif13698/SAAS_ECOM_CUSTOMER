@@ -65,7 +65,7 @@ const Orders = () => {
                 <p>Start shopping to see your orders here!</p>
               </div>
             ) : (
-              carts?.map((item, index) => {
+              carts?.reverse()?.map((item, index) => {
                 console.log("carts", item);
 
                 const name = item?.productStock?.product?.name || "Unnamed Product";

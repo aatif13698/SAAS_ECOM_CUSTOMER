@@ -25,6 +25,7 @@ import { FiHeart } from "react-icons/fi";
 import { IoMdHeart } from "react-icons/io";
 import { setDefaultWishList } from "../../store/reducer/auth/authCustomerSlice";
 import { MdStarRate } from "react-icons/md";
+import { TbRotateClockwise2 } from "react-icons/tb";
 
 
 // Secret key for decryption (same as used for encryption)
@@ -120,8 +121,6 @@ const ProductDetail = ({ noFade }) => {
   const [attributesArray, setAttributesArray] = useState([]);
   const [filteredProduct, setFilteredProduct] = useState([]);
 
-  console.log("filteredProduct", filteredProduct);
-  console.log("productData", productData);
 
 
 
@@ -129,6 +128,12 @@ const ProductDetail = ({ noFade }) => {
   const [selectedAddress, setSelectedAddress] = useState(null);
 
   const { clientUser: customerData, isAuth: isLogedIn, wishList } = useSelector((state) => state?.authCustomerSlice);
+
+
+  console.log("wishList", wishList);
+
+
+
 
 
   useEffect(() => {
@@ -175,10 +180,6 @@ const ProductDetail = ({ noFade }) => {
   const [priceObject, setPriceObject] = useState(null);
   const [finalPrice, setFinalPrice] = useState(null);
 
-  console.log("priceObject", priceObject);
-  console.log("price", price);
-  console.log("finalPrice", finalPrice);
-
 
   useEffect(() => {
     if (quantity > 0 && filteredProduct?.length > 0 && productData) {
@@ -222,7 +223,6 @@ const ProductDetail = ({ noFade }) => {
 
 
   const scrollToTop = () => {
-    console.log("kkkkk");
 
     window.scrollTo({
       top: 0,
@@ -442,6 +442,10 @@ const ProductDetail = ({ noFade }) => {
     }
   }
   const [wishListed, setWishListed] = useState(false);
+  const [isWishlisting, setIsWishlisting] = useState(false);
+
+  console.log("wishListed", wishListed);
+
 
   function handleWishList() {
 
@@ -454,7 +458,7 @@ const ProductDetail = ({ noFade }) => {
   }
 
   const handleRemoveFromWishList = async (productStockId) => {
-    setIsLoading(true);
+    setIsWishlisting(true);
     try {
       const dataObject = {
         productStockId,
@@ -467,14 +471,14 @@ const ProductDetail = ({ noFade }) => {
       console.error("Error removing from wishlist:", error);
       toast.error("Failed to remove item from wishlist");
     } finally {
-      setIsLoading(false);
+      setIsWishlisting(false);
     }
   };
 
 
 
   async function handleAddWishList() {
-    setIsLoading(true);
+    setIsWishlisting(true);
     try {
       const formData = new FormData();
       formData.append("productMainStockId", productData?._id);
@@ -482,13 +486,11 @@ const ProductDetail = ({ noFade }) => {
       formData.append("sessionId", null);
       formData.append("clientId", import.meta.env.VITE_DATABASE_ID)
       const response = await customerService.addToWishList(formData);
-      setShowLoadingModal(false);
       toast.success(response?.data?.message);
       dispatch(setDefaultWishList(response?.data?.data))
-      setIsLoading(false);
-
+      setIsWishlisting(false);
     } catch (error) {
-      setIsLoading(false);
+      setIsWishlisting(false);
       console.log("error while adding to wishlist", error);
     }
   }
@@ -556,6 +558,8 @@ const ProductDetail = ({ noFade }) => {
       } else {
         setWishListed(false)
       }
+    } else {
+      setWishListed(false)
     }
   }, [wishList, productData])
 
@@ -708,13 +712,13 @@ const ProductDetail = ({ noFade }) => {
                   onTouchEnd={handleTouchEnd}
                 >
                   <div className=" w-[100%] h-[100%] flex items-center">
-                    <span onClick={() => handleWishList()} className="absolute z-[99] bg-gray-100 cursor-pointer top-1 right-1 border p-1 rounded-full ">
-
+                    <button disabled={isWishlisting} onClick={() => handleWishList()} className="absolute z-[99] bg-gray-100 cursor-pointer top-1 right-1 border p-1 rounded-full ">
                       {
-                        wishListed ? <IoMdHeart className="w-5 h-5 text-red-500" /> : <FiHeart className="w-5 h-5 text-red-500" />
+                        isWishlisting ? <TbRotateClockwise2 className="w-5 h-5 text-red-500 animate-spin " />
+                          :
+                          wishListed ? <IoMdHeart className="w-5 h-5 text-red-500" /> : <FiHeart className="w-5 h-5 text-red-500" />
                       }
-
-                    </span>
+                    </button>
                     {productData?.images?.map((img, index) => (
                       <img
                         key={index}
@@ -762,7 +766,6 @@ const ProductDetail = ({ noFade }) => {
                   <div className="flex lg:flex-row flex-col justify-around  gap-4 mx-2">
                     <button
                       onClick={() => {
-                        console.log("yes1");
                         if (!customerData) {
                           alert("Login first")
                         } else {
@@ -809,8 +812,6 @@ const ProductDetail = ({ noFade }) => {
                     </button>
                     <button
                       onClick={() => {
-                        console.log("yes1");
-
                         if (!customerData) {
                           alert("Login first")
                         } else {
@@ -873,7 +874,7 @@ const ProductDetail = ({ noFade }) => {
                   : ""
                   }   px-3 md:px-0`}
               >
-                <h1 className={`text-2xl ${isDark ? "dark:text-white" : "text-black" }   font-semibold`}>
+                <h1 className={`text-2xl ${isDark ? "dark:text-white" : "text-black"}   font-semibold`}>
                   {productData?.name}
                 </h1>
 
@@ -1009,8 +1010,6 @@ const ProductDetail = ({ noFade }) => {
                     <button
                       disabled={filteredProduct?.length == 0}
                       onClick={() => {
-                        console.log("yes1");
-
                         if (!customerData) {
                           alert("Login first")
                         } else {
@@ -1058,8 +1057,6 @@ const ProductDetail = ({ noFade }) => {
                     <button
                       disabled={filteredProduct?.length == 0}
                       onClick={() => {
-                        console.log("yes1");
-
                         if (!customerData) {
                           alert("Login first")
                         } else {
