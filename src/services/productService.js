@@ -62,13 +62,29 @@ const getProductAttribute = async (productId) => {
     }
 }
 
-
+const getProductRating = async (productStockId, productMainStockId) => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/listing/get/product/v1/${import.meta.env.VITE_DATABASE_ID}/${productStockId}/${productMainStockId}`
+        );
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return Promise.reject(error.response.data?.message || "Server error.");
+        } else if (error.request) {
+            return Promise.reject("Network error. Please try again.");
+        } else {
+            return Promise.reject("An error occurred. Please try again later.");
+        }
+    }
+}
 
 
 
 
 export default {
     getLaptopList1,
+    getProductRating,
     getParticularProductData,
     getProductAttribute
 }

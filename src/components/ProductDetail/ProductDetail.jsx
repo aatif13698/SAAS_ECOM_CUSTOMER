@@ -120,6 +120,7 @@ const ProductDetail = ({ noFade }) => {
 
   const [attributesArray, setAttributesArray] = useState([]);
   const [filteredProduct, setFilteredProduct] = useState([]);
+  const [ratings, setRatings] = useState([])
 
 
 
@@ -330,12 +331,23 @@ const ProductDetail = ({ noFade }) => {
 
   useEffect(() => {
     if (productData) {
+      const decryptedId = decryptId(encryptedId);
+      fetchRating(decryptedId, productData?._id,)
       // setProductSpecificData(productData);
       setSelectedImage(
         `${productData?.images[0]}`
       );
     }
   }, [productData]);
+
+  async function fetchRating(productStockId, productMainStockId) {
+    try {
+      const resposne = await productService.getProductRating(productStockId, productMainStockId);
+      setRatings(resposne?.data);
+    } catch (error) {
+      console.log("error while fetching the rating", error);
+    }
+  }
 
   async function handleAddToCart() {
     const isCustomizable = productData?.product?.isCustomizable;
@@ -563,7 +575,24 @@ const ProductDetail = ({ noFade }) => {
     }
   }, [wishList, productData])
 
+  const averageRating = ratings?.length > 0
+    ? (ratings.reduce((sum, item) => sum + item.rating, 0) / ratings.length).toFixed(1)
+    : 0;
+  // State for modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedReviewImage, setSelectedReviewImage] = useState(null);
 
+  // Handle image click to open modal
+  const handleImageClick = (image) => {
+    setSelectedReviewImage(image);
+    setIsModalOpen(true);
+  };
+
+  // Close modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedReviewImage(null);
+  };
 
 
   if (loading) {
@@ -1139,24 +1168,96 @@ const ProductDetail = ({ noFade }) => {
                 </div>
 
                 <div className="  rounded-lg border-1 mx-auto my-4 ">
-                  <div className="flex justify-between items-center p-4">
-                    <h2 className={`${isDark ? "text-white" : "text-gray-800"}md:text-xl text-base  font-semibold `}>Ratings & Reviews</h2>
+                  <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex flex-col gap-2">
+                      <h2 className={`${isDark ? "text-white" : "text-gray-800"} md:text-xl text-base font-semibold`}>
+                        Ratings & Reviews
+                      </h2>
+                      {ratings?.length > 0 && (
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500 text-sm">({ratings.length} reviews)</span>
+                          <span className="text-ratingButton text-lg">{averageRating}</span>
+                          <MdStarRate className="text-ratingButton" />
+                        </div>
+                      )}
+                    </div>
                     <button
                       onClick={() => {
                         if (!customerData) {
-                          alert("Login first")
+                          alert("Login first");
                         } else {
-                          handleReviewAndRatingClick()
+                          handleReviewAndRatingClick();
                         }
                       }}
-                      className={` md:px-6 px-2 py-2 md:h-[3rem] h-[2rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"}  group relative  border-2 border-ratingButton text-ratingButton hover:border-ratingButton/60 hover:bg-ratingButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md disabled:opacity-50`}
+                      disabled={filteredProduct?.length === 0}
+                      className={`md:px-6 px-2 py-2 md:h-[3rem] h-[2rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} 
+                                    group relative border-2 border-ratingButton text-ratingButton hover:border-ratingButton/60 
+                                     hover:bg-ratingButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center 
+                                      gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md 
+                                    disabled:opacity-50`}
                     >
                       <div className="flex justify-center items-center gap-1">
-                        <span><MdStarRate className="md:text-[1.2rem] text-[1rem]" /></span>
+                        <MdStarRate className="md:text-[1.2rem] text-[1rem]" />
                         <span className="md:text-[.90rem] text-[.60rem]">Rate Product</span>
                       </div>
                     </button>
+                  </div>
 
+                  <div className="p-4">
+                    {ratings && ratings.length > 0 ? (
+                      <div className="space-y-4">
+                        {ratings.map((item, index) => (
+                          <div
+                            key={index}
+                            className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0"
+                          >
+                            {/* Rating and User Info */}
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="flex">
+                                {[...Array(5)].map((_, i) => (
+                                  <MdStarRate
+                                    key={i}
+                                    className={`${i < item.rating ? "text-ratingButton" : "text-gray-300"
+                                      } text-lg`}
+                                  />
+                                ))}
+                              </div>
+                              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                                {item.name}
+                              </span>
+                              <span className="text-xs text-gray-500">
+                                {new Date(item.createdAt).toLocaleDateString()}
+                              </span>
+                            </div>
+
+                            {/* Review Description */}
+                            <p className="text-gray-700 dark:text-gray-200 text-sm mb-2">
+                              {item.description}
+                            </p>
+
+                            {/* Review Images */}
+                            {item.images && item.images.length > 0 && (
+                              <div className="flex gap-2 overflow-x-auto">
+                                {item.images.map((image, imgIndex) => (
+                                  <img
+                                    key={imgIndex}
+                                    src={image}
+                                    alt={`Review image ${imgIndex + 1}`}
+                                    className="w-20 h-20 object-cover rounded-md border border-gray-200 dark:border-gray-700 cursor-pointer hover:opacity-80 transition-opacity"
+                                    onClick={() => handleImageClick(image)}
+                                  />
+                                ))}
+                              </div>
+                            )
+                            }
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center text-gray-500 dark:text-gray-400 py-4">
+                        No Ratings Found
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -1209,6 +1310,52 @@ const ProductDetail = ({ noFade }) => {
         </div>
 
 
+        <Transition appear show={isModalOpen} as={Fragment}>
+          <Dialog as="div" className="relative z-[99999]" onClose={closeModal}>
+            <Transition.Child
+              as={Fragment}
+              enter={noFade ? "" : "duration-300 ease-out"}
+              enterFrom={noFade ? "" : "opacity-0"}
+              enterTo={noFade ? "" : "opacity-100"}
+              leave={noFade ? "" : "duration-200 ease-in"}
+              leaveFrom={noFade ? "" : "opacity-100"}
+              leaveTo={noFade ? "" : "opacity-0"}
+            >
+              <div className="fixed inset-0 bg-slate-900/50 backdrop-filter backdrop-blur-sm" />
+            </Transition.Child>
+
+            <div className="fixed inset-0 overflow-y-auto flex justify-center items-center">
+              <Transition.Child
+                as={Fragment}
+                enter={noFade ? "" : "duration-300 ease-out"}
+                enterFrom={noFade ? "" : "opacity-0 scale-95"}
+                enterTo={noFade ? "" : "opacity-100 scale-100"}
+                leave={noFade ? "" : "duration-200 ease-in"}
+                leaveFrom={noFade ? "" : "opacity-100 scale-100"}
+                leaveTo={noFade ? "" : "opacity-0 scale-95"}
+              >
+                <Dialog.Panel className="md:w-[70%] w-[100%] relative  bg-white dark:bg-darkSecondary rounded-md shadow-xl p-6 ">
+
+                  <span className='absolute right-2 top-2'>
+                    <button
+                      onClick={closeModal}
+                    >
+                      <RxCross2 size={24} className='text-red-600 bg-red-100 rounded-full p-1 border-2' />
+                    </button>
+                  </span>
+
+                  <img
+                    src={selectedReviewImage}
+                    alt="Preview"
+                    className="w-full h-auto max-h-[80vh] object-contain rounded-md"
+                  />
+
+
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition>
 
 
 
