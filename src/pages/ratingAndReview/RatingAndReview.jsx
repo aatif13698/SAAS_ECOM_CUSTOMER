@@ -194,7 +194,7 @@ function RatingAndReview() {
       navigate('/list/rating'); // Redirect to reviews list after submission
     } catch (error) {
       console.error('Error submitting review:', error);
-      toast.error(error.message || 'Failed to submit review');
+      toast.error(error || 'Failed to submit review');
     } finally {
       setIsLoading(false);
     }
