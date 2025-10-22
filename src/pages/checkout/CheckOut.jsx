@@ -939,12 +939,12 @@ function CheckOut({ noFade }) {
                                                 >
                                                     <div className='flex mb-3 items-center gap-2'>
 
-                                                        <h3 className="text-lg font-semibold  text-gray-900 dark:text-white ">Customization Form</h3>
+                                                        <h3 className="text-lg font-semibold  text-gray-900 dark:text-white ">Customisation Form</h3>
                                                     </div>
 
                                                     <div className='flex mb-3 items-center gap-2'>
                                                         <div className=" w-[100%] relative rounded-md  ">
-                                                            <h2 className="text-sm md:text-lg dark:text-gray-100 font-semibold mt-2 text-center my-3">This product is customiseable</h2>
+                                                            <h2 className="text-sm md:text-lg dark:text-gray-100 font-semibold mt-2 text-center my-3">This product is customisable</h2>
                                                             <div className="grid md:grid-cols-2 md:grid-col-1 gap-4 w-[100%] ">
                                                                 {customizableOption && customizableOption?.length > 0 ?
 
