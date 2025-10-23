@@ -928,13 +928,22 @@ const ProductDetail = ({ noFade }) => {
                             <div className="flex gap-1 justify-start items-center">
                               <span className="bg-green-600 py-[.30rem] px-[.40rem] text-white rounded-lg font-bold">{`${priceObject?.hasDiscount ? "-" + " " + priceObject?.discountPercent + " " + "%" : ""}`}</span>
                               <p className="font-bold">Price : ₹{finalPrice} </p>
+
                             </div>
-                            <span className="text-base font-serif text-gray-500">MRP: <span className=""><del>{price}</del></span> </span>
+                            <div className="flex flex-col mt-2">
+                              <div className="">
+                                <span className="font-semibold w-[100%] text-sm text-gray-800  bg-blue-200 p-1 rounded-md ">Unit Price : ₹{unitPrice}</span>
+                              </div>
+                              <span className="text-base font-serif text-gray-500">MRP: <span className=""><del>{price}</del></span> </span>
+                            </div>
+
                           </div>
                           :
                           <div>
                             <p className="font-bold">Price : ₹{price} </p>
-                          </div>
+                            <div className="">
+                              <span className="font-semibold w-[100%] text-sm text-gray-800  bg-blue-200 p-1 rounded-md ">Unit Price : ₹{unitPrice}</span>
+                            </div>                          </div>
                       }
                     </div>
                 }
