@@ -26,6 +26,7 @@ import { IoMdHeart } from "react-icons/io";
 import { setDefaultWishList } from "../../store/reducer/auth/authCustomerSlice";
 import { MdStarRate } from "react-icons/md";
 import { TbRotateClockwise2 } from "react-icons/tb";
+import { MdQuestionMark } from "react-icons/md";
 
 
 // Secret key for decryption (same as used for encryption)
@@ -104,11 +105,13 @@ const ProductDetail = ({ noFade }) => {
 
   const [isDark] = useDarkmode();
   const [showLoadingModal, setShowLoadingModal] = useState(false);
+  const [showQuestionModel, setShowQuestionModel] = useState(false);
   const [actionType, setActionType] = useState("")
   const handleCloseLoadingModal = () => {
     setShowLoadingModal(false);
   };
-
+  const [postQuestionResponseError, setPostQuestionResponseError] = useState(null)
+  const [question, setQuestion] = useState("")
   const { productId: encryptedId } = useParams();
   const [decryptedStockId, setDecryptedStockId] = useState(null);
   const [productData, setProductData] = useState(null);
@@ -695,6 +698,33 @@ const ProductDetail = ({ noFade }) => {
     }
   };
 
+
+
+
+  async function handlePostQuestion() {
+    try {
+      if (question?.length == 0) {
+        alert("Please enter question");
+        return
+      }
+      const dataObject = {
+        productMainStockId: productData?._id,
+        productStock: decryptedStockId,
+        question: question,
+        clientId: import.meta.env.VITE_DATABASE_ID
+      }
+      const reposnse = await customerService.postQuestion(dataObject);
+      setQuestion("");
+      setPostQuestionResponseError(null);
+      setShowQuestionModel(false);
+      toast.success("Question posted successfully.")
+
+    } catch (error) {
+      setPostQuestionResponseError(error)
+    }
+
+  }
+
   return (
 
     <>
@@ -1268,6 +1298,104 @@ const ProductDetail = ({ noFade }) => {
                       </div>
                     )}
                   </div>
+
+
+                </div>
+
+                <div className="  rounded-lg border-1 mx-auto my-4 ">
+                  <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex flex-col gap-2">
+                      <h2 className={`${isDark ? "text-white" : "text-gray-800"} md:text-xl text-base font-semibold`}>
+                        Questions and Answers
+                      </h2>
+                      {ratings?.length > 0 && (
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500 text-sm">({ratings.length} reviews)</span>
+                          <span className="text-ratingButton text-lg">{averageRating}</span>
+                          <MdStarRate className="text-ratingButton" />
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => {
+                        if (!customerData) {
+                          alert("Login first");
+                        } else {
+                          setShowQuestionModel(true);
+                        }
+                      }}
+                      disabled={filteredProduct?.length === 0}
+                      className={`md:px-6 px-2 py-2 md:h-[3rem] h-[2rem] ${filteredProduct?.length === 0 ? "grayscale" : "grayscale-0"} 
+                                    group relative border-2 border-questionButton text-questionButton hover:border-questionButton/60 
+                                     hover:bg-questionButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center 
+                                      gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md 
+                                    disabled:opacity-50`}
+                    >
+                      <div className="flex justify-center items-center gap-1">
+                        <MdQuestionMark className="md:text-[1.2rem] text-[1rem]" />
+                        <span className="md:text-[.90rem] text-[.60rem]">Post Question</span>
+                      </div>
+                    </button>
+                  </div>
+
+                  <div className="p-4">
+                    {ratings && ratings.length > 0 ? (
+                      <div className="space-y-4">
+                        {ratings.map((item, index) => (
+                          <div
+                            key={index}
+                            className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0"
+                          >
+                            {/* Rating and User Info */}
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="flex">
+                                {[...Array(5)].map((_, i) => (
+                                  <MdStarRate
+                                    key={i}
+                                    className={`${i < item.rating ? "text-ratingButton" : "text-gray-300"
+                                      } text-lg`}
+                                  />
+                                ))}
+                              </div>
+                              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                                {item.name}
+                              </span>
+                              <span className="text-xs text-gray-500">
+                                {new Date(item.createdAt).toLocaleDateString()}
+                              </span>
+                            </div>
+
+                            {/* Review Description */}
+                            <p className="text-gray-700 dark:text-gray-200 text-sm mb-2">
+                              {item.description}
+                            </p>
+
+                            {/* Review Images */}
+                            {item.images && item.images.length > 0 && (
+                              <div className="flex gap-2 overflow-x-auto">
+                                {item.images.map((image, imgIndex) => (
+                                  <img
+                                    key={imgIndex}
+                                    src={image}
+                                    alt={`Review image ${imgIndex + 1}`}
+                                    className="w-20 h-20 object-cover rounded-md border border-gray-200 dark:border-gray-700 cursor-pointer hover:opacity-80 transition-opacity"
+                                    onClick={() => handleImageClick(image)}
+                                  />
+                                ))}
+                              </div>
+                            )
+                            }
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center text-gray-500 dark:text-gray-400 py-4">
+                        No Question Found
+                      </div>
+                    )}
+                  </div>
+
+
                 </div>
 
 
@@ -1356,7 +1484,7 @@ const ProductDetail = ({ noFade }) => {
                   <img
                     src={selectedReviewImage}
                     alt="Preview"
-                    className="w-full h-auto max-h-[80vh] object-contain rounded-md"
+                    className="w-[100%] h-auto max-h-[80vh] object-contain rounded-md"
                   />
 
 
@@ -1435,6 +1563,81 @@ const ProductDetail = ({ noFade }) => {
                     >
                       Submit
                     </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition>
+
+        {/* question model */}
+        <Transition appear show={showQuestionModel} as={Fragment}>
+          <Dialog as="div" className="relative z-[99999]" onClose={() => setShowQuestionModel(false)}>
+            <Transition.Child
+              as={Fragment}
+              enter={noFade ? "" : "duration-300 ease-out"}
+              enterFrom={noFade ? "" : "opacity-0"}
+              enterTo={noFade ? "" : "opacity-100"}
+              leave={noFade ? "" : "duration-200 ease-in"}
+              leaveFrom={noFade ? "" : "opacity-100"}
+              leaveTo={noFade ? "" : "opacity-0"}
+            >
+              <div className="fixed inset-0 bg-slate-900/50 backdrop-filter backdrop-blur-sm" />
+            </Transition.Child>
+
+            <div className="fixed inset-0 overflow-y-auto flex justify-center items-center">
+              <Transition.Child
+                as={Fragment}
+                enter={noFade ? "" : "duration-300 ease-out"}
+                enterFrom={noFade ? "" : "opacity-0 scale-95"}
+                enterTo={noFade ? "" : "opacity-100 scale-100"}
+                leave={noFade ? "" : "duration-200 ease-in"}
+                leaveFrom={noFade ? "" : "opacity-100 scale-100"}
+                leaveTo={noFade ? "" : "opacity-0 scale-95"}
+              >
+                <Dialog.Panel className={`md:w-[70%] w-[100%] max-w-4xl relative ${isDark ? " bg-gray-800" : " bg-white"}  dark: rounded-md shadow-xl p-6`}>
+                  <span className="absolute right-4 top-4">
+                    <button onClick={() => setShowQuestionModel(false)}>
+                      <RxCross2 size={24} className="text-red-600 bg-red-100 rounded-full p-1 border-2" />
+                    </button>
+                  </span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-[100%]">
+                    {/* Left Section: Guidelines */}
+                    <div className="flex flex-col justify-start p-4 border border-gray-200 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-800">
+                      <h3 className="text-md font-semibold mb-4 text-gray-800 dark:text-gray-200">Guidelines for Asking Questions</h3>
+                      <ul className="list-disc pl-5 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                        <li>Be specific, ask questions only about the product.</li>
+                        <li>Ensure you have gone through the product specifications before posting your question.</li>
+                        <li>Reach out to Flipkart customer care for queries related to offers, orders, delivery etc.</li>
+                      </ul>
+                    </div>
+                    {/* Right Section: Form */}
+                    <div className="flex flex-col">
+                      {/* Header Subsection */}
+                      <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Post your question</h2>
+                      {/* Main Content Subsection */}
+                      <div className="flex flex-col space-y-4">
+                        <textarea
+                          onChange={(e) => setQuestion(e.target.value)}
+                          className="w-[100%] h-32 p-3 border border-gray-300 dark:border-gray-600 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"
+                          placeholder="Type your question here..."
+                        // Add state and onChange handler as needed
+                        />
+                        <div className="flex justify-end">
+                          <button
+                            onClick={handlePostQuestion}
+                            className="group relative px-4 py-2 border-2 border-lightButton text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md"
+                          // Add onClick handler for submission
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                     <span className="text-red-500"> {postQuestionResponseError}</span>
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

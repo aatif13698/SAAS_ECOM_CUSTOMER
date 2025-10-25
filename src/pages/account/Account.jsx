@@ -94,7 +94,7 @@ function Account() {
           <span className="font-bold text-lg text-gray-900 dark:text-gray-100">My Activity</span>
           <div className="grid grid-cols-2 gap-3 mt-3 w-[100%]">
             <SettingItem isDark={isDark} action={() => navigate("/list/rating")} icon={<FaStar className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="Reviews" />
-            <SettingItem isDark={isDark} icon={<FaQuestionCircle className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="Questions & Answers" />
+            <SettingItem isDark={isDark} action={() => navigate("/list/questionasnwer")} icon={<FaQuestionCircle className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="Questions & Answers" />
           </div>
         </div>
 

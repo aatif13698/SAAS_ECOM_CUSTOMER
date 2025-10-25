@@ -80,6 +80,8 @@ const conf = withMT({
         addToCartBUtton : "#38b0f5",
         ratingButton: "#FAB12F",
 
+        questionButton: "#0aadff",
+
         carBgDark : "#43424a80",
         cardBgDark2 : "#43424af2",
 

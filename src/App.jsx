@@ -24,6 +24,7 @@ const Cart = lazy(() => import("../src/pages/cart/Cart"));
 const WishList = lazy(() => import("../src/pages/wishList/WishList"));
 const RatingAndReview = lazy(() => import("../src/pages/ratingAndReview/RatingAndReview"));
 const ListRatingAndReview = lazy(() => import("../src/pages/ratingAndReview/ListRatingAndReview"));
+const ListQuestionAnswer = lazy(() => import("../src/pages/questionAnswer/ListQuestionAnswer"));
 const Account = lazy(() => import("../src/pages/account/Account"))
 const Profile = lazy(() => import("../src/pages/profile/Profile"))
 const Address = lazy(() => import("../src/pages/address/Address"));
@@ -85,6 +86,7 @@ export default function App() {
             <Route path="wishlist" element={<WishList />} />
             <Route path="rating/:productMainStockId/:productStockId" element={<RatingAndReview />} />
             <Route path="list/rating" element={<ListRatingAndReview />} />
+            <Route path="list/questionasnwer" element={<ListQuestionAnswer />} />
             <Route path="edit-review/:productMainStockId/:productStockId/:reviewId" element={<RatingAndReview />} />
             <Route path="order" element={<Orders />} />
             <Route path="track-order/:orderId" element={<TrackOrder />} />
