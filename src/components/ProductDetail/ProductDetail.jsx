@@ -123,7 +123,8 @@ const ProductDetail = ({ noFade }) => {
 
   const [attributesArray, setAttributesArray] = useState([]);
   const [filteredProduct, setFilteredProduct] = useState([]);
-  const [ratings, setRatings] = useState([])
+  const [ratings, setRatings] = useState([]);
+  const [qas, setqas] = useState([]);
 
 
 
@@ -134,7 +135,7 @@ const ProductDetail = ({ noFade }) => {
   const { clientUser: customerData, isAuth: isLogedIn, wishList } = useSelector((state) => state?.authCustomerSlice);
 
 
-  console.log("wishList", wishList);
+  console.log("qas", qas);
 
 
 
@@ -335,7 +336,8 @@ const ProductDetail = ({ noFade }) => {
   useEffect(() => {
     if (productData) {
       const decryptedId = decryptId(encryptedId);
-      fetchRating(decryptedId, productData?._id,)
+      fetchRating(decryptedId, productData?._id,);
+      fetchQa(decryptedId, productData?._id,);
       // setProductSpecificData(productData);
       setSelectedImage(
         `${productData?.images[0]}`
@@ -349,6 +351,16 @@ const ProductDetail = ({ noFade }) => {
       setRatings(resposne?.data);
     } catch (error) {
       console.log("error while fetching the rating", error);
+    }
+  }
+
+  async function fetchQa(productStockId, productMainStockId) {
+    try {
+      const resposne = await productService.getProductQA(productStockId, productMainStockId);
+      console.log("response QA list", resposne);
+      setqas(resposne?.qa);
+    } catch (error) {
+      console.log("error while fetching the QA", error);
     }
   }
 
@@ -708,6 +720,9 @@ const ProductDetail = ({ noFade }) => {
         return
       }
       const dataObject = {
+        businessUnit: productData?.businessUnit,
+        branch: productData?.branch,
+        warehouse: productData?.warehouse,
         productMainStockId: productData?._id,
         productStock: decryptedStockId,
         question: question,
@@ -1308,11 +1323,9 @@ const ProductDetail = ({ noFade }) => {
                       <h2 className={`${isDark ? "text-white" : "text-gray-800"} md:text-xl text-base font-semibold`}>
                         Questions and Answers
                       </h2>
-                      {ratings?.length > 0 && (
+                      {qas?.length > 0 && (
                         <div className="flex items-center gap-1">
-                          <span className="text-gray-500 text-sm">({ratings.length} reviews)</span>
-                          <span className="text-ratingButton text-lg">{averageRating}</span>
-                          <MdStarRate className="text-ratingButton" />
+                          <span className="text-gray-500 text-sm">({qas.length} QA)</span>
                         </div>
                       )}
                     </div>
@@ -1341,50 +1354,25 @@ const ProductDetail = ({ noFade }) => {
                   <div className="p-4">
                     {ratings && ratings.length > 0 ? (
                       <div className="space-y-4">
-                        {ratings.map((item, index) => (
+                        {qas && qas.map((item, index) => (
                           <div
                             key={index}
                             className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0"
                           >
                             {/* Rating and User Info */}
                             <div className="flex items-center gap-2 mb-2">
-                              <div className="flex">
-                                {[...Array(5)].map((_, i) => (
-                                  <MdStarRate
-                                    key={i}
-                                    className={`${i < item.rating ? "text-ratingButton" : "text-gray-300"
-                                      } text-lg`}
-                                  />
-                                ))}
-                              </div>
+
                               <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                                {item.name}
+                                Q: {item.question}
                               </span>
-                              <span className="text-xs text-gray-500">
+                              {/* <span className="text-xs text-gray-500">
                                 {new Date(item.createdAt).toLocaleDateString()}
-                              </span>
+                              </span> */}
                             </div>
 
-                            {/* Review Description */}
                             <p className="text-gray-700 dark:text-gray-200 text-sm mb-2">
-                              {item.description}
+                              A: {item.answer}
                             </p>
-
-                            {/* Review Images */}
-                            {item.images && item.images.length > 0 && (
-                              <div className="flex gap-2 overflow-x-auto">
-                                {item.images.map((image, imgIndex) => (
-                                  <img
-                                    key={imgIndex}
-                                    src={image}
-                                    alt={`Review image ${imgIndex + 1}`}
-                                    className="w-20 h-20 object-cover rounded-md border border-gray-200 dark:border-gray-700 cursor-pointer hover:opacity-80 transition-opacity"
-                                    onClick={() => handleImageClick(image)}
-                                  />
-                                ))}
-                              </div>
-                            )
-                            }
                           </div>
                         ))}
                       </div>
@@ -1394,17 +1382,7 @@ const ProductDetail = ({ noFade }) => {
                       </div>
                     )}
                   </div>
-
-
                 </div>
-
-
-
-
-
-
-
-
               </div>
             </div>
           </div>
@@ -1636,7 +1614,7 @@ const ProductDetail = ({ noFade }) => {
                     </div>
 
                     <div>
-                     <span className="text-red-500"> {postQuestionResponseError}</span>
+                      <span className="text-red-500"> {postQuestionResponseError}</span>
                     </div>
                   </div>
                 </Dialog.Panel>
