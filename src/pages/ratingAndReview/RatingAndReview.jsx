@@ -55,7 +55,7 @@ const StarRating = ({ rating, setRating }) => {
 };
 
 function RatingAndReview() {
-  const { productMainStockId, productStockId, reviewId } = useParams();
+  const { productMainStockId, productStockId, productId, reviewId } = useParams();
   const [isDark] = useDarkmode();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -104,6 +104,7 @@ function RatingAndReview() {
   useEffect(() => {
     const decryptedProductMainStockId = decryptId(productMainStockId);
     const decryptedProductStockId = decryptId(productStockId);
+    const decryptedProductId = decryptId(productId);
     if (!decryptedProductMainStockId || !decryptedProductStockId) {
       toast.error('Invalid product IDs');
       navigate('/list/rating');
@@ -112,6 +113,7 @@ function RatingAndReview() {
     setStockIds({
       productMainStockId: decryptedProductMainStockId,
       productStockId: decryptedProductStockId,
+      productId: decryptedProductId,
     });
   }, [productMainStockId, productStockId, navigate]);
 
@@ -166,6 +168,7 @@ function RatingAndReview() {
       formData.append('clientId', import.meta.env.VITE_DATABASE_ID);
       formData.append('productMainStockId', stockIds.productMainStockId);
       formData.append('productStock', stockIds.productStockId);
+      formData.append('product', stockIds.productId);
       formData.append('rating', rating);
       formData.append('name', name);
       formData.append('description', description);

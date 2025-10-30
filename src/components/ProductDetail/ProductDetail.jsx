@@ -137,8 +137,6 @@ const ProductDetail = ({ noFade }) => {
   const { clientUser: customerData, isAuth: isLogedIn, wishList } = useSelector((state) => state?.authCustomerSlice);
 
 
-  console.log("qas", qas);
-
 
 
 
@@ -415,7 +413,8 @@ const ProductDetail = ({ noFade }) => {
   const handleReviewAndRatingClick = () => {
     const encryptedIdMainStockId = encryptId(productData?._id);
     const encryptedProductStockId = encryptId(decryptedStockId);
-    navigate(`/rating/${encryptedIdMainStockId}/${encryptedProductStockId}`, {
+    const encryptedProductId = encryptId(productData?.product?._id);
+    navigate(`/rating/${encryptedIdMainStockId}/${encryptedProductStockId}/${encryptedProductId}`, {
       state: {
         paymentOPtions: filteredProduct[0]?.paymentOPtions,
         customizableOptions: filteredProduct[0]?.product?.customizableOptions,

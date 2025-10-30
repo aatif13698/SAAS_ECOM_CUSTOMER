@@ -84,7 +84,7 @@ export default function App() {
             <Route path="categories" element={<Category />} />
             <Route path="cart" element={<Cart />} />
             <Route path="wishlist" element={<WishList />} />
-            <Route path="rating/:productMainStockId/:productStockId" element={<RatingAndReview />} />
+            <Route path="rating/:productMainStockId/:productStockId/:productId" element={<RatingAndReview />} />
             <Route path="list/rating" element={<ListRatingAndReview />} />
             <Route path="list/questionasnwer" element={<ListQuestionAnswer />} />
             <Route path="edit-review/:productMainStockId/:productStockId/:reviewId" element={<RatingAndReview />} />
