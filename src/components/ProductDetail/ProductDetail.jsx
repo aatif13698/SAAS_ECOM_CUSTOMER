@@ -27,6 +27,8 @@ import { setDefaultWishList } from "../../store/reducer/auth/authCustomerSlice";
 import { MdStarRate } from "react-icons/md";
 import { TbRotateClockwise2 } from "react-icons/tb";
 import { MdQuestionMark } from "react-icons/md";
+import { MdOutlineVerifiedUser } from "react-icons/md";
+import { FaRegUser } from "react-icons/fa";
 
 
 // Secret key for decryption (same as used for encryption)
@@ -1352,27 +1354,30 @@ const ProductDetail = ({ noFade }) => {
                   </div>
 
                   <div className="p-4">
-                    {ratings && ratings.length > 0 ? (
+                    {qas && qas.length > 0 ? (
                       <div className="space-y-4">
                         {qas && qas.map((item, index) => (
                           <div
                             key={index}
                             className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0"
                           >
-                            {/* Rating and User Info */}
-                            <div className="flex items-center gap-2 mb-2">
 
+                            <div className="flex items-center gap-2 mb-2">
                               <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                                 Q: {item.question}
                               </span>
-                              {/* <span className="text-xs text-gray-500">
-                                {new Date(item.createdAt).toLocaleDateString()}
-                              </span> */}
                             </div>
 
                             <p className="text-gray-700 dark:text-gray-200 text-sm mb-2">
                               A: {item.answer}
                             </p>
+
+                            {
+                              item?.isPredefined ?
+                                <div className="flex gap-1 items-center"><MdOutlineVerifiedUser /><span className="text-xs font-semibold text-gray-400">Vendor Verified</span></div>
+                                :
+                                <div className="flex gap-1 items-center"><FaRegUser /><span className="text-xs font-semibold text-gray-400">Verified Customer</span></div>
+                            }
                           </div>
                         ))}
                       </div>
