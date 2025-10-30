@@ -33,7 +33,7 @@ const NotFound = () => {
         </div>
         
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className="relative mx-auto max-w-sm">
+        {/* <form onSubmit={handleSearch} className="relative mx-auto max-w-sm">
           <input
             type="text"
             value={searchQuery}
@@ -49,7 +49,7 @@ const NotFound = () => {
             Go
           </button>
         </form>
-        
+         */}
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
