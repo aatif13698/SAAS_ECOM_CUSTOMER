@@ -34,6 +34,8 @@ const ProductList = lazy(() => import("../src/pages/ProductList/ProductList"));
 const CheckOut = lazy(() => import("../src/pages/checkout/CheckOut"));
 const CheckoutFromCart = lazy(() => import("../src/pages/checkout/CheckoutFromCart"));
 
+const NotFound = lazy(() => import("./pages/404NotFound/NotFound"));
+
 
 // import ProducDe
 
@@ -95,6 +97,8 @@ export default function App() {
             <Route path="address" element={<Address />} />
             <Route path="checkout/:productMainStockId/:productStockId" element={<CheckOut />} />
             <Route path="checkout/cart" element={<CheckoutFromCart />} />
+
+            <Route path="*" element={<NotFound/>} />
 
           </Route>
         </Route>
