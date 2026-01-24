@@ -55,6 +55,7 @@ function Account() {
             <FaHeart className="group-hover:scale-110 transition-transform duration-300" /> Wishlist
           </button>
           <button
+            onClick={() => navigate("/list/query")}
             className="group relative px-4 py-3 border-2 border-lightButton text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md disabled:opacity-50"
           >
             <FaQuestionCircle className="group-hover:scale-110 transition-transform duration-300" /> Ask Query

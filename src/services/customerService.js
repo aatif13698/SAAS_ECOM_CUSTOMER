@@ -12,8 +12,8 @@ const getCategortAndSubcategory = async (data) => {
         );
         return response.data;
     } catch (error) {
-        console.log("error",error);
-        
+        console.log("error", error);
+
         if (error.response) {
             return Promise.reject(error.response.data?.message || "Server error.");
         } else if (error.request) {
@@ -30,7 +30,7 @@ const updateProfile = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
 
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/auth/editProfile`, data, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/auth/editProfile`, data, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -40,13 +40,13 @@ const updateProfile = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -57,7 +57,7 @@ const getProfile = async (id) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
 
-        const response =  await axios.get(`${import.meta.env.VITE_API_URL}/api/customer/auth/getProfile/${import.meta.env.VITE_DATABASE_ID}/${id}`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/customer/auth/getProfile/${import.meta.env.VITE_DATABASE_ID}/${id}`, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -67,13 +67,13 @@ const getProfile = async (id) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -83,7 +83,7 @@ const getProfile = async (id) => {
 const updateBusinessData = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/auth/create/businessinfo`, data, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/auth/create/businessinfo`, data, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -93,13 +93,13 @@ const updateBusinessData = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -107,7 +107,7 @@ const updateBusinessData = async (data) => {
 const getBusinessData = async (id) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-        const response =  await axios.get(`${import.meta.env.VITE_API_URL}/api/customer/auth/get/businessinfo/${import.meta.env.VITE_DATABASE_ID}/${id}`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/customer/auth/get/businessinfo/${import.meta.env.VITE_DATABASE_ID}/${id}`, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -117,13 +117,13 @@ const getBusinessData = async (id) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -134,7 +134,7 @@ const addAddress = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
 
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/addNewAddress`, {...data, clientId: import.meta.env.VITE_DATABASE_ID }, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/addNewAddress`, { ...data, clientId: import.meta.env.VITE_DATABASE_ID }, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -144,13 +144,13 @@ const addAddress = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -160,7 +160,7 @@ const addAddress = async (data) => {
 const updateAddress = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/updateAddress`, {...data, clientId: import.meta.env.VITE_DATABASE_ID }, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/updateAddress`, { ...data, clientId: import.meta.env.VITE_DATABASE_ID }, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -170,13 +170,13 @@ const updateAddress = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -185,7 +185,7 @@ const updateAddress = async (data) => {
 const deleteAddress = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/deleteAddress`, {...data, clientId: import.meta.env.VITE_DATABASE_ID }, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/deleteAddress`, { ...data, clientId: import.meta.env.VITE_DATABASE_ID }, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -195,13 +195,13 @@ const deleteAddress = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -212,7 +212,7 @@ const getAddresses = async (id) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
 
-        const response =  await axios.get(`${import.meta.env.VITE_API_URL}/api/customer/getAddresses/${import.meta.env.VITE_DATABASE_ID}/${id}`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/customer/getAddresses/${import.meta.env.VITE_DATABASE_ID}/${id}`, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -222,13 +222,13 @@ const getAddresses = async (id) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -237,7 +237,7 @@ const getAddresses = async (id) => {
 const addToCart = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/cart/add`, {...data, clientId: import.meta.env.VITE_DATABASE_ID }, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/cart/add`, { ...data, clientId: import.meta.env.VITE_DATABASE_ID }, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -247,13 +247,13 @@ const addToCart = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -261,7 +261,7 @@ const addToCart = async (data) => {
 const newaddToCart = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/cart/add/new`, data, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/cart/add/new`, data, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -271,20 +271,20 @@ const newaddToCart = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
 const newPlaceOrder = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/order/place-order`, data, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/order/place-order`, data, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -294,20 +294,20 @@ const newPlaceOrder = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
 const placeOrderFromCart = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/order/place-order-from-cart`, data, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/order/place-order-from-cart`, data, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -317,13 +317,13 @@ const placeOrderFromCart = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -410,7 +410,7 @@ const getParticularOrder = async (id) => {
 
 const removeFromCart = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
-    
+
     try {
         const response = await axios.delete(
             `${import.meta.env.VITE_API_URL}/api/customer/cart/remove`,
@@ -441,14 +441,14 @@ const getProductsByCategory = async (categoryId) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
         const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/listing/products/${import.meta.env.VITE_DATABASE_ID}/category/${categoryId}`,
-      {
-        params: {
-          page: 1,
-          limit: 20,
-        },
-      }
-    );
+            `${import.meta.env.VITE_API_URL}/api/listing/products/${import.meta.env.VITE_DATABASE_ID}/category/${categoryId}`,
+            {
+                params: {
+                    page: 1,
+                    limit: 20,
+                },
+            }
+        );
         return response;
     } catch (error) {
         if (error.response) {
@@ -468,14 +468,14 @@ const getProductsBySubcategory = async (subcategoryId) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
         const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/listing/products/${import.meta.env.VITE_DATABASE_ID}/subcategory/${subcategoryId}`,
-      {
-        params: {
-          page: 1,
-          limit: 20,
-        },
-      }
-    );
+            `${import.meta.env.VITE_API_URL}/api/listing/products/${import.meta.env.VITE_DATABASE_ID}/subcategory/${subcategoryId}`,
+            {
+                params: {
+                    page: 1,
+                    limit: 20,
+                },
+            }
+        );
         return response;
     } catch (error) {
         if (error.response) {
@@ -496,7 +496,7 @@ const getProductsBySubcategory = async (subcategoryId) => {
 const addToWishList = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/wishlist/add/new`, data, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/wishlist/add/new`, data, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -506,13 +506,13 @@ const addToWishList = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -544,7 +544,7 @@ const getWishlist = async (sessionId) => {
 
 const removeFromWishList = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
-    
+
     try {
         const response = await axios.delete(
             `${import.meta.env.VITE_API_URL}/api/customer/wishlist/remove`,
@@ -574,7 +574,7 @@ const removeFromWishList = async (data) => {
 const postRating = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/create/ratingAndReview`, data, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/create/ratingAndReview`, data, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -584,13 +584,13 @@ const postRating = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -598,7 +598,7 @@ const postRating = async (data) => {
 const updateRating = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/update/ratingAndReview`, data, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/update/ratingAndReview`, data, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -608,13 +608,13 @@ const updateRating = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -623,7 +623,7 @@ const updateRating = async (data) => {
 const deleteRating = async (id, clientId) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-       const response = await axios.delete(
+        const response = await axios.delete(
             `${import.meta.env.VITE_API_URL}/api/customer/delete/review/${clientId}/${id}`,
             {
                 headers: {
@@ -636,13 +636,13 @@ const deleteRating = async (id, clientId) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -704,7 +704,7 @@ const getParticularRewview = async (id) => {
 const postQuestion = async (data) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-        const response =  await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/post/question`, data, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/post/question`, data, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
             }
@@ -714,13 +714,13 @@ const postQuestion = async (data) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -757,7 +757,7 @@ const getQuestionAnswer = async (sessionId) => {
 const deleteQuestion = async (id, clientId) => {
     const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
     try {
-       const response = await axios.delete(
+        const response = await axios.delete(
             `${import.meta.env.VITE_API_URL}/api/customer/delete/question/${clientId}/${id}`,
             {
                 headers: {
@@ -770,13 +770,13 @@ const deleteQuestion = async (id, clientId) => {
         if (error.response) {
             // The request was made, but the server responded with a status code
             return Promise.reject(error.response.data.message);
-          } else if (error.request) {
+        } else if (error.request) {
             // The request was made but no response was received
             return Promise.reject("Network error. Please try again.");
-          } else {
+        } else {
             // Something happened in setting up the request that triggered an Error
             return Promise.reject("An error occurred. Please try again later.");
-          }
+        }
     }
 }
 
@@ -808,7 +808,85 @@ const getStatement = async (type) => {
     }
 };
 
-export default { 
+
+const getQueries = async (sessionId) => {
+    const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/customer/get/all/query/customer?sessionId=${sessionId}&clientId=${import.meta.env.VITE_DATABASE_ID}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+        return response;
+    } catch (error) {
+        if (error.response) {
+            // The request was made, but the server responded with a status code
+            return Promise.reject(error.response.data.message);
+        } else if (error.request) {
+            // The request was made but no response was received
+            return Promise.reject("Network error. Please try again.");
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            return Promise.reject("An error occurred. Please try again later.");
+        }
+    }
+};
+
+const postQuery = async (data) => {
+    const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
+    try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/customer/post/query`, data, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            }
+        });
+        return response;
+    } catch (error) {
+        if (error.response) {
+            // The request was made, but the server responded with a status code
+            return Promise.reject(error.response.data.message);
+        } else if (error.request) {
+            // The request was made but no response was received
+            return Promise.reject("Network error. Please try again.");
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            return Promise.reject("An error occurred. Please try again later.");
+        }
+    }
+}
+
+
+
+const deleteQuery = async (id, clientId) => {
+    const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
+    try {
+        const response = await axios.delete(
+            `${import.meta.env.VITE_API_URL}/api/customer/delete/query/${clientId}/${id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+        return response;
+    } catch (error) {
+        if (error.response) {
+            // The request was made, but the server responded with a status code
+            return Promise.reject(error.response.data.message);
+        } else if (error.request) {
+            // The request was made but no response was received
+            return Promise.reject("Network error. Please try again.");
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            return Promise.reject("An error occurred. Please try again later.");
+        }
+    }
+}
+
+export default {
     getCategortAndSubcategory,
     updateProfile,
     getProfile,
@@ -842,6 +920,9 @@ export default {
     getQuestionAnswer,
     deleteQuestion,
 
+    getQueries,
+    postQuery,
+    deleteQuery,
 
     getStatement
 
