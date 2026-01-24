@@ -9,23 +9,27 @@ import {
 // import footerLogo from "../../assets/website/logo.png";
 import images from "../../constant/images";
 import useDarkmode from "../../Hooks/useDarkMode";
+import { MdPrivacyTip } from "react-icons/md";
+import { RiRefund2Fill } from "react-icons/ri";
+import { GoCodeOfConduct } from "react-icons/go";
+import { Link } from "react-router-dom";
+
 
 const FooterLinks = [
   {
-    title: "Home",
-    link: "/#",
+    title: "Privacy Policy",
+    icon: <MdPrivacyTip />,
+    link: "/privacy",
   },
   {
-    title: "About",
-    link: "/#about",
+    title: "Refund Policy",
+    icon: <RiRefund2Fill />,
+    link: "/refund",
   },
   {
-    title: "Contact",
-    link: "/#contact",
-  },
-  {
-    title: "Blog",
-    link: "/#blog",
+    title: "Terms & Condition",
+    icon: <GoCodeOfConduct />,
+    link: "/terms",
   },
 ];
 const Footer = () => {
@@ -72,14 +76,14 @@ const Footer = () => {
             <div className="">
               <div className="py-8 px-4 ">
                 <h1 className="sm:text-xl text-xl font-bold sm:text-left text-justify mb-3">
-                  Important Links
+                  Policy
                 </h1>
                 <ul className={`flex flex-col gap-3`}>
                   {FooterLinks.map((link, index) => (
-                    <li key={index} className="cursor-pointer hover:translate-x-1 duration-300 hover:text-blue-600 space-x-1 text-gray-500">
-                      <span>&#11162;</span>
+                    <Link to={link.link} key={index} className="cursor-pointer flex items-center hover:translate-x-1 duration-300 hover:text-blue-600 space-x-1 text-gray-500">
+                      <span>{link.icon}</span>
                       <span>{link.title}</span>
-                    </li>
+                    </Link>
                   ))}
                 </ul>
               </div>

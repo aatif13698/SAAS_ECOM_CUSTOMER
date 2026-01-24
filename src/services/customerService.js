@@ -780,6 +780,34 @@ const deleteQuestion = async (id, clientId) => {
     }
 }
 
+
+
+const getStatement = async (type) => {
+    const authToken = localStorage.getItem("SAAS_ECOM_customer_token");
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/vendor/cms/statement/get/statement/${import.meta.env.VITE_DATABASE_ID}/${type}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+        return response;
+    } catch (error) {
+        if (error.response) {
+            // The request was made, but the server responded with a status code
+            return Promise.reject(error.response.data.message);
+        } else if (error.request) {
+            // The request was made but no response was received
+            return Promise.reject("Network error. Please try again.");
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            return Promise.reject("An error occurred. Please try again later.");
+        }
+    }
+};
+
 export default { 
     getCategortAndSubcategory,
     updateProfile,
@@ -812,6 +840,9 @@ export default {
 
     postQuestion,
     getQuestionAnswer,
-    deleteQuestion
+    deleteQuestion,
+
+
+    getStatement
 
 }
