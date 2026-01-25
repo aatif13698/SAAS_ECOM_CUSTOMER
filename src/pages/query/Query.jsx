@@ -216,9 +216,9 @@ function ListQuery({ noFade }) {
                                     <div className="flex flex-col justify-start p-4 border border-gray-200 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-800">
                                         <h3 className="text-md font-semibold mb-4 text-gray-800 dark:text-gray-200">Guidelines for Asking Questions</h3>
                                         <ul className="list-disc pl-5 space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                                            <li>Be specific, ask questions only about the product.</li>
-                                            <li>Ensure you have gone through the product specifications before posting your question.</li>
-                                            <li>Reach out to Flipkart customer care for queries related to offers, orders, delivery etc.</li>
+                                            <li>Feel free to ask any question about anything on your mind.</li>
+                                            <li>Be clear and specific to get the best responses.</li>
+                                            <li>For urgent issues related to orders, delivery, or offers, you may still reach out to customer care if needed.</li>
                                         </ul>
                                     </div>
                                     {/* Right Section: Form */}
