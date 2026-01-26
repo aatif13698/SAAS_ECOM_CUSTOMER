@@ -80,6 +80,7 @@ const Header = ({ noFade }) => {
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
+        navigate("/home")
     };
     const toggleProfileDropdown = () => {
         setIsProfileDropdownOpen(!isProfileDropdownOpen);
