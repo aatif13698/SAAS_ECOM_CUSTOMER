@@ -29,6 +29,9 @@ const MultiCarousel2 = ({
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const handleCardClick = (productId) => {
+
+    console.log("productId", productId);
+    
     const encryptedId = encryptId(productId);
     navigate(`/product/${encryptedId}`);
   };

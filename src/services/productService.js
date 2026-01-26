@@ -99,6 +99,27 @@ const getProductQA = async (productStockId, productMainStockId) => {
 
 
 
+const getProductStock = async (productId) => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/api/vendor/stock/stock/by/product/${import.meta.env.VITE_DATABASE_ID}/${productId}`
+        );
+        return response.data;
+    } catch (error) {
+        console.log("error",error);
+        
+        if (error.response) {
+            return Promise.reject(error.response.data?.message || "Server error.");
+        } else if (error.request) {
+            return Promise.reject("Network error. Please try again.");
+        } else {
+            return Promise.reject("An error occurred. Please try again later.");
+        }
+    }
+}
+
+
+
 
 
 export default {
@@ -106,5 +127,6 @@ export default {
     getProductRating,
     getProductQA,
     getParticularProductData,
-    getProductAttribute
+    getProductAttribute,
+    getProductStock
 }
