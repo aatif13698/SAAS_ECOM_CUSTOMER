@@ -32,12 +32,16 @@ const Home = () => {
   console.log("sectionssss", sections);
 
 
+  const sortByOrderAscending = (cards) => {
+    return [...cards].sort((a, b) => a.order - b.order);
+  };
 
   const fetchPosts = async (page) => {
     try {
       setLoading(true);
       const response = await customerService.getCardSections();
-      setSections(response?.data?.data)
+
+      setSections(sortByOrderAscending(response?.data?.data))
     } catch (error) {
       console.log("Error in fetching posts", error);
     } finally {
