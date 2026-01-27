@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaBox, FaHeart, FaQuestionCircle, FaHeadset, FaUser, FaMapMarkerAlt, FaLanguage, FaBell, FaShieldAlt, FaStar, FaSignOutAlt, FaChevronRight } from "react-icons/fa";
 import useWidth from "../../Hooks/useWidth";
 import { logOut } from "../../store/reducer/auth/authCustomerSlice";
@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useDarkmode from "../../Hooks/useDarkMode";
 import { isDraft } from "@reduxjs/toolkit";
+import customerService from "../../services/customerService";
+import data from "../../constant/data";
 
 function Account() {
 
@@ -13,6 +15,8 @@ function Account() {
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const [isDark] = useDarkmode();
+
+  const [recentView, setRecentView] = useState([])
 
 
 
@@ -33,6 +37,25 @@ function Account() {
   }
 
 
+  useEffect(() => {
+
+    getRecentViewed()
+
+  }, []);
+
+
+  const getRecentViewed = async () => {
+    try {
+      const response = await customerService.getRecentViewed();
+      if (response?.data?.data?.length > 0) {
+        setRecentView(response?.data?.data)
+      }
+    } catch (error) {
+      console.error("Error fetching carts:", error);
+    }
+  };
+
+
 
 
   return (
@@ -49,7 +72,7 @@ function Account() {
             <FaBox className="group-hover:scale-110 transition-transform duration-300" /> Orders
           </button>
           <button
-          onClick={() => navigate("/wishlist")}
+            onClick={() => navigate("/wishlist")}
             className="group relative px-4 py-3 border-2 border-lightButton text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md disabled:opacity-50"
           >
             <FaHeart className="group-hover:scale-110 transition-transform duration-300" /> Wishlist
@@ -68,13 +91,39 @@ function Account() {
         </div>
 
         {/* Recently Viewed Products */}
-        <div className={`mt-2 w-[100%] ${isDark ? "bg-carBgDark" : "bg-white "}  shadow-lg px-2 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4 rounded-lg`}>
-          <span className="font-bold text-lg">Recently Viewed</span>
-          <div className="flex overflow-x-auto gap-3 mt-2 p-2">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className={`w-24 h-32 ${isDark ? "bg-carBgDark/80" : "bg-gray-200"}  rounded-lg`}></div>
-            ))}
-          </div>
+        <div className={`mt-2 w-[100%] ${isDark ? "bg-gray-800" : "bg-white"} shadow-md rounded-xl p-4 md:p-6`}>
+          <h2 className="text-xl font-semibold mb-3">Recently Viewed</h2>
+          {recentView && recentView.length > 0 ? (
+            <div className="flex overflow-x-auto gap-4 pb-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800">
+              {recentView.map((rec, index) => {
+                const image = rec?.productMainStock?.images[0];
+                const name = rec?.productMainStock?.name;
+
+                return (
+                  <div
+                    key={index}
+                    className={`flex-shrink-0 w-32 sm:w-40 md:w-48 h-auto ${isDark ? "bg-gray-700" : "bg-gray-100"} rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200`}
+                  >
+                    <div className="aspect-square relative">
+                      <img
+                        src={image}
+                        alt={name || "Product image"}
+                        className="w-[100%] h-[100%] object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                    <p className="p-2 text-sm font-medium truncate text-center">
+                      {name}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-center text-gray-500 dark:text-gray-400 italic">
+              No recently viewed items yet.
+            </p>
+          )}
         </div>
 
         {/* Account Settings */}
@@ -129,7 +178,7 @@ const SettingItem2 = ({ isDark, icon, text, action }) => (
 
 const SettingItem = ({ icon, text, action }) => (
   <button
-   onClick={action}
+    onClick={action}
     className="group relative px-4 py-3 border-2 border-lightButton text-lightButton hover:border-lightButton/60 hover:bg-lightButton/10 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md disabled:opacity-50"
   >
     {icon} {text}

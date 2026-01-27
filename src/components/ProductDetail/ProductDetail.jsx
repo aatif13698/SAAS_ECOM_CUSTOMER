@@ -611,6 +611,29 @@ const ProductDetail = ({ noFade }) => {
   };
 
 
+  useEffect(() => {
+
+    if (filteredProduct && filteredProduct?.length > 0) {
+      addRecentView()
+    }
+
+  }, [filteredProduct]);
+
+
+  async function addRecentView() {
+    try {
+      const dataObject = {
+        productMainStockId: productData?._id,
+        productStockId: decryptedStockId,
+        clientId: import.meta.env.VITE_DATABASE_ID
+      }
+      const response = await customerService.addRecentView(dataObject);
+    } catch (error) {
+      console.log("error while adding", error);
+    }
+  }
+
+
   if (loading) {
     return (
 
