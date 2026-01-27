@@ -50,6 +50,7 @@ const NotFound = lazy(() => import("./pages/404NotFound/NotFound"));
 import useDarkmode from "./Hooks/useDarkMode";
 import PublicRoutes from "./pages/PublicRoute/PublicRoutes";
 import customerService from "./services/customerService";
+import AboutUs from "./pages/aboutUs/AboutUs";
 
 
 export default function App() {
@@ -109,6 +110,7 @@ export default function App() {
             <Route path="privacy" element={<Privacy />} />
             <Route path="refund" element={<Refund />} />
             <Route path="terms" element={<Terms />} />
+            <Route path="aboutus" element={<AboutUs />} />
 
 
             <Route path="*" element={<NotFound/>} />
