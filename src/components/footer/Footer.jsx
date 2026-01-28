@@ -13,6 +13,8 @@ import { MdPrivacyTip } from "react-icons/md";
 import { RiRefund2Fill } from "react-icons/ri";
 import { GoCodeOfConduct } from "react-icons/go";
 import { Link } from "react-router-dom";
+import { BsInfoCircleFill } from "react-icons/bs";
+
 
 
 const FooterLinks = [
@@ -30,6 +32,15 @@ const FooterLinks = [
     title: "Terms & Condition",
     icon: <GoCodeOfConduct />,
     link: "/terms",
+  },
+];
+
+
+const FooterLinks2 = [
+  {
+    title: "About us",
+    icon: <BsInfoCircleFill />,
+    link: "/about-us",
   },
 ];
 const Footer = () => {
@@ -94,11 +105,11 @@ const Footer = () => {
                   Links
                 </h1>
                 <ul className="flex flex-col gap-3">
-                  {FooterLinks.map((link, index) => (
-                    <li key={index} className="cursor-pointer hover:translate-x-1 duration-300 hover:text-blue-600 space-x-1 text-gray-500">
-                      <span>&#11162;</span>
+                  {FooterLinks2.map((link, index) => (
+                    <Link to={link.link} key={index} className="cursor-pointer flex items-center hover:translate-x-1 duration-300 hover:text-blue-600 space-x-1 text-gray-500">
+                      <span>{link.icon}</span>
                       <span>{link.title}</span>
-                    </li>
+                    </Link>
                   ))}
                 </ul>
               </div>

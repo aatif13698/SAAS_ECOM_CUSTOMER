@@ -110,7 +110,7 @@ export default function App() {
             <Route path="privacy" element={<Privacy />} />
             <Route path="refund" element={<Refund />} />
             <Route path="terms" element={<Terms />} />
-            <Route path="aboutus" element={<AboutUs />} />
+            <Route path="about-us" element={<AboutUs />} />
 
 
             <Route path="*" element={<NotFound/>} />
