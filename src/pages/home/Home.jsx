@@ -16,9 +16,12 @@ import customerService from '../../services/customerService';
 import CardType1 from '../../components/cardSections/CardType1';
 import CardType2 from '../../components/cardSections/CardType2';
 import CardType9 from '../../components/cardSections/CardType9';
+import RecentView from '../../components/recentView/RecentView';
 
 
 const Home = () => {
+  const { clientUser: customerData, isAuth: isLogedIn, wishList } = useSelector((state) => state?.authCustomerSlice);
+
   const { width, breakpoints } = useWidth();
   const [postsArr, setPostArr] = useState([]);
   const [page, setPage] = useState(1);
@@ -149,6 +152,15 @@ const Home = () => {
 
 
               }) : ""
+            }
+
+
+            {
+              customerData ?
+              
+             <RecentView/>
+              
+              : ""
             }
 
 
