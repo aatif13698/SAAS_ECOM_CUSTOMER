@@ -994,6 +994,22 @@ const getRecentViewed = async () => {
     }
 };
 
+
+
+
+const getSimilarProductList = async (categoryFilter, subCategoryFilter, exclude ) => {
+    const authToken = localStorage.getItem("saas_client_token");
+    const clientId = import.meta.env.VITE_DATABASE_ID;
+
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/vendor/stock/list/all/similar/blueprints?clientId=${clientId}&&categoryId=${categoryFilter}&&subCategoryId=${subCategoryFilter}&&exclude=${exclude}`, {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        }
+
+    });
+    return response.data
+}
+
 export default {
     getCategortAndSubcategory,
     updateProfile,
@@ -1039,6 +1055,7 @@ export default {
     getBanners,
 
     addRecentView,
-    getRecentViewed
+    getRecentViewed,
+    getSimilarProductList
 
 }

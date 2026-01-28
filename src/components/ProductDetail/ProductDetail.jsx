@@ -29,6 +29,7 @@ import { TbRotateClockwise2 } from "react-icons/tb";
 import { MdQuestionMark } from "react-icons/md";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
+import SimilarProduct from "../similarProduct/SimilarProduct";
 
 
 // Secret key for decryption (same as used for encryption)
@@ -128,6 +129,8 @@ const ProductDetail = ({ noFade }) => {
   const [ratings, setRatings] = useState([]);
   const [qas, setqas] = useState([]);
 
+  console.log("productData", productData);
+  
 
 
 
@@ -1414,39 +1417,13 @@ const ProductDetail = ({ noFade }) => {
             </div>
           </div>
 
-          <div className="mt-10 px-3  md:px-0">
-            <h3 className="text-xl dark:text-white font-semibold">Return & Refund Policy</h3>
-            <p className="text-gray-600">
-              Our return policy ensures customer satisfaction. You can return the
-              product within 30 days.
-            </p>
-          </div>
-
-          <div className="mt-10 px-3 md:px-0">
-            <h3 className="text-xl dark:text-white font-semibold">Similar Products</h3>
-          </div>
-
-          <div className="mt-10 px-3 md:px-0">
-            <h3 className="text-xl  dark:text-white font-semibold">More Product Information</h3>
-            <p className="text-gray-600">
-              This product is designed to meet the highest standards of quality
-              and performance.
-            </p>
-          </div>
-
-          <div className="mt-10 px-3 md:px-0">
-            <h3 className="text-xl dark:text-white font-semibold">Return & Refund Policy</h3>
-            <p className="text-gray-600">
-              Our return policy ensures customer satisfaction. You can return the
-              product within 30 days.
-            </p>
-          </div>
-          <div>
+          {/* <div>
             <CarouselWithoutArrow
               data={products.mobileData}
               title={"Similar Products"}
             />
-          </div>
+          </div> */}
+          <SimilarProduct category={productData?.product?.categoryId} subcategory={productData?.product?.subCategoryId} exclude={productData?.product?._id}/>
 
 
         </div>

@@ -89,7 +89,7 @@ const Home = () => {
       > */}
 
       <div className="w-[100%] min-h-[60vh] bg-gray-100 dark:bg-gray-800 flex flex-col  items-center py-6">
-        <div className="w-[100%]  lg:w-3/4 px-2 sm:px-0 lg:px-8">
+        <div className=" max-w-[90rem] w-[100%]   px-2 sm:px-0 lg:px-8">
 
 
           <div className={`${width > breakpoints.xl ? "w-[100%]" : "w-[100%]"}`}>
