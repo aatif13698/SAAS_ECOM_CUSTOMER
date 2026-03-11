@@ -180,9 +180,9 @@ function Account() {
           <div className="grid gap-2 mt-3">
             <SettingItem2 isDark={isDark} action={handleEditProfile} icon={<FaUser className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="Edit Profile" />
             <SettingItem2 isDark={isDark} action={() => navigate("/address")} icon={<FaMapMarkerAlt className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="My Addresses" />
-            <SettingItem2 isDark={isDark} icon={<FaLanguage className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="Select Language" />
+            {/* <SettingItem2 isDark={isDark} icon={<FaLanguage className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="Select Language" /> */}
             <SettingItem2 isDark={isDark} icon={<FaBell className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="Notification Settings" />
-            <SettingItem2 isDark={isDark} icon={<FaShieldAlt className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="Privacy Settings" />
+            {/* <SettingItem2 isDark={isDark} icon={<FaShieldAlt className="text-lightButton group-hover:text-lightButton/60 transition-colors duration-300" />} text="Privacy Settings" /> */}
           </div>
         </div>
 
