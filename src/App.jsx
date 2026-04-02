@@ -3,7 +3,7 @@
 
 
 import { Routes, Route, Navigate, } from "react-router-dom"
-import { lazy, useEffect } from "react";
+import { lazy, useEffect, useState } from "react";
 
 
 import AuthLayout from "./layout/AuthLayout";
@@ -51,18 +51,65 @@ import useDarkmode from "./Hooks/useDarkMode";
 import PublicRoutes from "./pages/PublicRoute/PublicRoutes";
 import customerService from "./services/customerService";
 import AboutUs from "./pages/aboutUs/AboutUs";
+import authSrvice from "./services/authSrvice";
+import api from "./services/api";
 
 
 export default function App() {
 
   const [isDark] = useDarkmode();
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [isAuthorizeDomain, setIsAuthorizeDomain] = useState(true);
+
   useEffect(() => {
     const loadingScreen = document.getElementById('loading-screen');
     if (loadingScreen) {
       loadingScreen.style.display = 'none';
     }
+
+    checkDomain()
   }, []);
+
+  async function checkDomain(params) {
+
+    try {
+
+      setIsLoading(true)
+
+      const res = await api.checkDomain();
+
+      console.log("res", res);
+
+      // if (res?.data?.status == "ok") {
+
+      //   const loadingScreen = document.getElementById('loading-screen');
+      //   if (loadingScreen) {
+      //     loadingScreen.style.display = 'none';
+      //   }
+
+      // } 
+      setIsLoading(false)
+    } catch (error) {
+      setIsAuthorizeDomain(false)
+      setIsLoading(false)
+    }
+
+  }
+
+
+  if(isLoading){
+
+    return <div>Loading</div>
+
+  }
+
+  if(!isAuthorizeDomain){
+
+    return <div>This domain is not authorize for this clientId</div>
+
+  }
 
 
   return (
@@ -113,7 +160,7 @@ export default function App() {
             <Route path="about-us" element={<AboutUs />} />
 
 
-            <Route path="*" element={<NotFound/>} />
+            <Route path="*" element={<NotFound />} />
 
           </Route>
         </Route>
