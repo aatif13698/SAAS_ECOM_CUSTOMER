@@ -145,38 +145,9 @@ export default function App() {
           <p className="text-zinc-400 text-[17px] leading-relaxed">
             This domain (<span className="font-mono bg-zinc-900 px-2 py-1 rounded text-amber-400 text-sm">
               {currentDomain}
-            </span>) is not authorized for this Client ID.
+            </span>) is not authorized for the configured Client ID.
           </p>
         </div>
-
-        {/* Helpful Explanation Card */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-7 text-left">
-          <p className="text-zinc-400 mb-5 text-[15px]">
-            This error typically occurs when the current domain is not added to the allowed origins in your OAuth provider settings.
-          </p>
-
-          {/* <div className="space-y-5 text-sm">
-            <div className="flex gap-4">
-              <div className="mt-1 w-6 h-6 rounded-xl bg-zinc-800 flex items-center justify-center text-xs font-mono text-zinc-500 flex-shrink-0">
-                1
-              </div>
-              <div className="text-zinc-300">
-                Go to your OAuth console (Google Cloud, Firebase, Auth0, etc.)
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="mt-1 w-6 h-6 rounded-xl bg-zinc-800 flex items-center justify-center text-xs font-mono text-zinc-500 flex-shrink-0">
-                2
-              </div>
-              <div className="text-zinc-300">
-                Add <span className="font-mono text-emerald-400">https://{currentDomain}</span> to{" "}
-                <strong>Authorized JavaScript origins</strong>
-              </div>
-            </div>
-          </div> */}
-        </div>
-        {/* Footer */}
         <p className="text-xs text-zinc-500 pt-8">
           Need help? Contact your administrator or support team.
         </p>
