@@ -4,8 +4,8 @@
 
 import { Routes, Route, Navigate, } from "react-router-dom"
 import { lazy, useEffect, useState } from "react";
-
-
+import { MdWarning, MdArrowBack, MdOpenInNew } from 'react-icons/md';
+import { SiGoogle } from 'react-icons/si';
 import AuthLayout from "./layout/AuthLayout";
 import images from "./constant/images";
 
@@ -53,9 +53,15 @@ import customerService from "./services/customerService";
 import AboutUs from "./pages/aboutUs/AboutUs";
 import authSrvice from "./services/authSrvice";
 import api from "./services/api";
+import { Spinner } from "@material-tailwind/react";
+import Loader1 from "./components/loader/Loader1";
 
 
 export default function App() {
+
+  const currentDomain = typeof window !== 'undefined' 
+    ? window.location.hostname 
+    : 'your-current-domain.com';
 
   const [isDark] = useDarkmode();
 
@@ -99,15 +105,83 @@ export default function App() {
   }
 
 
-  if(isLoading){
+  if (isLoading) {
 
-    return <div>Loading</div>
+    return <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        height: "100vh",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
+    >
+      <span className=" mt-1 font-medium  text-sm flex  justify-center items-center flex-col py-5">
+        {" "}
+        {/* <img src={StageDrivingLogo} alt="" className="w-20 py-5" /> */}
+        {/* <Spinner className="h-8 w-8"/> */}
+        <Loader1 />
+        <span>Checking Auth..</span>
+      </span>
+    </div>
 
   }
 
-  if(!isAuthorizeDomain){
+  if (!isAuthorizeDomain) {
 
-    return <div>This domain is not authorize for this clientId</div>
+    return <div className="min-h-screen bg-zinc-950 text-zinc-200 flex items-center justify-center p-6 font-sans">
+      <div className="max-w-md w-full text-center space-y-8">
+        
+        {/* Icon */}
+        <div className="mx-auto w-20 h-20 bg-amber-500/10 rounded-3xl flex items-center justify-center border border-amber-500/20">
+          <MdWarning className="w-12 h-12 text-amber-500" />
+        </div>
+
+        {/* Title & Message */}
+        <div className="space-y-3">
+          <h1 className="text-4xl font-semibold tracking-tight text-white">
+            Domain Not Authorized
+          </h1>
+          <p className="text-zinc-400 text-[17px] leading-relaxed">
+            This domain (<span className="font-mono bg-zinc-900 px-2 py-1 rounded text-amber-400 text-sm">
+              {currentDomain}
+            </span>) is not authorized for this Client ID.
+          </p>
+        </div>
+
+        {/* Helpful Explanation Card */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-7 text-left">
+          <p className="text-zinc-400 mb-5 text-[15px]">
+            This error typically occurs when the current domain is not added to the allowed origins in your OAuth provider settings.
+          </p>
+
+          {/* <div className="space-y-5 text-sm">
+            <div className="flex gap-4">
+              <div className="mt-1 w-6 h-6 rounded-xl bg-zinc-800 flex items-center justify-center text-xs font-mono text-zinc-500 flex-shrink-0">
+                1
+              </div>
+              <div className="text-zinc-300">
+                Go to your OAuth console (Google Cloud, Firebase, Auth0, etc.)
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="mt-1 w-6 h-6 rounded-xl bg-zinc-800 flex items-center justify-center text-xs font-mono text-zinc-500 flex-shrink-0">
+                2
+              </div>
+              <div className="text-zinc-300">
+                Add <span className="font-mono text-emerald-400">https://{currentDomain}</span> to{" "}
+                <strong>Authorized JavaScript origins</strong>
+              </div>
+            </div>
+          </div> */}
+        </div>
+        {/* Footer */}
+        <p className="text-xs text-zinc-500 pt-8">
+          Need help? Contact your administrator or support team.
+        </p>
+      </div>
+    </div>
 
   }
 
