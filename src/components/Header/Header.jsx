@@ -32,6 +32,7 @@ import { FaBox } from "react-icons/fa6";
 
 
 const Header = ({ noFade }) => {
+    const { config } = useSelector((state) => state.companyConfigSlice);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -124,7 +125,7 @@ const Header = ({ noFade }) => {
         }
     }
 
-     function handleWishList() {
+    function handleWishList() {
         if (!isLogedIn) {
             setShowLoadingModal(true)
         } else {
@@ -148,7 +149,7 @@ const Header = ({ noFade }) => {
                                 onClick={toggleDropdown}
                             >
                                 {
-                                    <img className='md:w-35 md:h-10 ' src={isDark ? images.logo : images.logo} alt="" />
+                                    <img className='md:w-35 md:h-10 ' src={config?.longLogo  ?  config?.longLogo : images.logo} alt="" />
                                 }
                                 {/* <svg
                                     className="-mr-1 h-5 w-[30px] text-gray-400"

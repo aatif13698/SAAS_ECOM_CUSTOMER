@@ -55,15 +55,23 @@ import authSrvice from "./services/authSrvice";
 import api from "./services/api";
 import { Spinner } from "@material-tailwind/react";
 import Loader1 from "./components/loader/Loader1";
+import { useDispatch, useSelector } from "react-redux";
+import { setCompanyConfig } from "./store/reducer/company/companyConfigSlice";
 
 
 export default function App() {
 
-  const currentDomain = typeof window !== 'undefined' 
-    ? window.location.hostname 
+  const dispatch = useDispatch();
+
+  const currentDomain = typeof window !== 'undefined'
+    ? window.location.hostname
     : 'your-current-domain.com';
 
   const [isDark] = useDarkmode();
+
+
+
+
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -74,34 +82,22 @@ export default function App() {
     if (loadingScreen) {
       loadingScreen.style.display = 'none';
     }
-
-    checkDomain()
+    checkDomain();
   }, []);
 
   async function checkDomain(params) {
-
     try {
-
       setIsLoading(true)
-
       const res = await api.checkDomain();
-
-      console.log("res", res);
-
-      // if (res?.data?.status == "ok") {
-
-      //   const loadingScreen = document.getElementById('loading-screen');
-      //   if (loadingScreen) {
-      //     loadingScreen.style.display = 'none';
-      //   }
-
-      // } 
+      if (res?.data?.status == "ok") {
+        const res = await api.getCompanyConfug(import.meta.env.VITE_DATABASE_ID);
+        dispatch(setCompanyConfig(res?.data?.data))  
+      }
       setIsLoading(false)
     } catch (error) {
       setIsAuthorizeDomain(false)
       setIsLoading(false)
     }
-
   }
 
 
@@ -131,7 +127,7 @@ export default function App() {
 
     return <div className="min-h-screen bg-zinc-950 text-zinc-200 flex items-center justify-center p-6 font-sans">
       <div className="max-w-md w-full text-center space-y-8">
-        
+
         {/* Icon */}
         <div className="mx-auto w-20 h-20 bg-amber-500/10 rounded-3xl flex items-center justify-center border border-amber-500/20">
           <MdWarning className="w-12 h-12 text-amber-500" />

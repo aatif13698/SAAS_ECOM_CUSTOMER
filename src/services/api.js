@@ -48,6 +48,39 @@ const checkDomain = async (id) => {
 };
 
 
+
+
+const getCompanyConfug = async (id) => {
+    try {
+        const response = await api.get(
+            `/api/get/company-config/${id}`
+        );
+        
+        return response;        // Return only the data (cleaner)
+        
+    } catch (error) {
+        console.error("Error fetching product data:", error);
+
+        if (error.response) {
+            // Server responded with error status
+            const message = error.response.data?.message 
+                         || error.response.data?.error 
+                         || "Server error occurred.";
+            return Promise.reject(message);
+        } 
+        else if (error.request) {
+            // Request was made but no response received
+            return Promise.reject("Network error. Please check your internet connection.");
+        } 
+        else {
+            // Something else happened while setting up the request
+            return Promise.reject("An unexpected error occurred. Please try again.");
+        }
+    }
+};
+
+
 export default {
-    checkDomain
+    checkDomain,
+    getCompanyConfug
 }

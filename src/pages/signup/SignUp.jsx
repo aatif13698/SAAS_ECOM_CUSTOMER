@@ -7,11 +7,15 @@ import useDarkmode from '../../Hooks/useDarkMode';
 import authSrvice from '../../services/authSrvice';
 import debounce from 'lodash.debounce';
 import toast, { Toaster } from 'react-hot-toast'
+import { useSelector } from 'react-redux';
 
 
 
 
 const SignUp = () => {
+
+  const { config } = useSelector((state) => state.companyConfigSlice);
+
 
   const navigate = useNavigate()
   const { width, breakpoints } = useWidth();
@@ -176,7 +180,7 @@ const SignUp = () => {
 
               <div className='sm:border-2  border-gray-300 rounded-sm p-6  max-w-md mx-auto'>
                 <div className='flex justify-center py-6'>
-                  <img src={isDark ? images?.logo : images?.logo} alt="Instagram Logo" className='w-36' />
+                  <img src={config?.longLogo ? config?.longLogo : images?.logo} alt="Instagram Logo" className='w-36' />
 
                 </div>
 

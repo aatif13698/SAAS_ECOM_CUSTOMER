@@ -2,7 +2,8 @@
 
 import layout from "./layout";
 
-import authCustomerSlice  from "./reducer/auth/authCustomerSlice";
+import authCustomerSlice from "./reducer/auth/authCustomerSlice";
+import companyConfigSlice from "./reducer/company/companyConfigSlice";
 
 
 
@@ -10,7 +11,8 @@ import authCustomerSlice  from "./reducer/auth/authCustomerSlice";
 const rootReducer = {
 
     layout,
-    authCustomerSlice
+    authCustomerSlice,
+    companyConfigSlice
 }
 
 

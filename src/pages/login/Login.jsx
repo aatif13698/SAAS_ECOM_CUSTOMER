@@ -8,7 +8,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import useDarkmode from '../../Hooks/useDarkMode';
 import authSrvice from '../../services/authSrvice';
 import { setClientUser, setDefaultAddress, setDefaultWishList } from '../../store/reducer/auth/authCustomerSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
 
 
@@ -28,6 +28,9 @@ const SignUpLink = memo(() => {
 });
 
 const Login = () => {
+
+        const { config } = useSelector((state) => state.companyConfigSlice);
+
 
     const navigate = useNavigate();
     const dispatch  = useDispatch()
@@ -171,7 +174,7 @@ const Login = () => {
 
                             <div className='sm:border-2  border-gray-300 rounded-sm p-6  max-w-md mx-auto'>
                                 <div className='flex justify-center py-6'>
-                                    <img src={isDark ? images?.logo : images?.logo} alt="Instagram Logo" className='w-36' />                                </div>
+                                    <img src={config?.longLogo ? config?.longLogo : images?.logo} alt="Instagram Logo" className='w-36' />                                </div>
 
                                 <div className='w-[90%]   rounded-lg flex justify-center items-center mx-auto'>
                                     <div className='w-[100%] space-y-4'>

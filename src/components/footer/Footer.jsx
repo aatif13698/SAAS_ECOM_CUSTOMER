@@ -6,6 +6,11 @@ import {
   FaLocationArrow,
   FaMobileAlt,
 } from "react-icons/fa";
+import { MdOutlineMailOutline } from "react-icons/md";
+import { BsFacebook } from "react-icons/bs";
+import { IoLogoLinkedin } from "react-icons/io5";
+import { SiTelegram } from "react-icons/si";
+
 // import footerLogo from "../../assets/website/logo.png";
 import images from "../../constant/images";
 import useDarkmode from "../../Hooks/useDarkMode";
@@ -14,6 +19,7 @@ import { RiRefund2Fill } from "react-icons/ri";
 import { GoCodeOfConduct } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { BsInfoCircleFill } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
 
 
@@ -44,6 +50,8 @@ const FooterLinks2 = [
   },
 ];
 const Footer = () => {
+  const { config } = useSelector((state) => state.companyConfigSlice);
+
   const [isDark] = useDarkmode();
 
   return (
@@ -53,33 +61,59 @@ const Footer = () => {
           {/* company Details */}
           <div className=" py-8 px-4 ">
             <h1 className="sm:text-3xl text-xl font-bold sm:text-left text-justify mb-3 flex items-center gap-3">
-              <img src={images.tree} alt="Logo" className="max-w-[50px]" />
-              Aestree Ecom
+              <img src={config?.shortLogo ? config?.shortLogo : images.tree} alt="Logo" className="max-w-[50px]" />
+              {config && config?.name}
             </h1>
             <p className="">
-              Lorem ipsum dolor sit amet consectetur. Lorem ipsum dolor sit amet
-              consectetur adipisicing elit. Possimus, voluptate.{" "}
+              {config && config?.description}
             </p>
             <br />
             <div className="flex items-center gap-3">
               <FaLocationArrow />
-              <p>Noida, Uttar Pradesh</p>
+              <p>{config && config?.fullAddress}</p>
             </div>
             <div className="flex items-center gap-3 mt-3">
               <FaMobileAlt />
-              <p>+91 123456789</p>
+              <p>+91 {config && config?.phone}</p>
+            </div>
+            <div className="flex items-center gap-3 mt-3">
+              <MdOutlineMailOutline />
+              <p>{config && config?.email}</p>
             </div>
             {/* Social Handle */}
             <div className="flex items-center gap-3 mt-6">
-              <a href="#">
-                <FaInstagram className="text-3xl" />
-              </a>
-              <a href="#">
-                <FaFacebook className="text-3xl" />
-              </a>
-              <a href="#">
-                <FaLinkedin className="text-3xl" />
-              </a>
+              {
+                config?.showFacebook ?
+                  <a href={`${config?.facebookLink}`}>
+                    <BsFacebook className="text-3xl" />
+                  </a>
+                  : ""
+              }
+
+              {
+                config?.showInsta ?
+                  <a href={`${config?.instaLink}`}>
+                    <FaInstagram className="text-3xl" />
+                  </a>
+                  : ""
+              }
+
+              {
+                config?.showLinkedin ?
+                  <a href={`${config?.linkedinLink}`}>
+                    <IoLogoLinkedin className="text-3xl" />
+                  </a>
+                  : ""
+              }
+
+              {
+                config?.showTelegram ?
+                  <a target="_blank"  href={`${config?.telegramLink}`}>
+                    <SiTelegram className="text-3xl" />
+                  </a>
+                  : ""
+              }
+            
             </div>
           </div>
           {/* Links */}
