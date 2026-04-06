@@ -30,6 +30,7 @@ import { MdQuestionMark } from "react-icons/md";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import SimilarProduct from "../similarProduct/SimilarProduct";
+import ImageGalleryModal from "./ImageGalleryModel";
 
 
 // Secret key for decryption (same as used for encryption)
@@ -130,7 +131,7 @@ const ProductDetail = ({ noFade }) => {
   const [qas, setqas] = useState([]);
 
   console.log("productData", productData);
-  
+
 
 
 
@@ -600,6 +601,9 @@ const ProductDetail = ({ noFade }) => {
   // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReviewImage, setSelectedReviewImage] = useState(null);
+  const [selectedReviewImages, setSelectedReviewImages] = useState([]);
+  const [initialIndex, setInitialIndex] = useState(0);
+
 
   // Handle image click to open modal
   const handleImageClick = (image) => {
@@ -1317,15 +1321,20 @@ const ProductDetail = ({ noFade }) => {
                             </p>
 
                             {/* Review Images */}
-                            {item.images && item.images.length > 0 && (
+                            {item?.images && item?.images.length > 0 && (
                               <div className="flex gap-2 overflow-x-auto">
                                 {item.images.map((image, imgIndex) => (
                                   <img
                                     key={imgIndex}
                                     src={image}
                                     alt={`Review image ${imgIndex + 1}`}
-                                    className="w-20 h-20 object-cover rounded-md border border-gray-200 dark:border-gray-700 cursor-pointer hover:opacity-80 transition-opacity"
-                                    onClick={() => handleImageClick(image)}
+                                    className="w-20 h-20  object-cover rounded-md border border-gray-200 dark:border-gray-700 cursor-pointer hover:opacity-80 transition-opacity"
+                                    onClick={() => {
+                                      setSelectedReviewImages(item?.images)
+                                      handleImageClick(image)
+                                    }
+
+                                    }
                                   />
                                 ))}
                               </div>
@@ -1423,13 +1432,13 @@ const ProductDetail = ({ noFade }) => {
               title={"Similar Products"}
             />
           </div> */}
-          <SimilarProduct category={productData?.product?.categoryId} subcategory={productData?.product?.subCategoryId} exclude={productData?.product?._id}/>
+          <SimilarProduct category={productData?.product?.categoryId} subcategory={productData?.product?.subCategoryId} exclude={productData?.product?._id} />
 
 
         </div>
 
 
-        <Transition appear show={isModalOpen} as={Fragment}>
+        {/* <Transition appear show={isModalOpen} as={Fragment}>
           <Dialog as="div" className="relative z-[99999]" onClose={closeModal}>
             <Transition.Child
               as={Fragment}
@@ -1474,7 +1483,15 @@ const ProductDetail = ({ noFade }) => {
               </Transition.Child>
             </div>
           </Dialog>
-        </Transition>
+        </Transition> */}
+
+        <ImageGalleryModal
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+          selectedReviewImages={selectedReviewImages}
+          initialIndex={initialIndex}
+          noFade={false} // set true to disable fade animation
+        />
 
 
 
