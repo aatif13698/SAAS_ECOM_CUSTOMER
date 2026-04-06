@@ -31,6 +31,8 @@ import { MdOutlineVerifiedUser } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import SimilarProduct from "../similarProduct/SimilarProduct";
 import ImageGalleryModal from "./ImageGalleryModel";
+import QuestionsAndAnswers from "./QuestionsAndAnswers";
+import Faqs from "./Faqs";
 
 
 // Secret key for decryption (same as used for encryption)
@@ -1353,7 +1355,7 @@ const ProductDetail = ({ noFade }) => {
 
                 </div>
 
-                <div className="  rounded-lg border-1 mx-auto my-4 ">
+                {/* <div className="  rounded-lg border-1 mx-auto my-4 ">
                   <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
                     <div className="flex flex-col gap-2">
                       <h2 className={`${isDark ? "text-white" : "text-gray-800"} md:text-xl text-base font-semibold`}>
@@ -1421,7 +1423,25 @@ const ProductDetail = ({ noFade }) => {
                       </div>
                     )}
                   </div>
-                </div>
+                </div> */}
+                <QuestionsAndAnswers
+                  productStockId={decryptedStockId}
+                  productMainStockId={productData?._id}
+                  customerData={customerData}
+                  filteredProduct={filteredProduct}
+                  isDark={isDark}
+                  setShowQuestionModel={setShowQuestionModel}
+                />
+
+
+                 <Faqs
+                  productStockId={decryptedStockId}
+                  productMainStockId={productData?._id}
+                  customerData={customerData}
+                  filteredProduct={filteredProduct}
+                  isDark={isDark}
+                  setShowQuestionModel={setShowQuestionModel}
+                />
               </div>
             </div>
           </div>
