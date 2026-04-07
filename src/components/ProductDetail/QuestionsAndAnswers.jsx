@@ -116,7 +116,7 @@ const QuestionsAndAnswers = ({
                 ) : error ? (
                     <div className="text-center py-8 text-red-500">{error}</div>
                 ) : qas.length > 0 ? (
-                    <div className="space-y-6">
+                    <div className="space-y-6 h-[40vh] overflow-y-scroll">
                         {qas.map((item, index) => (
                             <div
                                 key={item?._id || index} // Use real _id if available
@@ -155,16 +155,16 @@ const QuestionsAndAnswers = ({
 
             {/* Pagination Controls */}
             {totalQAs > limit && (
-                <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-gray-700 text-sm">
+                <div className="flex items-center justify-between px-4 py-2 border-t border-gray-200 dark:border-gray-700 text-sm">
                     <button
                         onClick={handlePrevPage}
                         disabled={currentPage === 1}
-                        className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                     >
                         ← Previous
                     </button>
 
-                    <div className="text-gray-500 dark:text-gray-400">
+                    <div className="text-gray-500 text-sm dark:text-gray-400">
                         Page <span className="font-medium text-gray-700 dark:text-gray-300">{currentPage}</span> of{' '}
                         <span className="font-medium text-gray-700 dark:text-gray-300">{totalPages}</span>
                     </div>
@@ -172,7 +172,7 @@ const QuestionsAndAnswers = ({
                     <button
                         onClick={handleNextPage}
                         disabled={currentPage === totalPages}
-                        className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        className="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                     >
                         Next →
                     </button>
