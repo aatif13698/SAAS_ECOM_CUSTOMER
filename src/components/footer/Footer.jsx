@@ -54,6 +54,13 @@ const Footer = () => {
 
   const [isDark] = useDarkmode();
 
+  function getCurrentYear() {
+    return new Date().getFullYear().toString();
+  }
+
+  // Example:
+  console.log(getCurrentYear()); // "2026"
+
   return (
     <div className={`${isDark ? " bg-dark " : "bg-dark text-lightText"}`}>
       <section className="">
@@ -172,7 +179,7 @@ const Footer = () => {
         </div>
         <div>
           <div className="text-center py-10 border-t-2 border-gray-300/50">
-            {`@copyright 2025 All rights reserved || Powered by Aestree™.`}
+            {`@copyright ${getCurrentYear()} All rights reserved || Powered by Aestree™.`}
           </div>
         </div>
       </section>
