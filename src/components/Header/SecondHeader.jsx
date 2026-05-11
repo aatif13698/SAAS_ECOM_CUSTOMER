@@ -47,7 +47,7 @@ function SecondHeader() {
             <li key={item.id} className="relative group">
               {item.link ? (
                 <div className='flex  items-center'>
-                  <img className='w-10 h-10 object-cover' src={`${import.meta.env.VITE_API_URL}/icon/${item?.icon}`} alt="" />
+                  <img className='w-10 h-10 object-cover' src={`${item?.icon}`} alt="" />
                   {/* <a
                     href={`/list/product/${null}${item.link} `}
                     className="px-4 hover:text-blue-600 duration-200"
@@ -64,7 +64,7 @@ function SecondHeader() {
                 </div>
               ) : (
                 <div className='flex items-center'>
-                  <img className='w-10 h-10 object-cover' src={`${import.meta.env.VITE_API_URL}/icon/${item?.icon}`} alt="" />
+                  <img className='w-10 h-10 object-cover' src={`${item?.icon}`} alt="" />
                   <span className="flex items-center px-4 hover:text-blue-600 duration-200 cursor-pointer">
                     {item.name}
                     {item.submenu && (
